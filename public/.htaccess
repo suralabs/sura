@@ -2,17 +2,12 @@ DirectoryIndex index.php
 
 RewriteEngine On
 
-# Отключаем вывод ошибок пользователям
-	php_flag display_errors off
-
 # Регистрация
 	RewriteRule ^reg/(/?)+$ index.php?go=register [L]
 	
 # Отзывы
 	RewriteRule ^reviews(/?)+$ index.php?go=reviews [L]
 	
- RewriteRule ^ads(/?)+$ index.php?go=ads [QSA,L]
-
 # Статистика страницы пользователя
 	RewriteRule ^my_stats(/?)+$ index.php?go=my_stats [L]
 	
@@ -24,8 +19,7 @@ RewriteEngine On
 	RewriteRule ^editmypage(/?)+$ index.php?go=editprofile [L]
 	RewriteRule ^editmypage/contact(/?)+$ index.php?go=editprofile&act=contact [L]
 	RewriteRule ^editmypage/interests(/?)+$ index.php?go=editprofile&act=interests [L]
-	RewriteRule ^editmypage/all(/?)+$ index.php?go=editprofile&act=all [L]
-	
+
 # Альбомы
 	RewriteRule ^albums/([0-9]+)(/?)+$ index.php?go=albums&uid=$1 [L]
 	RewriteRule ^albums/add/([0-9]+)(/?)+$ index.php?go=albums&act=add&aid=$1 [L]
@@ -88,7 +82,7 @@ RewriteEngine On
 	RewriteRule ^video([0-9]+)_([0-9]+)_sec=msg/id=([0-9]+)(/?)+$ index.php?go=messages&act=review&mid=$3 [L]
 	
 # Поиск
-	RewriteRule ^search/query=(.*)&type=([0-3]+)(/?)+$ index.php?go=search&query=$1&type=$2 [L]
+#	RewriteRule ^search/query=(.*)&type=([0-3]+)(/?)+$ index.php?go=search&query=$1&type=$2 [L]
 	
 # Новости
 	RewriteRule ^news(/?)+$ index.php?go=news [L]
@@ -98,10 +92,7 @@ RewriteEngine On
 	RewriteRule ^news/notifications(/?)+$ index.php?go=news&type=notifications [L]
 	
 # Сообщения
-	RewriteRule ^messages(/?)+$ index.php?go=messages [L]
-	RewriteRule ^messages/i(/?)+$ index.php?go=messages&info=1 [L]
-	RewriteRule ^messages/outbox(/?)+$ index.php?go=messages&act=outbox [L]
-	RewriteRule ^messages/show/([0-9]+)(/?)+$ index.php?go=messages&act=review&mid=$1 [L]
+	RewriteRule ^messages(/?)+$ index.php?go=im [L]
 	
 # Стена
 	RewriteRule ^wall([0-9]+)(/?)+$ index.php?go=wall&uid=$1&type=page [L]
@@ -114,7 +105,8 @@ RewriteEngine On
 	RewriteRule ^settings(/?)+$ index.php?go=settings [L]
 	RewriteRule ^settings/privacy(/?)+$ index.php?go=settings&act=privacy [L]
 	RewriteRule ^settings/blacklist(/?)+$ index.php?go=settings&act=blacklist [L]
-	
+	RewriteRule ^settings/notify(/?)+$ index.php?go=settings&act=notify [L]
+
 # Помощь
 	RewriteCond %{QUERY_STRING} ^act=([a-z]+)
 	RewriteRule ^(.*)support $1index.php?go=support [QSA,L]
@@ -168,8 +160,10 @@ RewriteEngine On
 	RewriteRule ^wallgroups([0-9]+)_([0-9]+)(/?)+$ index.php?go=groups&act=wallgroups&pid=$1&id=$2 [L]
 	
 # Музыка
-	RewriteRule ^audio(/?)+$ index.php?go=audio [L,QSA]
-	RewriteRule ^audio([0-9]+)(/?)+$ index.php?go=audio&uid=$1 [L,QSA]
+RewriteRule ^audio(/?)+$ index.php?go=audio [L,QSA]
+RewriteRule ^audio([0-9]+)(/?)+$ index.php?go=audio&uid=$1 [L,QSA]
+RewriteRule ^public/audio([0-9]+)(/?)+$ index.php?go=public_audio&pid=$1 [L,QSA]
+
 
 # Документы
 	RewriteRule ^docs(/?)+$ index.php?go=doc&act=list [L]
@@ -179,7 +173,7 @@ RewriteEngine On
 	RewriteRule ^app([0-9]+)(/?)+$ index.php?go=apps&act=start&id=$1 [L]
 	
 # Сообщества -> Публичные страницы -> Аудио
-	RewriteRule ^public/audio([0-9]+)(/?)+$ index.php?go=public_audio&pid=$1 [L,QSA]
+	RewriteRule ^public/audio([0-9]+)(/?)+$ index.php?go=public_audio&pid=$1 [L]
 
 # Сообщества -> Публичные страницы -> Видео
 	RewriteRule ^public/videos([0-9]+)(/?)+$ index.php?go=public_videos&pid=$1 [L]
@@ -194,10 +188,8 @@ RewriteEngine On
 	
 # Сообщества -> Публичные страницы
 	RewriteCond %{QUERY_STRING} ^act=([a-z]+)
-	RewriteRule ^public([0-9]+)(/?)+$ index.php?go=public&pid=$1 [L]
-	
-	RewriteRule ^public([0-9]+)(/?)+$ index.php?go=public&pid=$1 [L]
-	RewriteRule ^([^.]+)/?$ index.php?go=public&get_adres=$1 [L]
+	RewriteRule ^publics([0-9]+)(/?)+$ index.php?go=publics&pid=$1 [QSA,L]
+	RewriteRule ^([^.]+)/?$ index.php?go=publics&get_adres=$1 [QSA,L]
 
 # Стат страницы
 	RewriteCond %{REQUEST_FILENAME} !-f

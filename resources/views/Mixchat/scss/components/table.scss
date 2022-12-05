@@ -1,0 +1,34 @@
+/*!
+ * Copyright (c) 2022 Tephida
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
+ *
+ */
+
+/*
+ * @table styles
+ *
+ * Таблицы
+ */
+
+table {
+  margin-bottom: 1.5rem;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+table td,
+table th {
+  font-size: 14px;
+  padding: 5px;
+}
+
+table tr:nth-of-type(2n) {
+  background-color: var(--slate-100);
+}
+
+table thead th {
+  border-bottom: 2px solid rgba(222, 226, 230, 0.5);
+}

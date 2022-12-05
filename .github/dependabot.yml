@@ -1,0 +1,16 @@
+version: 2
+
+updates:
+  - package-ecosystem: composer
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    reviewers:
+      - semyon492
+      - phakof
+    assignees:
+      - semyon492
+      - phakof
+    labels:
+      - type:build

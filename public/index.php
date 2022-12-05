@@ -1,14 +1,38 @@
 <?php
-/**
- * Sura - A PHP Framework.
+/*
+ * Copyright (c) 2022 Tephida
  *
- * @author   Semen Alekseev <semyon492@ya.ru>
+ *  For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
+ *
  */
 
-ini_set("allow_url_fopen", true);
+declare(strict_types=1);
 
-require __DIR__ . '/../vendor/autoload.php';
+use Mozg\Mozg;
 
-require __DIR__ . '/../app/bootstrap.php';
+if (\version_compare(PHP_VERSION, '8.1.5') < 0 || \version_compare(PHP_VERSION, '8.0.18') < 0) {
+    throw new \RuntimeException('Please change php version');
+}
+if (isset($_POST['PHPSESSID'])) {
+    \session_id($_POST['PHPSESSID']);
+}
+\session_start();
+\ob_start();
+\ob_implicit_flush(false);
+const ROOT_DIR = __DIR__ . '/../';
+const ENGINE_DIR = ROOT_DIR . '/system';
+try {
+    require __DIR__ . '/../vendor/autoload.php';
+} catch (\Error) {
+    throw new \RuntimeException('Please install composer');
+}
+
+/** Initialize */
+try {
+    (new Mozg())::initialize();
+} catch (JsonException $e) {
+} catch (\Mozg\exception\ErrorException $e) {
+}
 
 
