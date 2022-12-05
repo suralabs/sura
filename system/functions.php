@@ -398,7 +398,7 @@ function word_filter($source, bool $encode = true)
         if (!$all_words or !count($all_words)) return $source;
         foreach ($all_words as $word_line) {
             $word_arr = explode("|", $word_line);
-            if (function_exists("get_magic_quotes_gpc") and get_magic_quotes_gpc()) {
+            if (function_exists("get_magic_quotes_gpc")) {
                 $word_arr[1] = addslashes($word_arr[1]);
             }
             if ($word_arr[4]) {

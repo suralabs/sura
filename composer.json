@@ -1,6 +1,6 @@
 {
-  "name": "tephida/tephida",
-  "description": "Tephida",
+  "name": "sura/sura",
+  "description": "Sura",
   "minimum-stability": "stable",
   "license": "MIT",
   "authors": [
@@ -9,16 +9,16 @@
     }
   ],
   "require": {
-    "php": "^8.0",
+    "php": "^8.1",
     "ext-mysqli": "*",
     "ext-zlib": "*",
     "ext-gd": "*",
     "ext-iconv": "*",
     "ext-curl": "*",
     "ext-pdo": "*",
-    "tephida/fluffy-dollop": "^4.0",
-    "tephida/view": "^1.0",
-    "tephida/database": "^0.1",
+    "sura/framework": "^0.1",
+    "sura/view": "^2.0",
+    "sura/database": "^0.1",
     "sinergi/browser-detector": "^6.1",
     "scssphp/scssphp": "^1.10.2",
     "james-heinrich/getid3": "^2.0-dev"
