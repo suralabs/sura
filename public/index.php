@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2022 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 use Mozg\Mozg;
 
-if (\version_compare(PHP_VERSION, '8.1.5') < 0 || \version_compare(PHP_VERSION, '8.0.18') < 0) {
+if (\version_compare(PHP_VERSION, '8.1.5') < 0) {
     throw new \RuntimeException('Please change php version');
 }
 if (isset($_POST['PHPSESSID'])) {
