@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "859de19553813c31c96a76005850c0fe",
+    "content-hash": "dc9a9bffebeff88eaf238316c4b961ba",
     "packages": [
         {
             "name": "james-heinrich/getid3",
@@ -219,6 +219,166 @@
             "time": "2021-09-23T13:51:44+00:00"
         },
         {
+            "name": "sura/database",
+            "version": "0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Sura-framework/sura-database.git",
+                "reference": "6164ba57c5f4958566bb019224c17bdd89a2c007"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Sura-framework/sura-database/zipball/6164ba57c5f4958566bb019224c17bdd89a2c007",
+                "reference": "6164ba57c5f4958566bb019224c17bdd89a2c007",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pdo": "*",
+                "php": "^8",
+                "tephida/corner": "^0.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9",
+                "psalm/plugin-phpunit": "<1",
+                "squizlabs/php_codesniffer": "^3",
+                "vimeo/psalm": "^4 || ^5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Tephida\\Database\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Semen Alekseev",
+                    "email": "semyon492@ya.ru",
+                    "homepage": "https://qd2.ru/"
+                }
+            ],
+            "description": "The Sura database.",
+            "keywords": [
+                "database",
+                "sura"
+            ],
+            "support": {
+                "issues": "https://github.com/Sura-framework/sura-database/issues",
+                "source": "https://github.com/Sura-framework/sura-database/tree/0.1.2"
+            },
+            "time": "2023-01-08T19:44:11+00:00"
+        },
+        {
+            "name": "sura/framework",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Sura-framework/sura-framework.git",
+                "reference": "ceba4345e4ee5f070aab94c32050de59bb88dc36"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Sura-framework/sura-framework/zipball/ceba4345e4ee5f070aab94c32050de59bb88dc36",
+                "reference": "ceba4345e4ee5f070aab94c32050de59bb88dc36",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "ext-iconv": "*",
+                "ext-mysqli": "*",
+                "ext-zlib": "*",
+                "php": "^8.1",
+                "sura/database": "^0.1"
+            },
+            "require-dev": {
+                "jetbrains/phpstorm-attributes": "1.0",
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpstan/phpstan": "^1.5",
+                "phpunit/phpunit": "^9.5.20 || ^10.0.0",
+                "squizlabs/php_codesniffer": "^3.6"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Sura\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Semen Alekseev",
+                    "email": "semyon492@ya.ru"
+                }
+            ],
+            "description": "System parts",
+            "keywords": [
+                "support"
+            ],
+            "support": {
+                "issues": "https://github.com/Sura-framework/sura-framework/issues",
+                "source": "https://github.com/Sura-framework/sura-framework/tree/0.1.0"
+            },
+            "time": "2023-03-28T09:25:00+00:00"
+        },
+        {
+            "name": "sura/view",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Sura-framework/sura-view.git",
+                "reference": "c0c2a7deca42602eb108ce14108ea7b9349246d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Sura-framework/sura-view/zipball/c0c2a7deca42602eb108ce14108ea7b9349246d3",
+                "reference": "c0c2a7deca42602eb108ce14108ea7b9349246d3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "ext-iconv": "*",
+                "ext-json": "*",
+                "ext-mysqli": "*",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Tests\\": "tests/",
+                    "Sura\\View\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "The template engine.",
+            "keywords": [
+                "blade",
+                "php",
+                "template",
+                "templating",
+                "view"
+            ],
+            "support": {
+                "issues": "https://github.com/Sura-framework/sura-view/issues",
+                "source": "https://github.com/Sura-framework/sura-view/tree/2.0.1"
+            },
+            "time": "2022-12-11T12:51:33+00:00"
+        },
+        {
             "name": "tephida/corner",
             "version": "0.1.2",
             "source": {
@@ -255,162 +415,8 @@
                 "issues": "https://github.com/Tephida/corner/issues",
                 "source": "https://github.com/Tephida/corner/tree/0.1.2"
             },
+            "abandoned": true,
             "time": "2022-04-16T14:34:06+00:00"
-        },
-        {
-            "name": "tephida/database",
-            "version": "0.1.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Tephida/database.git",
-                "reference": "b623d504e16beca894a74361e886697c62a05e4d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Tephida/database/zipball/b623d504e16beca894a74361e886697c62a05e4d",
-                "reference": "b623d504e16beca894a74361e886697c62a05e4d",
-                "shasum": ""
-            },
-            "require": {
-                "ext-pdo": "*",
-                "php": "^8",
-                "tephida/corner": "^0.1"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9",
-                "psalm/plugin-phpunit": "<1",
-                "squizlabs/php_codesniffer": "^3",
-                "vimeo/psalm": "^4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Tephida\\Database\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Easy-to-use database abstraction",
-            "keywords": [
-                "database",
-                "pdo",
-                "security",
-                "sql"
-            ],
-            "support": {
-                "issues": "https://github.com/Tephida/database/issues",
-                "source": "https://github.com/Tephida/database/tree/0.1.3"
-            },
-            "time": "2022-04-16T14:44:12+00:00"
-        },
-        {
-            "name": "tephida/fluffy-dollop",
-            "version": "4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Tephida/fluffy-dollop.git",
-                "reference": "28263c6635baae164e19dad8c9ef16cd1918f8f5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Tephida/fluffy-dollop/zipball/28263c6635baae164e19dad8c9ef16cd1918f8f5",
-                "reference": "28263c6635baae164e19dad8c9ef16cd1918f8f5",
-                "shasum": ""
-            },
-            "require": {
-                "ext-gd": "*",
-                "ext-iconv": "*",
-                "ext-mysqli": "*",
-                "ext-zlib": "*",
-                "php": "^8.0",
-                "tephida/database": "^0.1"
-            },
-            "require-dev": {
-                "jetbrains/phpstorm-attributes": "1.0",
-                "php-coveralls/php-coveralls": "^2.1",
-                "phpstan/phpstan": "^1.5",
-                "phpunit/phpunit": "^9.5.20",
-                "squizlabs/php_codesniffer": "^3.6"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/helpers.php"
-                ],
-                "psr-4": {
-                    "FluffyDollop\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Semen Alekseev",
-                    "email": "semyon492@ya.ru"
-                }
-            ],
-            "description": "System parts",
-            "keywords": [
-                "support"
-            ],
-            "support": {
-                "issues": "https://github.com/Tephida/fluffy-dollop/issues",
-                "source": "https://github.com/Tephida/fluffy-dollop/tree/4.0"
-            },
-            "time": "2022-05-02T10:42:24+00:00"
-        },
-        {
-            "name": "tephida/view",
-            "version": "1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Tephida/blade.git",
-                "reference": "31f73dfe15aa49646de8b7d7e8cf0f9e6bb18a62"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Tephida/blade/zipball/31f73dfe15aa49646de8b7d7e8cf0f9e6bb18a62",
-                "reference": "31f73dfe15aa49646de8b7d7e8cf0f9e6bb18a62",
-                "shasum": ""
-            },
-            "require": {
-                "ext-gd": "*",
-                "ext-iconv": "*",
-                "ext-json": "*",
-                "ext-mysqli": "*",
-                "php": "^8.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Tests\\": "tests/",
-                    "Tephida\\View\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "The template engine.",
-            "keywords": [
-                "blade",
-                "php",
-                "template",
-                "templating",
-                "view"
-            ],
-            "support": {
-                "issues": "https://github.com/Tephida/blade/issues",
-                "source": "https://github.com/Tephida/blade/tree/1.0"
-            },
-            "time": "2022-03-08T12:17:32+00:00"
         }
     ],
     "packages-dev": [
@@ -1464,16 +1470,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.9.2",
+            "version": "1.10.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "d6fdf01c53978b6429f1393ba4afeca39cc68afa"
+                "reference": "0166aef76e066f0dd2adc2799bdadfa1635711e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d6fdf01c53978b6429f1393ba4afeca39cc68afa",
-                "reference": "d6fdf01c53978b6429f1393ba4afeca39cc68afa",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/0166aef76e066f0dd2adc2799bdadfa1635711e9",
+                "reference": "0166aef76e066f0dd2adc2799bdadfa1635711e9",
                 "shasum": ""
             },
             "require": {
@@ -1502,8 +1508,11 @@
                 "static analysis"
             ],
             "support": {
+                "docs": "https://phpstan.org/user-guide/getting-started",
+                "forum": "https://github.com/phpstan/phpstan/discussions",
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.9.2"
+                "security": "https://github.com/phpstan/phpstan/security/policy",
+                "source": "https://github.com/phpstan/phpstan-src"
             },
             "funding": [
                 {
@@ -1519,7 +1528,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-11-10T09:56:11+00:00"
+            "time": "2023-03-24T10:28:16+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -4891,7 +4900,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.0",
+        "php": "^8.1",
         "ext-mysqli": "*",
         "ext-zlib": "*",
         "ext-gd": "*",
