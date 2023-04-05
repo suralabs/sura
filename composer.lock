@@ -273,16 +273,16 @@
         },
         {
             "name": "sura/framework",
-            "version": "0.1.3",
+            "version": "0.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sura-framework/sura-framework.git",
-                "reference": "610cf6b63af6346f564cb1957cd95256bad78451"
+                "reference": "1de4cc62f543273b6f2b154ed777cb5dd6c1178f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sura-framework/sura-framework/zipball/610cf6b63af6346f564cb1957cd95256bad78451",
-                "reference": "610cf6b63af6346f564cb1957cd95256bad78451",
+                "url": "https://api.github.com/repos/Sura-framework/sura-framework/zipball/1de4cc62f543273b6f2b154ed777cb5dd6c1178f",
+                "reference": "1de4cc62f543273b6f2b154ed777cb5dd6c1178f",
                 "shasum": ""
             },
             "require": {
@@ -325,9 +325,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Sura-framework/sura-framework/issues",
-                "source": "https://github.com/Sura-framework/sura-framework/tree/0.1.3"
+                "source": "https://github.com/Sura-framework/sura-framework/tree/0.1.4"
             },
-            "time": "2023-04-01T15:43:30+00:00"
+            "time": "2023-04-04T06:18:24+00:00"
         },
         {
             "name": "sura/view",
