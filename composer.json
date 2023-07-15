@@ -10,9 +10,7 @@
   ],
   "require": {
     "php": "^8.1",
-    "ext-mysqli": "*",
     "ext-zlib": "*",
-    "ext-gd": "*",
     "ext-iconv": "*",
     "ext-curl": "*",
     "ext-pdo": "*",
@@ -25,13 +23,13 @@
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
-    "fakerphp/faker": "^1.19",
-    "php-coveralls/php-coveralls": "^2.1",
-    "phpspec/prophecy": "^1.15",
+    "fakerphp/faker": "^1.23",
+    "php-coveralls/php-coveralls": "^2.5",
+    "phpspec/prophecy": "^1.17",
     "phpspec/prophecy-phpunit": "^2.0",
-    "phpstan/phpstan": "^1.5",
-    "phpunit/phpunit": "^9.5",
-    "squizlabs/php_codesniffer": "^3.6"
+    "phpstan/phpstan": "^1.10",
+    "phpunit/phpunit": "^9.6",
+    "squizlabs/php_codesniffer": "^3.7"
   },
   "autoload": {
     "files": [
