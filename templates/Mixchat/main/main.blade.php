@@ -129,7 +129,7 @@
     </script>
 @endif
 @if($available === 'main')
-{{--    <small style="color:#ccc;padding:3px;position:absolute">Tephida</small>--}}
+{{--    <small style="color:#ccc;padding:3px;position:absolute">Sura</small>--}}
 {{--    <div class="header_flex">--}}
 {{--        <a href="/" class="new_logo" onClick="Page.Go(this.href); return false" style="margin-top:-10px">{{ $home }}</a>--}}
 {{--        <div class="new_descr">@_e('site_desc')<br/>--}}

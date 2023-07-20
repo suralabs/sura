@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2022 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -574,7 +574,7 @@ function compileAdmin($tpl): void
     $tpl->set('{content}', $tpl->result['content']);
     $tpl->compile('main');
     if ((new Request)->filter('ajax') === 'yes') {
-        $metatags['title'] = $metatags['title'] ?? 'Панель управления';
+        $metatags['title'] = 'Панель управления';
         $result_ajax = array(
             'title' => $metatags['title'],
             'content' => $tpl->result['info'] . $tpl->result['content']
