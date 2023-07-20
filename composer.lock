@@ -279,7 +279,8 @@
             "time": "2023-01-08T19:44:11+00:00"
         },
         {
-            "name": "sura/framework",
+            "name": "sura/framework",             
+
             "version": "0.1.6",
             "source": {
                 "type": "git",
@@ -330,9 +331,12 @@
             ],
             "support": {
                 "issues": "https://github.com/Sura-framework/sura-framework/issues",
+
+
                 "source": "https://github.com/Sura-framework/sura-framework/tree/0.1.6"
             },
             "time": "2023-07-15T22:04:19+00:00"
+
         },
         {
             "name": "sura/view",
