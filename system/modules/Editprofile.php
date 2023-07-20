@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2022 Sura
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -99,7 +99,7 @@ class Editprofile extends Module
             12 => 'Декабря'
         ));
         $years = [];
-        for ($i = 1950; $i <= 2022; ++$i) {
+        for ($i = 1950; $i <= 2023; ++$i) {
             $years[$i] = $i;
         }
         $params['user_year'] = addToList($row['user_day'], $years);

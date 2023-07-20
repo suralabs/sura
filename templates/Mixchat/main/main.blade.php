@@ -290,7 +290,7 @@
        onClick="Page.Go(this.href); return false">@_e('main_tpl_people')</a>
     <a href="/index.php?go=search&type=4" onClick="Page.Go(this.href); return false">@_e('main_tpl_lang_1')</a>
     <a href="/support" onClick="Page.Go(this.href); return false">@_e('main_support')</a>
-    <div>Mixchat &copy; 2022
+    <div>Mixchat &copy; 2023
         <a class="cursor_pointer" onClick="trsn.box();"
            onMouseOver="myhtml.title('1', '@_e('lang_toltip')', 'langTitle', 1)"
            id="langTitle1">{{ $lang }}</a>
@@ -379,7 +379,7 @@
     <div class="wrap">
         <div class="left">
             <div class="mb5">
-                Miaxchat © 2022        <span class="mb-none">— сообщество</span>
+                Miaxchat © 2023        <span class="mb-none">— сообщество</span>
             </div>
         </div>
         <div class="flex right">
