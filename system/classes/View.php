@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Mozg\classes;
 
 use Exception;
-use FluffyDollop\Http\Request;
-use FluffyDollop\Support\Registry;
+use Sura\Http\Request;
+use Sura\Support\Registry;
 use Mozg\modules\Lang;
-use Tephida\View\myView;
+use Sura\View\myView;
 
 /**
  * Template engine
@@ -129,7 +129,7 @@ class View
         $views = ROOT_DIR . '/templates/' . $config['temp'];
         $cache = ENGINE_DIR . '/cache/views';
         /** MODE_DEBUG allows pinpointing troubles. */
-        $blade = new myView($views, $cache, \Tephida\View\View::MODE_AUTO);
+        $blade = new myView($views, $cache, \Sura\View\View::MODE_AUTO);
         $blade::$dictionary = I18n::dictionary();
         if ((new Request)->checkAjax() === true) {
             $json_content = $blade->run($view, $variables);

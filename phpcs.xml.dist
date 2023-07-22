@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Tephida coding standard">
-    <description>Tephida coding standard</description>
+<ruleset name="Sura coding standard">
+    <description>Sura coding standard</description>
 
     <!-- display progress -->
     <arg value="p"/>

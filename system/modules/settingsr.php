@@ -1,15 +1,15 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
  *
  */
 
-use FluffyDollop\Http\Request;
-use FluffyDollop\Support\Registry;
+use Sura\Http\Request;
+use Sura\Support\Registry;
 use Mozg\classes\Cache;
 
 NoAjaxQuery();
@@ -223,7 +223,7 @@ if (Registry::get('logged')) {
             //Отправляем письмо на обе почты
             include_once ENGINE_DIR . '/classes/mail.php';
             $config = settings_get();
-            $mail = new \FluffyDollop\Support\ViiMail($config);
+            $mail = new \Sura\Support\ViiMail($config);
             $email = (new Request)->filter('email', 25000, true);
             //Проверка E-mail
             if (filter_var($email, FILTER_VALIDATE_EMAIL))

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -12,8 +12,8 @@
 use Mozg\classes\Cache;
 
 if (isset($_POST['add'])) {
-    $country = (new \FluffyDollop\Http\Request)->int('country');
-    $city = (new \FluffyDollop\Http\Request)->filter('city', 25000, true);
+    $country = (new \Sura\Http\Request)->int('country');
+    $city = (new \Sura\Http\Request)->filter('city', 25000, true);
     if (isset($city) and !empty($city) and $country) {
         $row = $db->super_query("SELECT COUNT(*) AS cnt FROM `city` WHERE name = '" . $city . "' AND id_country = '" . $country . "'");
         if (!$row['cnt']) {

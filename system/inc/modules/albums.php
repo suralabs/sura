@@ -1,24 +1,24 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
  *
  */
 
-$se_uid = (new \FluffyDollop\Http\Request)->int('se_uid');
+$se_uid = (new \Sura\Http\Request)->int('se_uid');
 if (!$se_uid) {
     $se_uid = '';
 }
 
-$se_user_id = (new \FluffyDollop\Http\Request)->int('se_user_id');
+$se_user_id = (new \Sura\Http\Request)->int('se_user_id');
 if (!$se_user_id) {
     $se_user_id = '';
 }
 
-$se_name = (new \FluffyDollop\Http\Request)->filter('se_name', 25000, true);
+$se_name = (new \Sura\Http\Request)->filter('se_name', 25000, true);
 
 $sort = $sort ?? null;
 $where_sql = $where_sql ?? '';
@@ -34,7 +34,7 @@ if ($se_uid or $sort or $se_name or $se_user_id) {
 }
 
 //Выводим список людей
-$page = (new \FluffyDollop\Http\Request)->int('page');
+$page = (new \Sura\Http\Request)->int('page');
 $gcount = 20;
 $limit_page = ($page - 1) * $gcount;
 

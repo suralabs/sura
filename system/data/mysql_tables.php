@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -2142,7 +2142,7 @@ $table_Chema[] = "INSERT INTO `city` (`id`, `id_country`, `name`) VALUES
 (2019, 1, 'Ипатово'),
 (2020, 1, 'Карачаевск'),
 (2021, 1, 'Кисловодск'),
-(2022, 1, 'Кочубеевское'),
+(2023, 1, 'Кочубеевское'),
 (2023, 1, 'Красногвардейское (Ставро'),
 (2024, 1, 'Курсавка'),
 (2025, 1, 'Левокумское'),

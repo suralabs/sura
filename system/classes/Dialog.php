@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -11,8 +11,8 @@
 namespace Mozg\classes;
 
 use Mozg\Security\AntiSpam;
-use FluffyDollop\Support\Registry;
-use FluffyDollop\Support\Status;
+use Sura\Support\Registry;
+use Sura\Support\Status;
 
 class Dialog
 {

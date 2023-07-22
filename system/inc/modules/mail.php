@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -16,7 +16,7 @@ switch ($act) {
     case "send":
         $limit = (int)$_POST['limit'];
         $lastid = (int)$_POST['lastid'];
-        $title = (new \FluffyDollop\Http\Request)->filter('title', 25000, true);
+        $title = (new \Suraquest)->filter('title', 25000, true);
 //		$_POST['text'] = $_POST['text'];
 
         $sql_ = $db->super_query("SELECT user_search_pref, user_email FROM `users` ORDER by `user_id` ASC LIMIT " . $lastid . ", " . $limit, true);
@@ -26,7 +26,7 @@ switch ($act) {
 //            $mail = new vii_mail($config, true);
 
             foreach ($sql_ as $row) {
-                $message_send = (new \FluffyDollop\Http\Request)->filter('text');
+                $message_send = (new \Sura\Http\Request)->filter('text');
                 $message_send = str_replace("{%user-name%}", $row['user_search_pref'], $message_send);
 
                 $mail->send($row['user_email'], $title, $message_send);

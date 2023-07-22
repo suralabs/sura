@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -9,11 +9,11 @@
 
 namespace Mozg;
 
-use Tephida\Corner\Error;
+use Sura\Corner\Error;
 use Mozg\exception\ErrorException;
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 use JsonException;
-use FluffyDollop\Support\{Registry, Router};
+use Sura\Support\{Registry, Router};
 use Mozg\classes\{I18n, DB};
 
 class Mozg

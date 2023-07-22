@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -11,12 +11,12 @@
 namespace Mozg\modules;
 
 use Mozg\classes\{Cache, DB, Email, Module, ViewEmail};
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 
-use FluffyDollop\Http\Response;
+use Sura\Http\Response;
 
-use FluffyDollop\Support\{Registry, Status, Cookie};
-use FluffyDollop\Filesystem\Filesystem;
+use Sura\Support\{Registry, Status, Cookie};
+use Sura\Filesystem\Filesystem;
 use JetBrains\PhpStorm\NoReturn;
 
 final class Register extends Module

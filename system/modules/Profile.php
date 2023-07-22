@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -11,11 +11,11 @@
 namespace Mozg\modules;
 
 use ErrorException;
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 use Mozg\classes\Cache;
 use Mozg\classes\DB;
 use Mozg\classes\Module;
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 use Mozg\classes\Wall;
 use Mozg\classes\WallProfile;
 

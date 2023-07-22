@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -16,9 +16,9 @@ if (isset($_POST['save'])) {
     include_once ENGINE_DIR . '/classes/Parse.php';
     $parse = new Parse();
 
-    $title = (new \FluffyDollop\Http\Request)->filter('title', 25000, true);
+    $title = (new \Sura\Http\Request)->filter('title', 25000, true);
     $alt_name = to_translit($_POST['alt_name']);
-    $text = $parse->BBparse((new \FluffyDollop\Http\Request)->filter('text'));
+    $text = $parse->BBparse((new \Sura\Http\Request)->filter('text'));
 
     if (!empty($title) and !empty($text) and !empty($alt_name)) {
         $db->query("INSERT INTO `static` SET alt_name = '" . $alt_name . "', title = '" . $title . "', text = '" . $text . "'");
@@ -45,9 +45,9 @@ if (isset($_POST['save'])) {
                 include_once ENGINE_DIR . '/classes/Parse.php';
                 $parse = new parse();
 
-                $title = (new \FluffyDollop\Http\Request)->filter('title', 25000, true);
+                $title = (new \Sura\Http\Request)->filter('title', 25000, true);
                 $alt_name = to_translit($_POST['alt_name']);
-                $text = $parse->BBparse((new \FluffyDollop\Http\Request)->filter('text'));
+                $text = $parse->BBparse((new \Sura\Http\Request)->filter('text'));
 
                 if (!empty($title) and !empty($text) and !empty($alt_name)) {
                     $db->query("UPDATE`static` SET alt_name = '" . $alt_name . "', title = '" . $title . "', text = '" . $text . "' WHERE id = '" . $id . "'");
