@@ -10,7 +10,7 @@
 
 namespace Mozg\classes;
 
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 
 use Sura\Database\Database;
 

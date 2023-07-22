@@ -11,7 +11,7 @@
 namespace Mozg\classes;
 
 use Exception;
-use FluffyDollop\Filesystem\Filesystem;
+use Sura\Filesystem\Filesystem;
 
 class Cache
 {

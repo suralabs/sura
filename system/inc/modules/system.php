@@ -8,7 +8,7 @@
  *
  */
 
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 use Mozg\classes\TplCp;
 
 $config = settings_get();
@@ -61,7 +61,7 @@ switch ($act) {
             );
         }
 
-        (new \FluffyDollop\Http\Response)->_e_json($response);
+        (new \Sura\Http\Response)->_e_json($response);
         break;
 
     default:

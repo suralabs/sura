@@ -9,8 +9,8 @@
 
 namespace Mozg\modules;
 
-use FluffyDollop\Filesystem\Filesystem;
-use FluffyDollop\Support\Status;
+use Sura\Filesystem\Filesystem;
+use Sura\Support\Status;
 use Mozg\classes\Cache;
 use Mozg\classes\DB;
 use Mozg\classes\Module;
@@ -55,7 +55,7 @@ class Editprofile extends Module
                 'status' => Status::BAD,
             );
         }
-        (new \FluffyDollop\Http\Response)->_e_json($response);
+        (new \Sura\Http\Response)->_e_json($response);
     }
 
     public function main()

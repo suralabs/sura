@@ -8,7 +8,7 @@
  *
  */
 
-use FluffyDollop\Support\{Filesystem, Registry, Thumbnail};
+use Sura\Support\{Filesystem, Registry, Thumbnail};
 
 NoAjaxQuery();
 

@@ -8,7 +8,7 @@
  *
  */
 
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 
 //Добавление слова
 if (isset($_POST['send'])) {
@@ -21,7 +21,7 @@ if (isset($_POST['send'])) {
 		
 	}
 	
-	$word_replace = (new \FluffyDollop\Http\Request)->filter('word_replace');
+	$word_replace = (new \Sura\Http\Request)->filter('word_replace');
 	
 	$word_id = Registry::get('server_time');
 	

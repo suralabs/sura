@@ -8,8 +8,8 @@
  *
  */
 
-use FluffyDollop\Support\{Registry};
-use FluffyDollop\Http\Request;
+use Sura\Support\{Registry};
+use Sura\Http\Request;
 use Mozg\classes\Cache;
 
 if (Registry::get('logged')) {

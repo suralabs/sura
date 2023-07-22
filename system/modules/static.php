@@ -8,8 +8,8 @@
  *
  */
 
-use FluffyDollop\Http\Request;
-use FluffyDollop\Support\Registry;
+use Sura\Http\Request;
+use Sura\Support\Registry;
 
 NoAjaxQuery();
 

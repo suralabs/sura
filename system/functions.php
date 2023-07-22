@@ -8,9 +8,9 @@
  *
  */
 
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 use Mozg\classes\View;
-use FluffyDollop\Http\{Request, Response};
+use Sura\Http\{Request, Response};
 use JetBrains\PhpStorm\ArrayShape;
 use Mozg\classes\Cache;
 use Mozg\classes\I18n;
@@ -281,7 +281,7 @@ function declWord(int $num, string $type): string
 {
     $lang = I18n::getLang();
     $decl_list = require ROOT_DIR . "/lang/{$lang}/declensions.php";
-    return (new \FluffyDollop\Support\Declensions($decl_list))->makeWord($num, $type);
+    return (new \Sura\Support\Declensions($decl_list))->makeWord($num, $type);
 }
 
 /**

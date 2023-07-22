@@ -9,7 +9,7 @@
  */
 
 //Редактирование
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 
 if ($_GET['act'] === 'edit') {
     $id = (int)$_GET['id'];
@@ -18,8 +18,8 @@ if ($_GET['act'] === 'edit') {
     $row = $db->super_query("SELECT owner_user_id, title, descr, video FROM `videos` WHERE id = '" . $id . "'");
     if ($row) {
         if (isset($_POST['save'])) {
-            $title = (new \FluffyDollop\Http\Request)->filter('title', 25000, true);
-            $descr = (new \FluffyDollop\Http\Request)->filter('descr');
+            $title = (new \Sura\Http\Request)->filter('title', 25000, true);
+            $descr = (new \Sura\Http\Request)->filter('descr');
 
             if (!empty($title) and !empty($descr)) {
                 $db->query("UPDATE `videos` SET title = '" . $title . "', descr = '" . $descr . "' WHERE id = '" . $id . "'");

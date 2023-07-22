@@ -8,7 +8,7 @@
  *
  */
 
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 
 echoheader();
 echohtmlstart('Общая статистика сайта');

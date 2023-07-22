@@ -2,7 +2,7 @@
 
 namespace Mozg\modules;
 
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 use Mozg\classes\Cache;
 use Mozg\classes\Module;
 

@@ -13,11 +13,11 @@ declare(strict_types=1);
 namespace Mozg\classes;
 
 use ErrorException;
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 
 class WallPublic
 {
-    public TpLSite|\FluffyDollop\Support\Templates $tpl;
+    public TpLSite|\Sura\Support\Templates $tpl;
     public array|bool|null $query = false;
     public false|string $template = false;
     public false|string $compile = false;

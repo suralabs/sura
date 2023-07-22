@@ -7,7 +7,7 @@
  *
  */
 
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 
 if ($logged) {
     $count = 40;

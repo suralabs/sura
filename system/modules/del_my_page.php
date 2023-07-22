@@ -8,7 +8,7 @@
  *
  */
 
-use FluffyDollop\Support\{Filesystem, Registry};
+use Sura\Support\{Filesystem, Registry};
 use Mozg\classes\Cache;
 
 NoAjaxQuery();

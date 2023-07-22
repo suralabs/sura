@@ -10,7 +10,7 @@
 
 namespace Mozg\classes;
 
-use FluffyDollop\Support\Cookie;
+use Sura\Support\Cookie;
 use Sinergi\BrowserDetector\Language;
 
 class I18n

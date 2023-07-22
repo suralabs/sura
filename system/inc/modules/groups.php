@@ -8,22 +8,22 @@
  *
  */
 
-use FluffyDollop\Support\{Filesystem, Registry};
+use Sura\Support\{Filesystem, Registry};
 use Mozg\classes\TplCp;
 
 $db = Registry::get('db');
 
 //Редактирование
-$act = (new \FluffyDollop\Http\Request)->filter('act');
+$act = (new \Sura\Http\Request)->filter('act');
 if ($act === 'edit') {
-    $id = (new \FluffyDollop\Http\Request)->int('id');
+    $id = (new \Sura\Http\Request)->int('id');
 
     //SQL Запрос на вывод информации
     $row = $db->super_query("SELECT title, descr, comments, photo FROM `communities` WHERE id = '" . $id . "'");
     if ($row) {
         if (isset($_POST['save'])) {
-            $title = (new \FluffyDollop\Http\Request)->filter('title', 25000, true);
-            $descr = (new \FluffyDollop\Http\Request)->filter('descr');
+            $title = (new \Sura\Http\Request)->filter('title', 25000, true);
+            $descr = (new \Sura\Http\Request)->filter('descr');
 
             if (!empty($title) && !empty($descr)) {
                 if ($_POST['comments']) {
@@ -87,12 +87,12 @@ if ($act === 'edit') {
         $tpl->render();
     }
 } else {
-    $se_uid = (new \FluffyDollop\Http\Request)->int('se_uid');
-    $se_user_id = (new \FluffyDollop\Http\Request)->int('se_user_id');
-    $sort = (new \FluffyDollop\Http\Request)->int('sort');
-    $se_name = (new \FluffyDollop\Http\Request)->filter('se_name', 25000, true);
-    $ban = (new \FluffyDollop\Http\Request)->filter('ban');
-    $delete = (new \FluffyDollop\Http\Request)->filter('delete');
+    $se_uid = (new \Sura\Http\Request)->int('se_uid');
+    $se_user_id = (new \Sura\Http\Request)->int('se_user_id');
+    $sort = (new \Sura\Http\Request)->int('sort');
+    $se_name = (new \Sura\Http\Request)->filter('se_name', 25000, true);
+    $ban = (new \Sura\Http\Request)->filter('ban');
+    $delete = (new \Sura\Http\Request)->filter('delete');
 
     $where_sql = '';
     if ($se_uid || $sort || $se_name || $se_user_id || $ban || $delete) {
@@ -136,7 +136,7 @@ if ($act === 'edit') {
     $checked_delete = $checked_delete ?? "checked";
 
     //Выводим список людей
-    $page = (new \FluffyDollop\Http\Request)->int('page', 1);
+    $page = (new \Sura\Http\Request)->int('page', 1);
     $g_count = 20;
     $limit_page = ($page - 1) * $g_count;
 

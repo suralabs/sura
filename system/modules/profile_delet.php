@@ -8,7 +8,7 @@
  *
  */
 
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 
 $user_info = $user_info ?? Registry::get('user_info');
 if ($user_info['user_group'] != '1') {

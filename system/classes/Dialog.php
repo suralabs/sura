@@ -11,8 +11,8 @@
 namespace Mozg\classes;
 
 use Mozg\Security\AntiSpam;
-use FluffyDollop\Support\Registry;
-use FluffyDollop\Support\Status;
+use Sura\Support\Registry;
+use Sura\Support\Status;
 
 class Dialog
 {

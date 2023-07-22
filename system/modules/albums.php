@@ -8,9 +8,9 @@
  *
  */
 
-use FluffyDollop\Http\Request;
-use FluffyDollop\Support\{ Registry};
-use FluffyDollop\Filesystem\Filesystem;
+use Sura\Http\Request;
+use Sura\Support\{ Registry};
+use Sura\Filesystem\Filesystem;
 use Mozg\classes\Cache;
 
 NoAjaxQuery();

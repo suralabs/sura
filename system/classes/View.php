@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Mozg\classes;
 
 use Exception;
-use FluffyDollop\Http\Request;
-use FluffyDollop\Support\Registry;
+use Sura\Http\Request;
+use Sura\Support\Registry;
 use Mozg\modules\Lang;
 use Sura\View\myView;
 

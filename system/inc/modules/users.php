@@ -8,7 +8,7 @@
  *
  */
 
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 
 $se_uid = (new Request)->int('se_uid');
 if (!$se_uid) {
@@ -62,7 +62,7 @@ $order_sql = "`user_reg_date` DESC";
 $selsorlist = installationSelected($sort, '<option value="1">по алфавиту</option><option value="2">по дате регистрации</option><option value="3">по дате посещения</option>');
 
 //Выводим список людей
-$page = (new \FluffyDollop\Http\Request)->int('page', 1);
+$page = (new \Sura\Http\Request)->int('page', 1);
 
 $gcount = 20;
 $limit_page = ($page - 1) * $gcount;

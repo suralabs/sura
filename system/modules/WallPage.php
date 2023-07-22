@@ -12,7 +12,7 @@ namespace Mozg\modules;
 
 use ErrorException;
 use JsonException;
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 use Mozg\classes\{Module, TpLSite, WallProfile, WallPublic};
 
 class WallPage extends Module
@@ -543,7 +543,7 @@ class WallPage extends Module
                         $gcount = $gcount ?? null;
                         $page_type = $page_type ?? null;
 
-                        $type = (new \FluffyDollop\Http\Request)->filter('type');
+                        $type = (new \Sura\Http\Request)->filter('type');
 
                         if (($cnt_rec['cnt'] > $gcount && $type == '') || $type == 'own') {
                             navigation($gcount, $cnt_rec['cnt'], $page_type);

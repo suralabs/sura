@@ -11,12 +11,12 @@
 namespace Mozg\modules;
 
 use Mozg\classes\{Cache, DB, Email, Module, ViewEmail};
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 
-use FluffyDollop\Http\Response;
+use Sura\Http\Response;
 
-use FluffyDollop\Support\{Registry, Status, Cookie};
-use FluffyDollop\Filesystem\Filesystem;
+use Sura\Support\{Registry, Status, Cookie};
+use Sura\Filesystem\Filesystem;
 use JetBrains\PhpStorm\NoReturn;
 
 final class Register extends Module

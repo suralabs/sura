@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace Mozg\classes;
 
 use ErrorException;
-use FluffyDollop\Http\Request;
-use FluffyDollop\Support\{Cookie, Registry};
+use Sura\Http\Request;
+use Sura\Support\{Cookie, Registry};
 use JsonException;
 use Mozg\Models\Users;
 

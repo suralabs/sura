@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Mozg\classes;
 
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 
 /**
  * Friends tools

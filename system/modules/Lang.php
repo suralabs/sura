@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace Mozg\modules;
 
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 use Mozg\classes\I18n;
 use Mozg\classes\Module;
-use FluffyDollop\Support\Cookie;
+use Sura\Support\Cookie;
 
 class Lang extends Module
 {

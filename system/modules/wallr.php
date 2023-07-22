@@ -10,8 +10,8 @@
 
 declare(strict_types=1);
 
-use FluffyDollop\Http\Request;
-use FluffyDollop\Support\Registry;
+use Sura\Http\Request;
+use Sura\Support\Registry;
 use Mozg\classes\Cache;
 use Mozg\classes\Flood;
 use Mozg\classes\WallProfile;

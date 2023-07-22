@@ -9,7 +9,7 @@
 
 namespace Mozg\modules;
 
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 use Mozg\classes\DB;
 use Mozg\classes\Flood;
 use Mozg\classes\Module;

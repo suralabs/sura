@@ -8,9 +8,9 @@
  *
  */
 
-use FluffyDollop\Support\{Registry, Status};
-use FluffyDollop\Filesystem\Filesystem;
-use FluffyDollop\Http\Request;
+use Sura\Support\{Registry, Status};
+use Sura\Filesystem\Filesystem;
+use Sura\Http\Request;
 use Mozg\classes\Cache;
 
 NoAjaxQuery();
@@ -172,7 +172,7 @@ if (Registry::get('logged')) {
                 'status' => $status,
                 'photo' => $photo,
             ];
-            (new \FluffyDollop\Http\Response)->_e_json($response);
+            (new \Sura\Http\Response)->_e_json($response);
             break;
 
         //Удаление фотографии

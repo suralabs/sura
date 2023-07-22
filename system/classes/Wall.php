@@ -9,7 +9,7 @@
 
 namespace Mozg\classes;
 
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 
 /**
  *
@@ -127,7 +127,7 @@ class Wall
                         $audioId = intval($attach_type[1]);
                         $audioInfo = $db->super_query("SELECT artist, name, url FROM `audio` WHERE aid = '" . $audioId . "'");//fixme name, aid
                         if ($audioInfo) {
-                            if ((new \FluffyDollop\Http\Request)->int('uid')) {
+                            if ((new \Sura\Http\Request)->int('uid')) {
                                 $appClassWidth = 'player_mini_mbar_wall_all';
                             } else {
                                 $appClassWidth = '';

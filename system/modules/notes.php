@@ -8,10 +8,10 @@
  *
  */
 
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 use Mozg\classes\Cache;
 use Mozg\classes\Parse;
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 
 NoAjaxQuery();
 

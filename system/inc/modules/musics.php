@@ -9,7 +9,7 @@
  */
 
 //Редактирование
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 use Mozg\classes\Cache;
 
 if ($_GET['act'] === 'edit') {

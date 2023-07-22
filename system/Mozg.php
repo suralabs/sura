@@ -11,9 +11,9 @@ namespace Mozg;
 
 use Sura\Corner\Error;
 use Mozg\exception\ErrorException;
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 use JsonException;
-use FluffyDollop\Support\{Registry, Router};
+use Sura\Support\{Registry, Router};
 use Mozg\classes\{I18n, DB};
 
 class Mozg

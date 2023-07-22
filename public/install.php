@@ -7,7 +7,7 @@
  *
  */
 
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 
 if (version_compare(PHP_VERSION, '8.1.5') < 0) {
     echo "Please change php version";
@@ -48,7 +48,7 @@ function check_install(): bool
     return !(!file_exists(ENGINE_DIR . '/data/config.php') || !file_exists(ENGINE_DIR . '/data/db_config.php'));
 }
 
-$act = (new \FluffyDollop\Http\Request)->filter('act');
+$act = (new \Sura\Http\Request)->filter('act');
 
 switch ($act) {
 
@@ -56,28 +56,28 @@ switch ($act) {
         if (!check_install()) {
             $url = $_SERVER['HTTP_HOST'];
             try {
-                \FluffyDollop\Filesystem\Filesystem::createDir('./uploads/room/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./uploads/records/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./uploads/attach/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./uploads/audio_tmp/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./uploads/blog/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./uploads/groups/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./uploads/users/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./uploads/videos/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./uploads/audio/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./uploads/doc/');
+                \Sura\Filesystem\Filesystem::createDir('./uploads/room/');
+                \Sura\Filesystem\Filesystem::createDir('./uploads/records/');
+                \Sura\Filesystem\Filesystem::createDir('./uploads/attach/');
+                \Sura\Filesystem\Filesystem::createDir('./uploads/audio_tmp/');
+                \Sura\Filesystem\Filesystem::createDir('./uploads/blog/');
+                \Sura\Filesystem\Filesystem::createDir('./uploads/groups/');
+                \Sura\Filesystem\Filesystem::createDir('./uploads/users/');
+                \Sura\Filesystem\Filesystem::createDir('./uploads/videos/');
+                \Sura\Filesystem\Filesystem::createDir('./uploads/audio/');
+                \Sura\Filesystem\Filesystem::createDir('./uploads/doc/');
 
-                \FluffyDollop\Filesystem\Filesystem::createDir('./system/cache/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./system/cache/groups/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./system/cache/groups_forum/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./system/cache/groups_mark/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./system/cache/photos_mark/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./system/cache/votes/');
-                \FluffyDollop\Filesystem\Filesystem::createDir('./system/cache/wall/');
+                \Sura\Filesystem\Filesystem::createDir('./system/cache/');
+                \Sura\Filesystem\Filesystem::createDir('./system/cache/groups/');
+                \Sura\Filesystem\Filesystem::createDir('./system/cache/groups_forum/');
+                \Sura\Filesystem\Filesystem::createDir('./system/cache/groups_mark/');
+                \Sura\Filesystem\Filesystem::createDir('./system/cache/photos_mark/');
+                \Sura\Filesystem\Filesystem::createDir('./system/cache/votes/');
+                \Sura\Filesystem\Filesystem::createDir('./system/cache/wall/');
 
-                \FluffyDollop\Filesystem\Filesystem::createDir('./system/data/');
+                \Sura\Filesystem\Filesystem::createDir('./system/data/');
 
-                \FluffyDollop\Filesystem\Filesystem::createDir('./backup/');
+                \Sura\Filesystem\Filesystem::createDir('./backup/');
 
             } catch (Exception $e) {
                 echo '<div class="h2">Не удалось создать директории</div>';//fixme
@@ -306,8 +306,8 @@ HTML;
         break;
     case "remove_installer":
         if (check_install() && !file_exists('./system/data/look')) {
-            \FluffyDollop\Filesystem\Filesystem::delete('./install.php');
-            \FluffyDollop\Filesystem\Filesystem::delete('./system/mysql_tables.php');
+            \Sura\Filesystem\Filesystem::delete('./install.php');
+            \Sura\Filesystem\Filesystem::delete('./system/mysql_tables.php');
             header('Location: /');
         } else {
             $params = [];
@@ -316,22 +316,22 @@ HTML;
         break;
     case "clean":
         if (check_install() && !file_exists('./system/data/look')) {
-            \FluffyDollop\Filesystem\Filesystem::delete('./uploads/room/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./uploads/records/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./uploads/attach/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./uploads/audio_tmp/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./uploads/blog/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./uploads/groups/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./uploads/users/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./uploads/videos/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./uploads/audio/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./uploads/doc/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./system/cache/groups/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./system/cache/groups_forum/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./system/cache/groups_mark/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./system/cache/photos_mark/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./system/cache/votes/');
-            \FluffyDollop\Filesystem\Filesystem::delete('./system/cache/wall/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/room/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/records/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/attach/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/audio_tmp/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/blog/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/groups/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/users/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/videos/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/audio/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/doc/');
+            \Sura\Filesystem\Filesystem::delete('./system/cache/groups/');
+            \Sura\Filesystem\Filesystem::delete('./system/cache/groups_forum/');
+            \Sura\Filesystem\Filesystem::delete('./system/cache/groups_mark/');
+            \Sura\Filesystem\Filesystem::delete('./system/cache/photos_mark/');
+            \Sura\Filesystem\Filesystem::delete('./system/cache/votes/');
+            \Sura\Filesystem\Filesystem::delete('./system/cache/wall/');
 
             $db_config = require ENGINE_DIR . '/data/db_config.php';
 
@@ -410,9 +410,9 @@ HTML;
                 }
             }
 
-            \FluffyDollop\Filesystem\Filesystem::delete(ENGINE_DIR . '/data/config.php');
-            \FluffyDollop\Filesystem\Filesystem::delete(ENGINE_DIR . '/data/db_config.php');
-            \FluffyDollop\Filesystem\Filesystem::delete(ROOT_DIR . '/adminpanel.php');
+            \Sura\Filesystem\Filesystem::delete(ENGINE_DIR . '/data/config.php');
+            \Sura\Filesystem\Filesystem::delete(ENGINE_DIR . '/data/db_config.php');
+            \Sura\Filesystem\Filesystem::delete(ROOT_DIR . '/adminpanel.php');
 
             $params = [];
             return view('install.installed', $params);

@@ -9,7 +9,7 @@
 
 namespace Mozg\modules;
 
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 use Mozg\classes\Module;
 
 class Search extends Module

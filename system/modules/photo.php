@@ -8,8 +8,8 @@
  *
  */
 
-use FluffyDollop\Http\Request;
-use FluffyDollop\Support\{Registry};
+use Sura\Http\Request;
+use Sura\Support\{Registry};
 use Mozg\classes\Cache;
 
 if (Registry::get('logged')) {
@@ -84,7 +84,7 @@ if (Registry::get('logged')) {
                     if ($config['news_mail_4'] == 'yes') {
                         $rowUserEmail = $db->super_query("SELECT user_name, user_email FROM `users` WHERE user_id = '" . $check_photo['user_id'] . "'");
                         if ($rowUserEmail['user_email']) {
-                            $mail = new \FluffyDollop\Support\ViiMail($config);
+                            $mail = new \Sura\Support\ViiMail($config);
                             $rowMyInfo = $db->super_query("SELECT user_search_pref FROM `users` WHERE user_id = '" . $user_id . "'");
                             $rowEmailTpl = $db->super_query("SELECT text FROM `mail_tpl` WHERE id = '4'");
                             $rowEmailTpl['text'] = str_replace('{%user%}', $rowUserEmail['user_name'], $rowEmailTpl['text']);

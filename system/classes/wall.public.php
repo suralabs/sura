@@ -8,7 +8,7 @@
  *
  */
 
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 
 class wall
 {

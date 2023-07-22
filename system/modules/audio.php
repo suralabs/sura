@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 use JamesHeinrich\GetID3\GetID3;
 use Mozg\classes\Cache;
 

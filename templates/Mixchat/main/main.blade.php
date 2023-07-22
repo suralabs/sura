@@ -1,4 +1,4 @@
-@if((new \FluffyDollop\Http\Request)->checkAjax() === false)<!DOCTYPE html>
+@if((new \Sura\Http\Request)->checkAjax() === false)<!DOCTYPE html>
 <html lang="{{ $lang }}" prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# profile: http://ogp.me/ns/profile#">
 <head>
     <title>{{ $title }}</title>
@@ -279,7 +279,7 @@
         <div id="page">
             @endif
             @yield('content')
-            @if((new \FluffyDollop\Http\Request)->checkAjax() === false)
+            @if((new \Sura\Http\Request)->checkAjax() === false)
                 <div class="clear"></div>
         </div>
         <div class="clear"></div>

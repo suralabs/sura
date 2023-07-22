@@ -8,9 +8,9 @@
  *
  */
 
-use FluffyDollop\Filesystem\Filesystem;
-use FluffyDollop\Http\Request;
-use FluffyDollop\Support\Registry;
+use Sura\Filesystem\Filesystem;
+use Sura\Http\Request;
+use Sura\Support\Registry;
 
 //Если добавляем
 if (isset($_POST['save'])) {

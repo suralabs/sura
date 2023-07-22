@@ -8,8 +8,8 @@
  *
  */
 
-use FluffyDollop\Support\Cookie;
-use FluffyDollop\Support\Registry;
+use Sura\Support\Cookie;
+use Sura\Support\Registry;
 use Mozg\classes\TplCp;
 use Mozg\Models\Users;
 
@@ -91,7 +91,7 @@ FROM `users` WHERE user_id = '" . $cookie_user_id . "' AND user_group = '1'");
 //Если данные поступили через пост и пользователь не авторизован
 if (isset($_POST['log_in']) && !isset($_SESSION['user_id'])) {
     //Приготавливаем данные
-    $email = (new \FluffyDollop\Http\Request)->filter('email');
+    $email = (new \Sura\Http\Request)->filter('email');
     $password = stripslashes($_POST['pass']);
 
     //Проверяем правильность e-mail

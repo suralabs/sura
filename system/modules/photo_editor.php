@@ -8,8 +8,8 @@
  *
  */
 
-use FluffyDollop\Support\{Registry};
-use FluffyDollop\Http\Request;
+use Sura\Support\{Registry};
+use Sura\Http\Request;
 
 if (Registry::get('logged')) {
 

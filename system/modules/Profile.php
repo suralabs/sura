@@ -11,11 +11,11 @@
 namespace Mozg\modules;
 
 use ErrorException;
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 use Mozg\classes\Cache;
 use Mozg\classes\DB;
 use Mozg\classes\Module;
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 use Mozg\classes\Wall;
 use Mozg\classes\WallProfile;
 

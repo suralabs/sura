@@ -8,8 +8,8 @@
  *
  */
 
-use FluffyDollop\Http\Request;
-use FluffyDollop\Support\Registry;
+use Sura\Http\Request;
+use Sura\Support\Registry;
 use Mozg\classes\Cache;
 
 NoAjaxQuery();
@@ -99,7 +99,7 @@ if (Registry::get('logged')) {
                         $rowUserEmail = $db->super_query("SELECT user_name, user_email FROM `users` WHERE user_id = '" . $for_user_id . "'");
                         if ($rowUserEmail['user_email']) {
                             include_once ENGINE_DIR . '/classes/mail.php';
-                            $mail = new \FluffyDollop\Support\ViiMail($config);
+                            $mail = new \Sura\Support\ViiMail($config);
                             $rowMyInfo = $db->super_query("SELECT user_search_pref FROM `users` WHERE user_id = '" . $user_id . "'");
                             $rowEmailTpl = $db->super_query("SELECT text FROM `mail_tpl` WHERE id = '6'");
                             $rowEmailTpl['text'] = str_replace('{%user%}', $rowUserEmail['user_name'], $rowEmailTpl['text']);
