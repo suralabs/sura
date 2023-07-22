@@ -1,14 +1,14 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
  *
  */
 
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 use Mozg\classes\TplCp;
 
 $config = settings_get();
@@ -61,7 +61,7 @@ switch ($act) {
             );
         }
 
-        (new \FluffyDollop\Http\Response)->_e_json($response);
+        (new \Sura\Http\Response)->_e_json($response);
         break;
 
     default:

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -11,10 +11,10 @@
 namespace Mozg\modules;
 
 use ErrorException;
-use FluffyDollop\Http\{Request, Response};
+use Sura\Http\{Request, Response};
 use JsonException;
 use Mozg\classes\{Email, Module, ViewEmail};
-use FluffyDollop\Support\{Registry, Status};
+use Sura\Support\{Registry, Status};
 
 /**
  * fixme template

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace Mozg\classes;
 
 use ErrorException;
-use FluffyDollop\Http\Request;
-use FluffyDollop\Support\{Cookie, Registry};
+use Sura\Http\Request;
+use Sura\Support\{Cookie, Registry};
 use JsonException;
 use Mozg\Models\Users;
 

@@ -1,14 +1,14 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
  *
  */
 
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 
 //Добавление слова
 if (isset($_POST['send'])) {
@@ -21,7 +21,7 @@ if (isset($_POST['send'])) {
 		
 	}
 	
-	$word_replace = (new \FluffyDollop\Http\Request)->filter('word_replace');
+	$word_replace = (new \Sura\Http\Request)->filter('word_replace');
 	
 	$word_id = Registry::get('server_time');
 	

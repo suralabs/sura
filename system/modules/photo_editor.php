@@ -1,15 +1,15 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
  *
  */
 
-use FluffyDollop\Support\{Registry};
-use FluffyDollop\Http\Request;
+use Sura\Support\{Registry};
+use Sura\Http\Request;
 
 if (Registry::get('logged')) {
 

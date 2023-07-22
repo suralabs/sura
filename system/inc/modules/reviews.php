@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -32,7 +32,7 @@ if ($_GET['act'] === 'del') {
 
 }
 
-$page = (new \FluffyDollop\Http\Request)->int('page', 1);
+$page = (new \Sura\Http\Request)->int('page', 1);
 $gcount = 20;
 $limit_page = ($page - 1) * $gcount;
 

@@ -14,7 +14,7 @@
                 Внимание, на сервере обнаружена уже установленная копия приложения.
             </div>
             <div style=" display: flex">
-                <input type="submit" class="inp fl_r" style="background: #f44336; margin: 10px" value="Очистить Tephida"
+                <input type="submit" class="inp fl_r" style="background: #f44336; margin: 10px" value="Очистить Sura"
                        onClick="location.href='/install.php?act=clean'"/>
                 <input type="submit" class="inp fl_r" style="background: #f44336; margin: 10px;"
                        value="Удалить инсталятор" onClick="location.href='/install.php?act=remove_installer'"/>

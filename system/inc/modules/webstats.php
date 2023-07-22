@@ -1,14 +1,14 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
  *
  */
 
-use FluffyDollop\Http\Request;
+use Sura\Http\Request;
 
 echoheader();
 echohtmlstart('Общая статистика сайта');
@@ -130,7 +130,7 @@ $month = (new Request)->int('m');
 if ($month and $month <= 0 or $month > 12) $month = 1;
 
 $year = (new Request)->int('y');
-if ($year and $year < 2022 or $year > 2030) $year = 2022;
+if ($year and $year < 2023 or $year > 2030) $year = 2023;
 
 if ($month and $year) {
     if ($month > 1 and $month < 10) {
@@ -242,7 +242,7 @@ $tpl->set('{uid}', $user_info['user_id']);
 
 $tpl->set('{months}', installationSelected($month, '<option value="1">Январь</option><option value="2">Февраль</option><option value="3">Март</option><option value="4">Апрель</option><option value="5">Май</option><option value="6">Июнь</option><option value="7">Июль</option><option value="8">Август</option><option value="9">Сентябрь</option><option value="10">Октябрь</option><option value="11">Ноябрь</option><option value="12">Декабрь</option>'));
 $tpl->set('{year}', installationSelected($year, '
-<option value="2013">2022</option>
+<option value="2013">2023</option>
 <option value="2014">2023</option>
 <option value="2015">2024</option>
 <option value="2016">2025</option>

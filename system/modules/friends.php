@@ -1,15 +1,15 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
  *
  */
 
-use FluffyDollop\Http\Request;
-use FluffyDollop\Support\Registry;
+use Sura\Http\Request;
+use Sura\Support\Registry;
 use Mozg\classes\Cache;
 use Mozg\classes\Flood;
 
@@ -74,7 +74,7 @@ if (Registry::get('logged')) {
                             if ($config['news_mail_1'] == 'yes') {
                                 $rowUserEmail = $db->super_query("SELECT user_name, user_email FROM `users` WHERE user_id = '" . $for_user_id . "'");
                                 if ($rowUserEmail['user_email']) {
-                                    $mail = new \FluffyDollop\Support\ViiMail($config);
+                                    $mail = new \Sura\Support\ViiMail($config);
                                     $rowMyInfo = $db->super_query("SELECT user_search_pref FROM `users` WHERE user_id = '" . $user_id . "'");
                                     $rowEmailTpl = $db->super_query("SELECT text FROM `mail_tpl` WHERE id = '1'");
                                     $rowEmailTpl['text'] = str_replace('{%user%}', $rowUserEmail['user_name'], $rowEmailTpl['text']);

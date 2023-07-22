@@ -2,8 +2,8 @@
 
 namespace Mozg\Security;
 
-use FluffyDollop\Contracts\Security\Factory;
-use FluffyDollop\Support\Registry;
+use Sura\Contracts\Security\Factory;
+use Sura\Support\Registry;
 
 class AntiSpam implements Factory
 {

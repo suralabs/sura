@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
@@ -9,8 +9,8 @@
 
 namespace Mozg\modules;
 
-use FluffyDollop\Filesystem\Filesystem;
-use FluffyDollop\Support\Status;
+use Sura\Filesystem\Filesystem;
+use Sura\Support\Status;
 use Mozg\classes\Cache;
 use Mozg\classes\DB;
 use Mozg\classes\Module;
@@ -55,7 +55,7 @@ class Editprofile extends Module
                 'status' => Status::BAD,
             );
         }
-        (new \FluffyDollop\Http\Response)->_e_json($response);
+        (new \Sura\Http\Response)->_e_json($response);
     }
 
     public function main()
@@ -99,7 +99,7 @@ class Editprofile extends Module
             12 => 'Декабря'
         ));
         $years = [];
-        for ($i = 1950; $i <= 2022; ++$i) {
+        for ($i = 1950; $i <= 2023; ++$i) {
             $years[$i] = $i;
         }
         $params['user_year'] = addToList($row['user_day'], $years);

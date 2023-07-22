@@ -1,16 +1,16 @@
 <?php
 
 /*
- * Copyright (c) 2022 Tephida
+ * Copyright (c) 2023 Sura
  *
  *  For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
  *
  */
 
-use FluffyDollop\Support\Registry;
+use Sura\Support\Registry;
 use Mozg\classes\View;
-use FluffyDollop\Http\{Request, Response};
+use Sura\Http\{Request, Response};
 use JetBrains\PhpStorm\ArrayShape;
 use Mozg\classes\Cache;
 use Mozg\classes\I18n;
@@ -281,7 +281,7 @@ function declWord(int $num, string $type): string
 {
     $lang = I18n::getLang();
     $decl_list = require ROOT_DIR . "/lang/{$lang}/declensions.php";
-    return (new \FluffyDollop\Support\Declensions($decl_list))->makeWord($num, $type);
+    return (new \Sura\Support\Declensions($decl_list))->makeWord($num, $type);
 }
 
 /**
@@ -574,7 +574,7 @@ function compileAdmin($tpl): void
     $tpl->set('{content}', $tpl->result['content']);
     $tpl->compile('main');
     if ((new Request)->filter('ajax') === 'yes') {
-        $metatags['title'] = $metatags['title'] ?? 'Панель управления';
+        $metatags['title'] = 'Панель управления';
         $result_ajax = array(
             'title' => $metatags['title'],
             'content' => $tpl->result['info'] . $tpl->result['content']

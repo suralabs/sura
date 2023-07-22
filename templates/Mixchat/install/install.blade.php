@@ -1,4 +1,4 @@
-@if((new \FluffyDollop\Http\Request)->checkAjax() === false)<!DOCTYPE>
+@if((new \Sura\Http\Request)->checkAjax() === false)<!DOCTYPE>
 <html lang="ru">
 <head>
     <title>Установка приложения</title>
@@ -109,7 +109,7 @@
 </style>
 @endif
 @yield('content')
-@if((new \FluffyDollop\Http\Request)->checkAjax() === false)
+@if((new \Sura\Http\Request)->checkAjax() === false)
 </body>
 </html>
 @endif
