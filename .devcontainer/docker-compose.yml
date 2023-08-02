@@ -1,22 +1,32 @@
 version: "3"
-
 services:
-  php:
-    build: .
+  app:
+    build: ./docker/app
     volumes:
-      - ..:/workspace:cached
+      - ../:/workspace:cached
     ports:
-      # For use with PHP (e.g. `php -S localhost:8080`)
-      - "8000:8000"
-    command: sleep infinity
-  mariadb:
-    image: mariadb:10.4
-    expose:
-      # Expose mariadb port to php service (Access as hostname "mariadb" from within php container)
-      - "3306"
-    # Uncomment to allow access to mariadb from external tools
-    # ports:
-    #     - "3306:3306"
+      - 80:80
+    tty: true
     environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: sura
+        APP_ENV: local
+        PHP_EXTENSION_XDEBUG: 1
+        PHP_EXTENSION_PGSQL: 1
+        PHP_EXTENSION_PDO_PGSQL: 1
+        APACHE_DOCUMENT_ROOT: /workspace/public
+  db:
+    image: postgres:13
+    restart: unless-stopped
+    ports:
+        - 5432:5432
+    environment:
+        POSTGRES_DB: laravel
+        POSTGRES_USER: laravel
+        POSTGRES_PASSWORD: laravel
+  redis:
+    image: redis:6-alpine
+    ports:
+      - 6379:6379
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
