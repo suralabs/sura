@@ -1,22 +1,32 @@
-# [Choice] PHP version (use -bullseye variants on local arm64/Apple Silicon): 8, 8.1, 8.0, 7, 7.4, 7.3, 8-bullseye, 8.1-bullseye, 8.0-bullseye, 7-bullseye, 7.4-bullseye, 7.3-bullseye, 8-buster, 8.1-buster, 8.0-buster, 7-buster, 7.4-buster
-ARG VARIANT=8.1-bullseye
-FROM mcr.microsoft.com/vscode/devcontainers/php:0-${VARIANT}
+FROM debian:bullseye-slim
+ARG DEBIAN_FRONTEND=noninteractive
+USER root
+COPY php.ini /tmp
 
-# Install MariaDB client
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get install -y mariadb-client \ 
-    && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -yq
+    # Add updated php sources
+RUN apt-get install curl -yq
+RUN curl -sSL https://packages.sury.org/php/README.txt | bash -x
+RUN apt-get update -yq
+    # Install some common packages
+RUN apt-get install git imagemagick nano openssh-server sqlite3 wget unzip -yq
+RUN sed -i 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' /etc/ImageMagick-6/policy.xml
+    # Install PHP CLI with some extensions for Drupal development
+RUN apt-get install php8.2-dev -yq
+RUN apt-get install php8.2-apcu php8.2-curl php8.2-gd php8.2-imagick php8.2-mbstring php8.2-sqlite3 php8.2-zip php8.2-intl -yq
+RUN pear config-set php_ini /etc/php/8.2/cli/php.ini
+RUN pecl install xdebug
+RUN cat /tmp/php.ini >> /etc/php/8.2/cli/php.ini
+    # Install NodeJS LTS
+# RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash
+# RUN apt-get install nodejs -yq
+    # Install Composer
+RUN wget https://getcomposer.org/installer
+RUN php installer --install-dir=/usr/local/bin --filename=composer
+    # Install MySql
+RUN apt-get update && apt-get install -y mariadb-server
+    #
+RUN composer install    
+    # Create a user
+#RUN useradd -m user -p user
 
-# Install php-mysql driver
-RUN docker-php-ext-install mysqli pdo pdo_mysql
-
-# [Choice] Node.js version: none, lts/*, 16, 14, 12, 10
-ARG NODE_VERSION="none"
-RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
-
-# [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
-
-# [Optional] Uncomment this line to install global node packages.
-# RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
