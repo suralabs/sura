@@ -1,30 +1,27 @@
+// See https://aka.ms/vscode-remote/devcontainer.json for format details.
 {
-	"name": "Debian with MySQL",
-	"dockerFile": "Dockerfile",
-	"settings": {
-	  "terminal.integrated.shell.linux": "/bin/bash"
+    "name": "Sura",
+    "dockerComposeFile": ["docker-compose.yml"],
+    "workspaceFolder": "/workspace",
+    "service": "app",
+    "shutdownAction": "stopCompose",
+    "extensions": [
+		"editorconfig.editorconfig",
+        "eg2.tslint",
+        "esbenp.prettier-vscode",
+        "CoenraadS.bracket-pair-colorizer"
+	],
+    "settings": {
+        "#terminal.integrated.shell.linux": "/bin/bash"
+    },
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    "forwardPorts": [80],
+
+    // Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "cp .env.example .env && composer install && php artisan key:generate && yarn install && yarn run development",
+	"portsAttributes": {
+		"80": {
+			"label": "HTTP"
+		}
 	},
-	"extensions": [
-	  "xdebug.php-debug",
-	  "bmewburn.vscode-intelephense-client",
-	  "mrmlnc.vscode-apache",
-	  "ms-vscode.vscode-docker",
-	  "felixfbecker.php-debug",
-	  "dbaeumer.vscode-eslint"	
-	],
-	"dockerComposeFile": "docker-compose.yml",
-	"services": [
-	  {
-		"name": "db",
-		"image": "mysql",
-		"env": {
-		  "MYSQL_ROOT_PASSWORD": "root"
-		},
-		"ports": [
-		  "3306:3306"
-		]
-	  }
-	],
-	"postCreateCommand": "bash .devcontainer/setup.sh"
-  }
-  
+}
