@@ -13,15 +13,21 @@ services:
         PHP_EXTENSION_PGSQL: 1
         PHP_EXTENSION_PDO_PGSQL: 1
         APACHE_DOCUMENT_ROOT: /workspace/public
-  db:
-    image: postgres:13
-    restart: unless-stopped
-    ports:
-        - 5432:5432
+  database:
+    image: 'mariadb:10'
     environment:
-        POSTGRES_DB: laravel
-        POSTGRES_USER: laravel
-        POSTGRES_PASSWORD: laravel
+        MYSQL_ROOT_PASSWORD: 'password'
+        MYSQL_ROOT_HOST: "%"
+        MYSQL_DATABASE: 'sura'
+        MYSQL_USER: 'sura'
+        MYSQL_PASSWORD: 'password'
+        MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+        - 'database:/var/lib/mysql'
+    healthcheck:
+        test: ["CMD", "mysqladmin", "ping", "-ppassword"]
+        retries: 3
+        timeout: 5s
   redis:
     image: redis:6-alpine
     ports:
