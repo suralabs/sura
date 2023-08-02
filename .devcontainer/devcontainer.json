@@ -18,7 +18,7 @@
 
     // Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "composer install && cp system/data/db_config.php.example system/data/db_config.php",
-	// "postCreateCommand": "sh setup.sh",
+	// "postCreateCommand": "setup.sh",
     "portsAttributes": {
 		"80": {
 			"label": "HTTP"

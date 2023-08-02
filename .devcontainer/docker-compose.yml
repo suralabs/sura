@@ -10,18 +10,19 @@ services:
     environment:
         APP_ENV: local
         PHP_EXTENSION_XDEBUG: 1
+        PHP_EXTENSION_GD: 1
         PHP_EXTENSION_PGSQL: 1
         PHP_EXTENSION_PDO_PGSQL: 1
         APACHE_DOCUMENT_ROOT: /workspace/public
-  # db:
-  #   image: mariadb
-  #   restart: always
-  #   ports:
-  #       - 3306:3306
-  #   environment:
-  #       MYSQL_DATABASE: sura
-  #       MYSQL_USER: sura
-  #       MYSQL_PASSWORD: example
+  db:
+    image: mariadb
+    restart: always
+    ports:
+        - 3306:3306
+    environment:
+        MYSQL_DATABASE: sura
+        MYSQL_USER: sura
+        MYSQL_PASSWORD: example
   redis:
     image: redis:6-alpine
     ports:
