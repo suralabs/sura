@@ -18,7 +18,7 @@
     "forwardPorts": [80],
 
     // Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "cp .env.example .env && composer install",
+	"postCreateCommand": "cp /system/data/db_config.php.example /system/data/db_config.php && composer install",
 	"portsAttributes": {
 		"80": {
 			"label": "HTTP"
