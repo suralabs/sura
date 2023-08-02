@@ -5,21 +5,21 @@
     "workspaceFolder": "/workspace",
     "service": "app",
     "shutdownAction": "stopCompose",
+
     "extensions": [
         "eg2.tslint",
         "christian-kohler.path-intellisense",
         "esbenp.prettier-vscode",
         "CoenraadS.bracket-pair-colorizer"
 	],
-    "settings": {
-        "#terminal.integrated.shell.linux": "/bin/bash"
-    },
+    
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     "forwardPorts": [80],
 
     // Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "composer install && cp system/data/db_config.php.example system/data/db_config.php",
-	"portsAttributes": {
+	
+    "portsAttributes": {
 		"80": {
 			"label": "HTTP"
 		}
