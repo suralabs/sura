@@ -12,8 +12,7 @@
 /system/data/config.php
 /system/data/db.php
 /system/data/db_config.php
-/adminpanel.php
-/composer.phar
-/composer.lock
-/vendor/
-/.idea/
+composer.phar
+composer.look
+vendor
+.idea
