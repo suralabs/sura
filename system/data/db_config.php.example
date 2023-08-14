@@ -1,0 +1,8 @@
+<?php
+    return [
+        'host' => "database",
+        'name' => "sura",
+        'user' => "sura",
+        'pass' => "password",
+    ];
+                

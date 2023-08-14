@@ -1,0 +1,27 @@
+// See https://aka.ms/vscode-remote/devcontainer.json for format details.
+{
+    "name": "codespaces",
+    "dockerComposeFile": ["docker-compose.yml"],
+    "workspaceFolder": "/workspace",
+    "service": "app",
+    "shutdownAction": "stopCompose",
+
+    "extensions": [
+        "eg2.tslint",
+        "christian-kohler.path-intellisense",
+        "esbenp.prettier-vscode",
+        "CoenraadS.bracket-pair-colorizer"
+	],
+    
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    "forwardPorts": [80],
+
+    // Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "composer install && cp system/data/db_config.php.example system/data/db_config.php",
+	// "postCreateCommand": "setup.sh",
+    "portsAttributes": {
+		"80": {
+			"label": "HTTP"
+		}
+	}
+}
