@@ -4018,7 +4018,7 @@ $table_Chema[] = "CREATE TABLE `updates` (
 $table_Chema[] = "CREATE TABLE `users` (
   `user_id` INT( 11 ) AUTO_INCREMENT PRIMARY KEY,
   `user_email` varchar(50) NOT NULL,
-  `user_password` varchar(32) NOT NULL,
+  `user_password` varchar(255) NOT NULL,
   `user_name` varchar(30) NOT NULL,
   `user_lastname` varchar(30) NOT NULL,
   `user_photo` varchar(255) NOT NULL,

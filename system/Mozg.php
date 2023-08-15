@@ -90,6 +90,8 @@ class Mozg
         $params = [];
         $routers = [
             '/' => 'Home@main',
+            '/api/authorize' => 'Api@authorize',
+            '/api' => 'Api@main',
 
             '/register/send' => 'Register@send',
             '/register/rules' => 'Register@rules',
@@ -149,7 +151,8 @@ class Mozg
             '/editprofile/delete/photo' => 'Editprofile@deletePhoto',
             '/editmypage' => 'Editprofile@main',
 
-            '/admin/' => 'Admin@main',
+            // '/admin/' => 'Admin@main',
+            
         ];
         $router->add($routers);
 
@@ -158,13 +161,22 @@ class Mozg
         } else {
             //todo update
             $module = isset($_GET['go']) ?
-                htmlspecialchars(strip_tags(stripslashes(trim(urldecode($_GET['go']))))) : 'main';
+                htmlspecialchars(strip_tags(stripslashes(trim(urldecode($_GET['go']))))) : 'Home';
             $action = (new Request)->filter('act');
             $class = ucfirst($module);
             if (!class_exists($class) || $action === '' || $class === 'Wall') {
+
+                if(!class_exists($class)){
+                    $text = 'error 500';
+                    $params = [
+                        'title' => $text,
+                        'text' => 'Нет контроллера ' . $class,
+                    ];
+                    view('info.info', $params);
+                }
                 $text = 'error 500';
                 $params = [
-                    'title' => 'error 500',
+                    'title' => $text,
                     'text' => $text,
                 ];
                 view('info.info', $params);
