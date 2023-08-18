@@ -1,11 +1,12 @@
 <?php
 
-use Sura\Libs\Db;
+const ROOT_DIR = __DIR__;
+const ENGINE_DIR = ROOT_DIR . '/system';
 
 if (PHP_SAPI === 'cli') {
     require __DIR__.'/vendor/autoload.php';
 
-    $config = include __DIR__.'/config/config.php';
+    // $config = include __DIR__.'/config/config.php';
     //include __DIR__.'/system/data/db.old.php';
     //require __DIR__.'/system/classes/mysql.php';
 
@@ -14,103 +15,326 @@ if (PHP_SAPI === 'cli') {
     die();
 }
 
-$go = $_SERVER['argv']['1'];
-    switch ($go) {
-        case '-all':
-            commandline_help();
-            break;
-        case '-video':
-            $db = Db::getDB();
-                // print "Start convert\n";
-              if ($_SERVER['argv']['2']=='convert') {
-                $row = $db->super_query("SELECT id, video, type FROM `".PREFIX."_videos_decode` LIMIT 0, 1", 1);
+$go = (!empty($_SERVER['argv']['1'])) ? $_SERVER['argv']['1'] : '';
+    switch($go)
+    {
+    case '-all';
+    commandline_help();
+    break;
+    case '-make:add-user':
+        $name = $_SERVER['argv']['2'];
+        $lastname = $_SERVER['argv']['3'];
+        $email = $_SERVER['argv']['4'];
 
-                $row_count = count($row);
-                if ($row_count > 0) {
-                    foreach ($row as $key) {
-                        $dir_file_name = str_replace('.'.$key['type'], '', $key['video']);
-                        $video_convert = false;
-                        if (file_exists($dir_file_name.'_240.mp4')) {
-                            $db->query("DELETE FROM `".PREFIX."_videos_decode` WHERE video = '".$key['video']."'");
-                            print "End convert\nFinish\n";
-                            die();
-                        }else{
-                            $video_convert = true;
-                        }
+        $pass = password_hash($_SERVER['argv']['5'], PASSWORD_DEFAULT);
+        $_IP = '0.0.0.0';
+        $hid = md5($pass);
+        $time = time();
+        $server_time = time();
+        $check_email = \Mozg\classes\DB::getDB()->row('SELECT COUNT(*) AS cnt FROM `users` WHERE user_email = ?', $email);
+        if (!$check_email['cnt']) {
+            \Mozg\classes\DB::getDB()->insert('users', [
+                'user_last_visit' => $server_time,
+                'user_email' => $email,
+                'user_password' => $pass,
+                'user_name' => $name,
+                'user_lastname' => $lastname,
+                'user_photo' => '',
+                'user_day' => '0',
+                'user_month' => '0',
+                'user_year' => '0',
+                'user_country' => '0',
+                'user_city' => '0',
+                'user_reg_date' => $server_time,
+                'user_lastdate' => $server_time,
+                'user_group' => '1',
+                'user_hid' => $hid,
+                'user_search_pref' => $name . ' ' . $lastname,
+                'user_birthday' => '0-0-0',
+                'user_privacy' => 'val_msg|1||val_wall1|1||val_wall2|1||val_wall3|1||val_info|1||',
+                'user_wall_id' => '0',
+                'user_sex' => '0',
+                'user_country_city_name' => '',
+                'user_xfields' => '',
+                'xfields' => '',
+                'user_xfields_all' => '',
+                'user_albums_num' => '0',
+                'user_friends_demands' => '0',
+                'user_friends_num' => '0',
+                'user_fave_num' => '0',
+                'user_pm_num' => '0',
+                'user_notes_num' => '0',
+                'user_subscriptions_num' => '0',
+                'user_videos_num' => '0',
+                'user_wall_num' => '0',
+                'user_status' => '',
+                'user_blacklist_num' => '0',
+                'user_blacklist' => '0',
+                'user_sp' => '',
+                'user_support' => 0,
+                'user_balance' => '0',
+                'user_lastupdate' => $server_time,
+                'user_gifts' => '0',
+                'user_public_num' => '0',
+                'user_audio' => '0',
+                'user_msg_type' => '0',
+                'user_delet' => '0',
+                'user_ban' => '0',
+                'user_ban_date' => '0',
+                'user_new_mark_photos' => 0,
+                'user_doc_num' => '0',
+                'user_logged_mobile' => '0',
+                'balance_rub' => '0',
+                'user_rating' => '0',
+                'invties_pub_num' => '0',
+                'user_real' => '0',
+                'user_active' => '0',
+                'notify' => '0',
+            ]);
+            print "User add success\n";
+        }else{
+            print "User found\n";
+        }
+    break;
+    // case '-video':
+    //     $db = Db::getDB();
+    //         // print "Start convert\n";
+    //       if ($_SERVER['argv']['2']=='convert') {
+    //         $row = $db->super_query("SELECT id, video, type FROM `".PREFIX."_videos_decode` LIMIT 0, 1", 1);
+
+    //         $row_count = count($row);
+    //         if ($row_count > 0) {
+    //             foreach ($row as $key) {
+    //                 $dir_file_name = str_replace('.'.$key['type'], '', $key['video']);
+    //                 $video_convert = false;
+    //                 if (file_exists($dir_file_name.'_240.mp4')) {
+    //                     $db->query("DELETE FROM `".PREFIX."_videos_decode` WHERE video = '".$key['video']."'");
+    //                     print "End convert\nFinish\n";
+    //                     die();
+    //                 }else{
+    //                     $video_convert = true;
+    //                 }
 
 
-                        if ($key['type'] == 'mp4' AND $video_convert == true) {
+    //                 if ($key['type'] == 'mp4' AND $video_convert == true) {
 
-                            //
-                            //240
-                            exec('/usr/bin/ffmpeg -y -i '.$key['video'].' -vcodec libx264 -vprofile baseline -preset slow -b:v 250k -maxrate 250k -bufsize 500k -vf scale=320:180 -threads 0 -ab 96k '.$dir_file_name.'_240.mp4');
+    //                     //
+    //                     //240
+    //                     exec('/usr/bin/ffmpeg -y -i '.$key['video'].' -vcodec libx264 -vprofile baseline -preset slow -b:v 250k -maxrate 250k -bufsize 500k -vf scale=320:180 -threads 0 -ab 96k '.$dir_file_name.'_240.mp4');
 
-                            // 720
-                            exec('/usr/bin/ffmpeg -y -i '.$key['video'].' -vcodec libx264 -vprofile baseline -preset slow -b:v 1000k -maxrate 500k -bufsize 1000k -vf scale=854:480 -threads 0 -ab 150k '.$dir_file_name.'_720.mp4');
-
-
-                            if (file_exists($dir_file_name.'_240.mp4')) {
-                                $db->query("DELETE FROM `".PREFIX."_videos_decode` WHERE video = '".$key['video']."'");
-                            }
-                            // ffmpeg -i inputfile.avi -vcodec libx264 -vprofile high -preset slower -b:v 1000k -vf scale=-1:576 -threads 0 -acodec libvo_aacenc -ab 196k output.mp4
-
-                            // exec('/usr/bin/ffmpeg -y -i '.$key['video'].' -vcodec libx264 -vprofile baseline -preset slow -b:v 250k -maxrate 250k -bufsize 500k -vf scale=320:240 -threads 0 -ab 96k '.$dir_file_name.'_240.mp4');
+    //                     // 720
+    //                     exec('/usr/bin/ffmpeg -y -i '.$key['video'].' -vcodec libx264 -vprofile baseline -preset slow -b:v 1000k -maxrate 500k -bufsize 1000k -vf scale=854:480 -threads 0 -ab 150k '.$dir_file_name.'_720.mp4');
 
 
-                            //480
-                            //'ffmpeg -i input_file.avi -vcodec libx264 -vprofile high -preset slow -b:v 500k -maxrate 500k -bufsize 1000k -vf scale=-1:480 -threads 0 -acodec libvo_aacenc -b:a 128k output_file.mp4'
+    //                     if (file_exists($dir_file_name.'_240.mp4')) {
+    //                         $db->query("DELETE FROM `".PREFIX."_videos_decode` WHERE video = '".$key['video']."'");
+    //                     }
+    //                     // ffmpeg -i inputfile.avi -vcodec libx264 -vprofile high -preset slower -b:v 1000k -vf scale=-1:576 -threads 0 -acodec libvo_aacenc -ab 196k output.mp4
 
-                            //480p video for iPads and tablets (480p at 400kbit/s in main profile):
-                            //ffmpeg -i inputfile.avi -vcodec libx264 -vprofile main -preset slow -b:v 400k -maxrate 400k -bufsize 800k -vf scale=-1:480 -threads 0 -acodec libvo_aacenc -ab 128k output.mp4
+    //                     // exec('/usr/bin/ffmpeg -y -i '.$key['video'].' -vcodec libx264 -vprofile baseline -preset slow -b:v 250k -maxrate 250k -bufsize 500k -vf scale=320:240 -threads 0 -ab 96k '.$dir_file_name.'_240.mp4');
 
-                            print "Convert Finish\n";
-                            break;
-                        }
-                    }
-                }else{
-                    print "Not found new videos\n";
-                    break;
+
+    //                     //480
+    //                     //'ffmpeg -i input_file.avi -vcodec libx264 -vprofile high -preset slow -b:v 500k -maxrate 500k -bufsize 1000k -vf scale=-1:480 -threads 0 -acodec libvo_aacenc -b:a 128k output_file.mp4'
+
+    //                     //480p video for iPads and tablets (480p at 400kbit/s in main profile):
+    //                     //ffmpeg -i inputfile.avi -vcodec libx264 -vprofile main -preset slow -b:v 400k -maxrate 400k -bufsize 800k -vf scale=-1:480 -threads 0 -acodec libvo_aacenc -ab 128k output.mp4
+
+    //                     print "Convert Finish\n";
+    //                     break;
+    //                 }
+    //             }
+    //         }else{
+    //             print "Not found new videos\n";
+    //             break;
+    //         }
+
+    //           break;
+    //       }else{
+    //           commandline_help();
+    //           break;
+    //       }
+    //     break;
+    case '-migrate':
+        $db_config = require ENGINE_DIR . '/data/db_config.php';
+
+        // $_POST['name'] = strip_tags($_POST['name']);
+        // $_POST['lastname'] = strip_tags($_POST['lastname']);
+        $table_Chema = array();
+        $table_data = array();
+
+        include_once ENGINE_DIR . '/data/mysql_tables.php';
+        $db = new PDO(
+            "mysql:dbname=" . $db_config['name'] . ";host=" . $db_config['host'],
+            $db_config['user'],
+            $db_config['pass']);
+        try {
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);//Error Handling
+            foreach ($table_Chema as $sql) {
+                try {
+                    $db->exec($sql);
+                } catch (Error $e) {
+                    echo 'error query: ' . $sql;
+                    exit();
                 }
+            }
 
-                  break;
-              }else{
-                  commandline_help();
-                  break;
-              }
-            break;
+            $countryes = [
+                [1, 'Россия'],
+                [2, 'Украина'],
+                [3, 'Казахстан'],
+                [4, 'Беларусь'],
+                [5, 'Латвия'],
+                [6, 'Молдова'],
+                [7, 'Эстония'],
+                [8, 'Азербайджан'],
+                [9, 'Литва'],
+                [10, 'США'],
+            ];
+            $stmt = $db->prepare("INSERT INTO country (id, name) VALUES (?,?)");
+            try {
+                $db->beginTransaction();
+                foreach ($countryes as $row) {
+                    $stmt->execute($row);
+                }
+                $db->commit();
 
-        case '-make:add-user':
-            $db = Db::getDB();
+            } catch (Exception $e) {
+                $db->rollback();
+                throw $e;
+                print "Error\n";
+            }
+                print "Migrate success\n";
+        } catch (Exception $e) {
+            $db->rollback();
+            throw $e;
+            print "Error\n";
+        }
 
-            $name = $_SERVER['argv']['2'];
-            $lastname = $_SERVER['argv']['3'];
-            $email = $_SERVER['argv']['4'];
+    break;
 
-            $pass = password_hash($_SERVER['argv']['5'], PASSWORD_DEFAULT);
-            $_IP = '0.0.0.0';
-            $hid = $pass . md5(md5($_IP));
-            $time = time();
+    case '-clean':
+        if (file_exists(ENGINE_DIR . '/data/config.php') &&
+        file_exists(ENGINE_DIR . '/data/db_config.php')) {
+            \Sura\Filesystem\Filesystem::delete('./uploads/room/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/records/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/attach/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/audio_tmp/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/blog/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/groups/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/users/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/videos/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/audio/');
+            \Sura\Filesystem\Filesystem::delete('./uploads/doc/');
+            \Sura\Filesystem\Filesystem::delete('./system/cache/groups/');
+            \Sura\Filesystem\Filesystem::delete('./system/cache/groups_forum/');
+            \Sura\Filesystem\Filesystem::delete('./system/cache/groups_mark/');
+            \Sura\Filesystem\Filesystem::delete('./system/cache/photos_mark/');
+            \Sura\Filesystem\Filesystem::delete('./system/cache/votes/');
+            \Sura\Filesystem\Filesystem::delete('./system/cache/wall/');
+        }
+        
+        $db_config = require ENGINE_DIR . '/data/db_config.php';
 
-            $db->query("INSERT INTO `users` (`user_email`, `user_password`, `user_name`, `user_lastname`, `user_photo`, `user_wall_id`, `user_birthday`, `user_sex`, `user_day`, `user_month`, `user_year`, `user_country`, `user_city`, `user_reg_date`, `user_lastdate`, `user_group`, `user_country_city_name`, `user_search_pref`, `user_xfields`, `xfields`, `user_xfields_all`, `user_albums_num`, `user_friends_demands`, `user_friends_num`, `user_last_visit`, `user_fave_num`, `user_pm_num`, `user_notes_num`, `user_subscriptions_num`, `user_videos_num`, `user_wall_num`, `user_status`, `user_privacy`, `user_blacklist_num`, `user_blacklist`, `user_sp`, `user_support`, `user_balance`, `user_lastupdate`, `user_gifts`, `user_public_num`, `user_audio`, `user_msg_type`, `user_delet`, `user_ban`, `user_ban_date`, `user_new_mark_photos`, `user_doc_num`, `user_logged_mobile`, `guests`, `user_cover`, `user_cover_pos`, `balance_rub`, `user_rating`, `invties_pub_num`, `notifications_list`, `user_text`) VALUES ('{$email}', '{$pass}', '{$name}', '{$lastname}', '', 0, '1970-1-1', '1', '1', '1', '1970', '1', '0', '{$time}', '', '0', 'Россия|', '{$name} {$lastname}', '', '', '', 0, 0, 0, '1587841518', 0, 1, 0, 0, 0, 0, '', 'val_msg|1||val_wall1|1||val_wall2|1||val_wall3|1||val_info|1||', 0, '', '1|0', 0, 0, '1587840016', 0, 0, 0, 1, 0, 0, '', 0, 0, 0, 0, '', '', 0, 0, 0, '', '')");
+        $db = new PDO(
+            "mysql:dbname=" . $db_config['name'] . ";host=" . $db_config['host'],
+            $db_config['user'],
+            $db_config['pass']);
 
-            break;
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);//Error Handling
 
-        case '-migrate':
-            \App\Libs\Migrate::main();
-            break;
+        $table_Chema = array();
+        $table_Chema[] = "DROP TABLE IF EXISTS `room`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `room_users`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `albums`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `attach`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `antispam`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `attach`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `attach_comm`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `audio`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `banned`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `blog`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `city`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `communities`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `communities_audio`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `communities_feedback`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `communities_forum`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `communities_forum_msg`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `communities_join`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `communities_stats`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `communities_stats_log`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `communities_wall`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `communities_wall_like`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `country`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `doc`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `fave`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `friends`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `friends_demands`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `gifts`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `gifts_list`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `im`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `invites`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `log`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `mail_tpl`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `messages`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `news`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `notes`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `notes_comments`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `photos`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `photos_comments`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `photos_mark`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `photos_rating`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `report`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `restore`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `reviews`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `sms_log`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `static`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `support`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `support_answers`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `updates`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `users`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `users_rating`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `users_stats`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `users_stats_log`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `videos`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `videos_comments`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `votes`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `votes_result`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `wall`";
+        $table_Chema[] = "DROP TABLE IF EXISTS `wall_like`";
+        foreach ($table_Chema as $query) {
+            try {
+                $db->query($query);
+            } catch (Error $e) {
+                echo $query;
+                exit();
+            }
+        }
+        print "Clean success\n";
+    break;
 
-        default:
-            commandline_help();
-            break;
-      }
+    case '-remove';
+        \Sura\Filesystem\Filesystem::delete(ENGINE_DIR . '/data/config.php');
+        \Sura\Filesystem\Filesystem::delete(ENGINE_DIR . '/data/db_config.php');
+    break;
+
+    case 'heineken';
+        echo 'Хороший выбор';
+        break;
+    default;
+    commandline_help();
+        break;
+    }      
 
   function commandline_help() {
-    print "Usage: php craft <options>\n\n";
+    print "Usage: php sura <options>\n\n";
     print "Options:\n";
-      print " -all\t\t Info\n";
-      print " -make:add-user\t\t -make:add-user <name> <lastname> <mail> <pass>\n";
-      print " -video convert \t\t convert uploads video\n";
-      print " -migrate \t\t create tables db\n";
+    print " -all\t\t Info\n";
+    print " -make:add-user\t -make:add-user <name> <lastname> <mail> <pass>\n";
+    //   print " -video convert \t\t convert uploads video\n";
+    print " -migrate \t create tables db\n";
+    print " -clean \t clean migrate tables\n";
+    print " -remove \t clean settings\n";
     print " -d <num>\t Set  <num> (deprecated)\n";
   }
 

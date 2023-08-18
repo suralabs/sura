@@ -547,6 +547,24 @@ function settings_get(): array
 }
 
 /**
+ * @return array
+ */
+function settings_get_db(): array
+{
+    if (Registry::exists('config_db')) {
+        return Registry::get('config_db');
+    }
+    try {
+        $config = require __DIR__ . '/data/db_config.php';
+        Registry::set('config_db', $config);
+        return $config;
+    } catch (Error) {
+        echo 'Please install system';
+        exit();
+    }
+}
+
+/**
  * @deprecated
  * @throws JsonException
  */
