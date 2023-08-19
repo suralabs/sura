@@ -12,6 +12,9 @@ namespace Mozg\classes;
 
 use Mozg\Security\AntiSpam;
 
+/**
+ *
+ */
 class Flood extends AntiSpam
 {
     /** @var int Лимиты новых друзей на день */
@@ -29,12 +32,36 @@ class Flood extends AntiSpam
 
     /** @var int Максимум альбомов за день */
     private static int $max_albums = 5;
+    /**
+     * @var int
+     */
     private static int $max_album_photos = 40;
+    /**
+     * @var int
+     */
     private static int $max_music = 5;
+    /**
+     * @var int
+     */
     private static int $max_doc = 5;
+    /**
+     * @var int
+     */
     private static int $max_group_forum = 5;
+    /**
+     * @var int
+     */
     private static int $max_group_forum_msg = 40;
+    /**
+     * @var int
+     */
     private static int $max_notes = 5;
+    /**
+     * @var int
+     */
     private static int $max_videos = 5;
+    /**
+     * @var int
+     */
     private static int $max_support = 1;
 }
