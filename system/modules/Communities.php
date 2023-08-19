@@ -11,7 +11,7 @@
 namespace Mozg\modules;
 
 use Sura\Support\Registry;
-use Mozg\classes\{Module, TpLSite, WallPublic};
+use Mozg\classes\{Module, WallPublic};
 
 class Communities extends Module
 {
