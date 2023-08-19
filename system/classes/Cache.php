@@ -13,6 +13,9 @@ namespace Mozg\classes;
 use Exception;
 use Sura\Filesystem\Filesystem;
 
+/**
+ *
+ */
 class Cache
 {
     /**
@@ -102,6 +105,10 @@ class Cache
         return false;
     }
 
+    /**
+     * @param string $prefix
+     * @return void
+     */
     public static function systemMozgClearCacheFile(string $prefix): void
     {
         Filesystem::delete(ENGINE_DIR . '/cache/system/' . $prefix . '.php');

@@ -15,8 +15,14 @@ use Sura\View\myView;
  */
 class View
 {
+    /**
+     * @var string
+     */
     public string $title = 'Social network';
 
+    /**
+     * @var array|string[]
+     */
     public array $notify = [
         'user_pm_num' => '',
         'new_news' => '',
@@ -32,6 +38,9 @@ class View
         'new_groups' => '',
     ];
 
+    /**
+     *
+     */
     public function __construct()
     {
 

@@ -12,18 +12,33 @@ namespace Mozg\classes;
 use Sura\Database\Database;
 use Sura\Database\Factory;
 
+/**
+ *
+ */
 class DB
 {
+    /**
+     * @var Database|null
+     */
     private static ?Database $database = null;
 
+    /**
+     *
+     */
     protected function __construct()
     {
     }
 
+    /**
+     * @return void
+     */
     protected function __clone()
     {
     }
 
+    /**
+     * @return Database|null
+     */
     public static function getDB(): null|Database
     {
         if (self::$database === null) {
