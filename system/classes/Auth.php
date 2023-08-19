@@ -17,6 +17,9 @@ use Sura\Support\{Cookie, Registry};
 use JsonException;
 use Mozg\Models\Users;
 
+/**
+ *
+ */
 class Auth
 {
     /**

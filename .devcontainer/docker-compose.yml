@@ -20,9 +20,16 @@ services:
     ports:
         - 3306:3306
     environment:
-        MYSQL_DATABASE: sura
-        MYSQL_USER: sura
-        MYSQL_PASSWORD: example
+      MARIADB_ROOT_PASSWORD: example
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_PASSWORD: example
+      MYSQL_USER: mariadb
+      MYSQL_DATABASE: mariadb
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080        
   redis:
     image: redis:6-alpine
     ports:

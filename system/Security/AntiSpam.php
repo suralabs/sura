@@ -5,6 +5,9 @@ namespace Mozg\Security;
 use Sura\Contracts\Security\Factory;
 use Sura\Support\Registry;
 
+/**
+ *
+ */
 class AntiSpam implements Factory
 {
     /** @var int Лимиты новых друзей на день */

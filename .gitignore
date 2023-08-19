@@ -12,7 +12,8 @@
 /system/data/config.php
 /system/data/db.php
 /system/data/db_config.php
+/system/cache/
 composer.phar
-composer.look
+/composer.lock
 vendor
 .idea

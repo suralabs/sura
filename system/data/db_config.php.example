@@ -1,8 +1,8 @@
 <?php
     return [
-        'host' => "database",
-        'name' => "sura",
-        'user' => "sura",
-        'pass' => "password",
+        'host' => "db",
+        'name' => "mariadb",
+        'user' => "mariadb",
+        'pass' => "example",
     ];
                 

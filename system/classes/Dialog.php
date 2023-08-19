@@ -14,11 +14,17 @@ use Mozg\Security\AntiSpam;
 use Sura\Support\Registry;
 use Sura\Support\Status;
 
+/**
+ *
+ */
 class Dialog
 {
     /** @var int ID юзера */
     public int $user_id;
 
+    /**
+     * @param int $user_id
+     */
     public function __construct(int $user_id)
     {
         $this->user_id = $user_id;
@@ -266,6 +272,12 @@ class Dialog
         return false;
     }
 
+    /**
+     * @param int $room_id
+     * @param int $im_user_id
+     * @param $user_id
+     * @return bool
+     */
     final public function delete(int $room_id, int $im_user_id, $user_id): bool
     {
         if ($room_id > 0) {
