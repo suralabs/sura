@@ -167,15 +167,7 @@ class Mozg
             $class = ucfirst($module);
             if (!class_exists($class) || $action === '' || $class === 'Wall') {
 
-                if(!class_exists($class)){
-                    $text = 'error 500';
-                    $params = [
-                        'title' => $text,
-                        'text' => 'Нет контроллера ' . $class,
-                    ];
-                    view('info.info', $params);
-                }
-                $text = 'error 500';
+                $text = 'error 404';
                 $params = [
                     'title' => $text,
                     'text' => $text,

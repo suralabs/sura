@@ -30,8 +30,8 @@ class Api  extends Module
      */
     #[NoReturn] final public function authorize()
     {
-        var_dump($_POST);
-        exit;
+//        var_dump($_POST);
+//        exit;
 
         $email = (new Request)->filter('email');
         $password = md5(md5(stripslashes((new Request)->filter('password'))));
