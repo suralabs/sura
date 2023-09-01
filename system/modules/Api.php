@@ -30,11 +30,9 @@ class Api  extends Module
      */
     #[NoReturn] final public function authorize()
     {
-//        var_dump($_POST);
-//        exit;
-
-        $email = (new Request)->filter('email');
-        $password = md5(md5(stripslashes((new Request)->filter('password'))));
+        $data = json_decode(file_get_contents('php://input'), true);
+        $email = (new Request)->textFilter($data["email"]);
+        $password = md5(md5(stripslashes((new Request)->textFilter($data["password"]))));
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $response = array(
                 'status' => Status::NOT_VALID,
