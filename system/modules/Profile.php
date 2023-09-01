@@ -15,9 +15,11 @@ use Sura\Http\Request;
 use Mozg\classes\Cache;
 use Mozg\classes\DB;
 use Mozg\classes\Module;
+use Sura\Http\Response;
 use Sura\Support\Registry;
 use Mozg\classes\Wall;
 use Mozg\classes\WallProfile;
+use Sura\Support\Status;
 
 class Profile extends Module
 {
@@ -1132,4 +1134,14 @@ HTML;
 //	$db->free();
 
     }
+
+    public function api()
+    {
+        $response = array(
+            'status' => Status::NOT_DATA,
+        );
+
+        (new Response)->_e_json($response);
+    }
+
 }

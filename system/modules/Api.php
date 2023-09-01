@@ -2,14 +2,18 @@
 
 namespace Mozg\modules;
 
+use JetBrains\PhpStorm\NoReturn;
 use \Sura\Http\Response;
 use \Sura\Http\Request;
 use \Sura\Support\Status;
-use Mozg\classes\{Cache, DB};
+use Mozg\classes\{DB, Module};
 
-class Api  extends \Mozg\classes\Module
+class Api  extends Module
 {
-    final public function main()
+    /**
+     * @throws \JsonException
+     */
+    final public function main(): void
     {
         $response = array(
             'status' => '1',
@@ -21,11 +25,10 @@ class Api  extends \Mozg\classes\Module
     /**
      * authorize
      *
-     * @param Type $var Description
-     * @return type
-     * @throws conditon
-     **/
-    final public function authorize()
+     *
+     * @throws \JsonException
+     */
+    #[NoReturn] final public function authorize()
     {
         var_dump($_POST);
         exit;
@@ -70,7 +73,5 @@ class Api  extends \Mozg\classes\Module
 
         (new Response)->_e_json($response);           
         }
-
-
     }
 }

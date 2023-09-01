@@ -92,6 +92,8 @@ class Mozg
             '/' => 'Home@main',
             '/api/authorize' => 'Api@authorize',
             '/api' => 'Api@main',
+            '/api/profile' => 'Profile@api',
+
 
             '/register/send' => 'Register@send',
             '/register/rules' => 'Register@rules',
@@ -152,7 +154,6 @@ class Mozg
             '/editmypage' => 'Editprofile@main',
 
             // '/admin/' => 'Admin@main',
-            
         ];
         $router->add($routers);
 
