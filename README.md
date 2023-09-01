@@ -15,7 +15,7 @@ Install Sura with Composer.
 
 2. Please run install.php
 
-It requires PHP version 8.0 and supports PHP up to 8.1.
+It requires PHP version 8.2 and up.
 
 <a name="server-requirements"></a>
 
@@ -25,7 +25,7 @@ Sura has a few system requirements.
 
 However, if you are not using Homestead, you will need to make sure your server meets the following requirements:
 
-- PHP ^8.1
+- PHP ^8.3
 - ICONV PHP Extension
 - GD PHP extension
 - MySQLI PHP Extension
