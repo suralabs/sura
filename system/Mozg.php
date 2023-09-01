@@ -91,6 +91,8 @@ class Mozg
         $routers = [
             '/' => 'Home@main',
             '/api/authorize' => 'Api@authorize',
+            '/api/account/register' => 'Api@register',
+            
             '/api' => 'Api@main',
             '/api/profile' => 'Profile@api',
 
