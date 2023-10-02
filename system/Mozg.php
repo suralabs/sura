@@ -92,6 +92,9 @@ class Mozg
             '/' => 'Home@main',
             '/api/authorize' => 'Api@authorize',
             '/api/account/register' => 'Api@register',
+            '/api/account/getinfo' => 'Api@getinfo',
+            '/api/account/restore' => 'Api@restore',
+            '/api/account/reset_password' => 'Api@reset_password',
             
             '/api' => 'Api@main',
             '/api/profile' => 'Profile@api',

@@ -6,7 +6,7 @@ use JetBrains\PhpStorm\NoReturn;
 use \Sura\Http\Response;
 use \Sura\Http\Request;
 use \Sura\Support\Status;
-use Mozg\classes\{DB, Module};
+use Mozg\classes\{DB, Module, ViewEmail, Email};
 
 class Api  extends Module
 {
@@ -28,11 +28,17 @@ class Api  extends Module
      *
      * @throws \JsonException
      */
-    #[NoReturn] final public function authorize()
+    final public function authorize()
     {
         $data = json_decode(file_get_contents('php://input'), true);
-        $email = (new Request)->textFilter($data["email"]);
-        $password = md5(md5(stripslashes((new Request)->textFilter($data["password"]))));
+
+        // var_dump($data);
+        // echo $data['email'];
+        // echo (new Request)->textFilter($data['email']);
+        // exit();
+        $email = (new Request)->textFilter((string)$data['email']);
+        // $password = md5(md5(stripslashes((new Request)->textFilter($data["password"]))));
+        $password = password_hash((new Request)->textFilter((string)$data['password']), PASSWORD_DEFAULT);
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $response = array(
                 'status' => Status::NOT_VALID,
@@ -42,22 +48,31 @@ class Api  extends Module
             exit();
         }
         if (!empty($email)) {
-            $check_user = DB::getDB()->row('SELECT user_id FROM `users` WHERE user_email = ? AND user_password = ?', $email, $password);
+            $check_user = DB::getDB()->row('SELECT user_id, user_password, user_hid FROM `users` WHERE user_email = ?', $email);
             if ($check_user) {
-                $hid = $password . md5($password);
-                DB::getDB()->update('users', [
-                    'user_hid' => $hid
-                ], [
-                    'user_id' => $check_user['user_id']
-                ]);
-                DB::getDB()->delete('updates', [
-                    'for_user_id' => $check_user['user_id']
-                ]);
-                $response = array(
-                    'status' => Status::OK,
-                    'access_token' => $hid,
-                );
-                (new Response)->_e_json($response);
+                if (password_verify ($data['password'], $check_user['user_password'])) {
+                    $hid = $password;
+                    DB::getDB()->update('users', [
+                        'user_hid' => $hid
+                    ], [
+                        'user_id' => $check_user['user_id']
+                    ]);
+                    DB::getDB()->delete('updates', [
+                        'for_user_id' => $check_user['user_id']
+                    ]);
+                    $response = array(
+                        'status' => Status::OK,
+                        'access_token' => $hid,
+                    );
+                    (new Response)->_e_json($response);                    
+                }else{
+                    $response = array(
+                        'status' => Status::BAD_PASSWORD,
+                        'data1' => $check_user['user_password'],
+                        'data2' => $password,
+                    );
+                    (new Response)->_e_json($response);
+                }
             }else{
                 $response = array(
                     'status' => Status::NOT_USER,
@@ -75,32 +90,34 @@ class Api  extends Module
 
     function register()
     {
-        $data = json_decode(file_get_contents('php://input'), true);
-        
-        $name = (new Request)->textFilter($data['firstname']);
-        $lastname = (new Request)->textFilter($data['lastname']);
-        $email = (new Request)->textFilter($data['email']);
-        $pass = password_hash((new Request)->textFilter($data['password']), PASSWORD_DEFAULT);
-        $repass = password_hash((new Request)->textFilter($data['repassword']), PASSWORD_DEFAULT);
+        $data = json_decode(file_get_contents('php://input'), true);       
+        $name = (new Request)->textFilter((string)$data['firstname']);
+        $lastname = (new Request)->textFilter((string)$data['lastname']);
+        $email = (new Request)->textFilter((string)$data['email']);
+        $pass = password_hash((new Request)->textFilter((string)$data['password']), PASSWORD_DEFAULT);
+        $repass = password_hash((new Request)->textFilter((string)$data['repassword']), PASSWORD_DEFAULT);
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $response = array(
-                'status' => Status::NOT_VALID,
+                'status' => Status::BAD_MAIL,
                 // 'data' => $email. ' ' . $password,
             );
             (new Response)->_e_json($response);
             exit();
         }
-        if($pass !== $repass){
+
+        if (password_verify ( $data['password'] , $repass )) {
+        // if($data['password'] !== $data['repassword']){
             $response = array(
-                'status' => Status::NOT_VALID,
-                // 'data' => $email. ' ' . $password,
+                'status' => Status::BAD_PASSWORD,
+                'pass1' => $pass,
+                'pass2' => $repass,
             );
             (new Response)->_e_json($response);
             exit();
         }
         
         $_IP = '0.0.0.0';
-        $hid = md5($pass);
+        $hid = $repass;
         $time = time();
         $server_time = time();
         $check_email = \Mozg\classes\DB::getDB()->row('SELECT COUNT(*) AS cnt FROM `users` WHERE user_email = ?', $email);
@@ -143,7 +160,7 @@ class Api  extends Module
                 'user_blacklist_num' => '0',
                 'user_blacklist' => '0',
                 'user_sp' => '',
-                'user_support' => 0,
+                'user_support' => '0',
                 'user_balance' => '0',
                 'user_lastupdate' => $server_time,
                 'user_gifts' => '0',
@@ -165,7 +182,8 @@ class Api  extends Module
             ]);
 
             $response = array(
-                'status' => Status::NOT_DATA,
+                'status' => Status::OK,
+                'access_token' => $hid,
             );
     
             (new Response)->_e_json($response);   
@@ -177,5 +195,145 @@ class Api  extends Module
         );
 
         (new Response)->_e_json($response);   
+    }
+
+    function restore()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);  
+        $email = (new Request)->textFilter((string)$data['email']);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $response = array(
+                'status' => Status::BAD_MAIL,
+                // 'data' => $email. ' ' . $password,
+            );
+            (new Response)->_e_json($response);
+            exit();
+        }
+        $check = $this->db->row('SELECT user_id, user_search_pref, user_photo, user_name FROM `users` WHERE user_email = ?', $email);
+        if ($check) {
+            //Удаляем все предыдущие запросы на восстановление
+            $this->db->delete('restore', [
+                'email' => $email
+            ]);
+            $salt = 'abchefghjkmnpqrstuvwxyz0123456789';
+            $rand_lost = '';
+            for ($i = 0; $i < 15; $i++) {
+                $rand_lost .= $salt[random_int(0, 33)];
+            }
+            $server_time = time();
+            $hash = md5($server_time . $email . random_int(0, 100000) . $rand_lost . $check['user_name']);
+            // $hash = random_int(100000, 999999);
+            //Вставляем в базу
+            $_IP = '';//FIXME
+            $this->db->insert('restore', [
+                'email' => $email,
+                'hash' => $hash,
+                'ip' => $_IP,
+            ]);
+            //Отправляем письмо на почту для восстановления
+            $config = settings_get();
+
+            /** @var array $lang */
+            $dictionary = $this->lang;
+            $variables = [
+                'user_name' => $check['user_name'],
+                'home_url' => $config['home_url'],
+                'site_name' => $config['home'],
+                'admin_mail' => $config['admin_mail'],
+                'hash' => $hash,
+            ];
+            $message = (new ViewEmail('restore.email', $variables))->run();
+            /** @var ?string $dictionary['lost_subj'] */
+            Email::send($email, $dictionary['lost_subj'], $message);
+
+            $response = array(
+                'status' => Status::OK,
+            );
+            (new Response)->_e_json($response);
+        } else {
+            $response = array(
+                'status' => Status::NOT_USER,
+            );
+            (new Response)->_e_json($response);
+        }        
+    }
+
+    function reset_password()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);  
+        $pass = password_hash((new Request)->textFilter((string)$data['password']), PASSWORD_DEFAULT);
+        $repass = password_hash((new Request)->textFilter((string)$data['repassword']), PASSWORD_DEFAULT);
+        $hash = strip_data((new Request)->filter('hash'));
+        if (strlen($pass) >= 6 and $pass === $repass) {
+            $row = $this->db->row('SELECT email FROM `restore` WHERE hash = ? ', $hash);
+            if ($row['email']) {
+                $this->db->update('users', [
+                    'user_password' => $pass,
+                    'user_hid' => $repass,
+                ], [
+                    'email' => $row['email']
+                ]);
+                $this->db->delete('restore', [
+                    'email' => $row['email']
+                ]);    
+    
+                $response = array(
+                    'status' => Status::OK,
+                    'access_token' => $repass,
+                );
+                (new Response)->_e_json($response);
+                exit();
+            }else{
+                $response = array(
+                    'status' => Status::BAD_PASSWORD,
+                );
+                (new Response)->_e_json($response);
+                exit();
+            }
+        }else{
+            $response = array(
+                'status' => Status::BAD_PASSWORD,
+            );
+            (new Response)->_e_json($response);
+            exit();
+        }
+    }
+
+    function getinfo()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $access_token = (new Request)->textFilter((string)$data['access_token']);
+        $check_user = DB::getDB()->row('SELECT user_id, user_name, user_lastname, user_group FROM `users` WHERE user_hid = ?', $access_token);
+
+        if ($check_user) {
+            $check_user['access_token'] = $access_token;
+            if ($check_user['user_group'] == 1) {
+                $check_user['roles'] = 'ROLE_ADMIN';
+            }elseif ($check_user['user_group'] == 5) {
+                $check_user['roles'] = 'ROLE_USER';
+            }else {
+                $check_user['roles'] = 'ROLE_USER';
+            }
+            $response = array(
+                'status' => Status::OK,
+                'data' => array(
+                    'id' => $check_user['user_id'],
+                    'access_token' => $check_user['access_token'],
+                    'firstname' => $check_user['user_name'],
+                    'lastname' => $check_user['user_lastname'],
+                    'roles' => $check_user['roles'],
+                ),
+            );
+
+            (new Response)->_e_json($response);  
+
+        }else{
+            $response = array(
+                'status' => Status::NOT_DATA,
+            );
+    
+            (new Response)->_e_json($response);   
+        }
+  
     }
 }
