@@ -68,8 +68,8 @@ class Api  extends Module
                 }else{
                     $response = array(
                         'status' => Status::BAD_PASSWORD,
-                        'data1' => $check_user['user_password'],
-                        'data2' => $password,
+                        // 'data1' => $check_user['user_password'],
+                        // 'data2' => $password,
                     );
                     (new Response)->_e_json($response);
                 }
@@ -259,19 +259,19 @@ class Api  extends Module
     }
 
     function reset_password()
-    {
+    {      
         $data = json_decode(file_get_contents('php://input'), true);  
         $pass = password_hash((new Request)->textFilter((string)$data['password']), PASSWORD_DEFAULT);
         $repass = password_hash((new Request)->textFilter((string)$data['repassword']), PASSWORD_DEFAULT);
-        $hash = strip_data((new Request)->filter('hash'));
-        if (strlen($pass) >= 6 and $pass === $repass) {
+        $hash = (new Request)->textFilter((string)$data['hash']);
+        if (strlen($data['password']) >= 6 and $data['password'] === $data['repassword']) {
             $row = $this->db->row('SELECT email FROM `restore` WHERE hash = ? ', $hash);
             if ($row['email']) {
                 $this->db->update('users', [
                     'user_password' => $pass,
                     'user_hid' => $repass,
                 ], [
-                    'email' => $row['email']
+                    'user_email' => $row['email']
                 ]);
                 $this->db->delete('restore', [
                     'email' => $row['email']
@@ -285,7 +285,9 @@ class Api  extends Module
                 exit();
             }else{
                 $response = array(
-                    'status' => Status::BAD_PASSWORD,
+                    'status' => Status::NOT_VALID,
+                    // 'hash' => $hash,
+                    // 'email' => print_f($row),
                 );
                 (new Response)->_e_json($response);
                 exit();
@@ -297,6 +299,55 @@ class Api  extends Module
             (new Response)->_e_json($response);
             exit();
         }
+    }
+
+    function change_pass()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);  
+
+        $password_old = password_hash((new Request)->textFilter((string)$data['oldpassword']), PASSWORD_DEFAULT);
+        $password_new = password_hash((new Request)->textFilter((string)$data['password']), PASSWORD_DEFAULT);
+        $password_renew = password_hash((new Request)->textFilter((string)$data['repassword']), PASSWORD_DEFAULT);
+        $access_token =(new Request)->textFilter((string)$data['access_token']);
+
+        $check_user = DB::getDB()->row('SELECT user_password FROM `users` WHERE user_hid = ?', $access_token);
+        if ($check_user['user_password']) {
+            //check current password
+            if (password_verify((string)$data['oldpassword'], $check_user['user_password'])) {
+                if ($data['password'] == $data['repassword']) {
+                    DB::getDB()->update('users', [
+                        'user_hid' => $password_new, //access_token
+                        'user_password' => $password_new //access_token
+                    ], [
+                        'user_hid' => $access_token
+                    ]);
+                    $response = array(
+                        'status' => Status::OK,
+                        'access_token' => $password_new,
+                    );
+                    (new Response)->_e_json($response);
+                } else {
+                    $response = array(
+                        'status' => Status::BAD_PASSWORD,
+                        'pass1' => $data['password'],
+                        'pass2' => $data['repassword'],
+                    );
+                    (new Response)->_e_json($response);
+                }
+                
+            }else{
+                $response = array(
+                    'status' => Status::NOT_VALID,
+                    'oldpass' => $data['oldpassword'],
+                );
+                (new Response)->_e_json($response);
+            }            
+        } else {
+            $response = array(
+                'status' => Status::NOT_USER,
+            );
+            (new Response)->_e_json($response);            
+        }     
     }
 
     function getinfo()

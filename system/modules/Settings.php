@@ -40,7 +40,7 @@ class Settings extends Module
                 $code2 = (new Request)->textFilter('code2');
 
                 if (strlen($code1) == 32) {
-//                    $_IP = Request::getRequest()->getClientIP();
+                    //$_IP = Request::getRequest()->getClientIP();
                     $_IP = '';//fixme
                     $code2 = '';
                     $check_code1 = $db->super_query("SELECT email FROM `restore` WHERE hash = '{$code1}' AND ip = '{$_IP}'");

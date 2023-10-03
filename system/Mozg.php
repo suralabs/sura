@@ -95,6 +95,7 @@ class Mozg
             '/api/account/getinfo' => 'Api@getinfo',
             '/api/account/restore' => 'Api@restore',
             '/api/account/reset_password' => 'Api@reset_password',
+            '/api/account/change_pass' => 'Api@change_pass',
             
             '/api' => 'Api@main',
             '/api/profile' => 'Profile@api',
