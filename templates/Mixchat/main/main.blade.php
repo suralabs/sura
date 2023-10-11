@@ -4,7 +4,6 @@
     <title>{{ $title }}</title>
     <link rel="shortcut icon" href="/images/uic.png"/>
     <link rel="stylesheet" href="/assets/css/style.css?12" type="text/css">
-{{--    <link href="/css/style.css" rel="stylesheet">--}}
     {{ $js }}
     @if(!$logged)
         <script type="text/javascript" src="/js/reg.js"></script>

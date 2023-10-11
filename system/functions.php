@@ -41,62 +41,6 @@ function informationText($array): string
 }
 
 /**
- * TODO !!!UPDATE
- * @param $items_per_page
- * @param $items_count
- * @param $type
- * @return string
- */
-function navigationNew($items_per_page, $items_count, $type): string
-{
-    $page = (new Request)->int('page', 1);
-    $page_refers_per_page = 5;
-    $pages = '';
-    $pages_count = (($items_count % $items_per_page !== 0)) ? floor($items_count / $items_per_page) + 1 : floor($items_count / $items_per_page);
-    $start_page = ($page - $page_refers_per_page <= 0) ? 1 : $page - $page_refers_per_page + 1;
-    $page_refers_per_page_count = (($page - $page_refers_per_page < 0) ? $page : $page_refers_per_page) + (($page + $page_refers_per_page > $pages_count) ? ($pages_count - $page) : $page_refers_per_page - 1);
-    if ($page > 1) {
-        $pages .= '<a href="' . $type . ($page - 1) . '" onClick="Page.Go(this.href); return false">&laquo;</a>';
-    }
-    if ($start_page > 1) {
-        $pages .= '<a href="' . $type . '1" onClick="Page.Go(this.href); return false">1</a>';
-        $pages .= '<a href="' . $type . ($start_page - 1) . '" onClick="Page.Go(this.href); return false">...</a>';
-    }
-    for ($index = -1; ++$index <= $page_refers_per_page_count - 1;) {
-        if ($index + $start_page === $page) {
-            $pages .= '<span>' . ($start_page + $index) . '</span>';
-        } else {
-            $pages .= '<a href="' . $type . ($start_page + $index) . '" onClick="Page.Go(this.href); return false">' . ($start_page + $index) . '</a>';
-        }
-    }
-    if ($page + $page_refers_per_page <= $pages_count) {
-        $pages .= '<a href="' . $type . ($start_page + $page_refers_per_page_count) . '" onClick="Page.Go(this.href); return false">...</a>';
-        $pages .= '<a href="' . $type . $pages_count . '" onClick="Page.Go(this.href); return false">' . $pages_count . '</a>';
-    }
-    $res_if = $items_count / $items_per_page;
-    if (ceil($res_if) === $page) {
-        $pages .= '';
-    } else {
-        $pages .= '<a href="' . $type . ($page + 1) . '" onClick="Page.Go(this.href); return false">&raquo;</a>';
-    }
-    if ($pages_count <= 1) {
-        $pages = '';
-    }
-    return "<div class=\"nav\" id=\"nav\">{$pages}</div>";
-}
-
-/**
- * TODO update
- * @return void
- */
-function NoAjaxQuery() : void
-{
-    if (!empty($_POST['ajax']) && $_POST['ajax'] == 'yes' && $_SERVER['HTTP_REFERER'] !== $_SERVER['HTTP_HOST'] && $_SERVER['REQUEST_METHOD'] !== 'POST') {
-        header('Location: /index.php?go=none');
-    }
-}
-
-/**
  * @param array|string $source
  * @return array|string
  */
@@ -130,7 +74,7 @@ function rn_replace(array|string $source): array|string
  */
 function user_age($user_year, $user_month, $user_day)
 {
-    $server_time = Registry::get('server_time');
+    $server_time = time();
     if ($user_year) {
         $current_year = date('Y', $server_time);
         $current_month = date('n', $server_time);
@@ -426,15 +370,6 @@ function get_device(): array
         'device ' => $user_device->getName(),
         'language ' => $language->getLanguage(),
     ];
-}
-
-function notify_ico(): string
-{
-    return "<div class=\"ic_msg\" id=\"myprof2\" onmouseout=\"$('.js_titleRemove').remove();\">
-         <div id=\"new_msg\">
-            <div class=\"ic_newAct\">4</div>
-         </div>
-     </div>";
 }
 
 /**

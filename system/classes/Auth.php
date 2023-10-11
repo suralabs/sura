@@ -30,7 +30,7 @@ class Auth
         $_IP = $_SERVER['REMOTE_ADDR'];
         $act = (new Request)->filter('act');
 //Если делаем выход
-        if ($act === 'logout') {
+        if ($act === 'logout') { 
             Cookie::remove('user_id');
             Cookie::remove('password');
             Cookie::remove('hid');

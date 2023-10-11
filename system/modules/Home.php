@@ -9,11 +9,6 @@ class Home extends \Mozg\classes\Module
      */
     public function main()
     {
-        $logged = $this->logged;
-        if ($logged === true) {
-            (new News)->main();
-        } else {
-            (new Register)->main();
-        }
+        (new Register)->main();
     }
 }
