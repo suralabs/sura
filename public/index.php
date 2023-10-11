@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 }
 
+<<<<<<< HEAD
 // header('Access-Control-Allow-Origin: *');
 // header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 // header("Access-Control-Allow-Headers: X-Requested-With");
@@ -47,6 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 // header('Access-Control-Allow-Origin: *');
 // // header('Content-Type: application/json');
 
+=======
+>>>>>>> semyon492-dev
 if (\version_compare(PHP_VERSION, '8.1.5') < 0) {
     throw new \RuntimeException('Please change php version');
 }

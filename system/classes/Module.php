@@ -43,7 +43,6 @@ class Module
     {
         $this->user_info = Registry::get('user_info');
         $this->lang = Registry::get('lang');
-        $this->logged = Registry::get('logged');
         $this->db = DB::getDB();
     }
 }

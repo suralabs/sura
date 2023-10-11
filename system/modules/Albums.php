@@ -22,7 +22,11 @@ class Albums  extends Module
         $user_id = (new Request)->textFilter((string)$data['id']);
         $access_token = (new Request)->textFilter((string)$data['access_token']);
 
+<<<<<<< HEAD
         $check_albums = DB::getDB()->run("SELECT aid, name, cover, system FROM `albums` WHERE user_id = ? ORDER by `adate` DESC LIMIT 0, 50", $user_id);
+=======
+        $check_albums = $this->db->run("SELECT aid, name, cover, system FROM `albums` WHERE user_id = ? ORDER by `adate` DESC LIMIT 0, 50", $user_id);
+>>>>>>> semyon492-dev
 
         if ($check_albums) {
             $results = array();

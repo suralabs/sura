@@ -41,6 +41,7 @@ function informationText($array): string
 }
 
 /**
+<<<<<<< HEAD
  * TODO !!!UPDATE
  * @param $items_per_page
  * @param $items_count
@@ -97,6 +98,8 @@ function NoAjaxQuery() : void
 }
 
 /**
+=======
+>>>>>>> semyon492-dev
  * @param array|string $source
  * @return array|string
  */
@@ -130,7 +133,7 @@ function rn_replace(array|string $source): array|string
  */
 function user_age($user_year, $user_month, $user_day)
 {
-    $server_time = Registry::get('server_time');
+    $server_time = time();
     if ($user_year) {
         $current_year = date('Y', $server_time);
         $current_month = date('n', $server_time);
@@ -428,8 +431,15 @@ function get_device(): array
     ];
 }
 
-function notify_ico(): string
+/**
+ * @param string $value
+ * @param bool $lower
+ * @param bool $part
+ * @return array|string|null
+ */
+function to_translit(string $value, bool $lower = true, bool $part = true): array|string|null
 {
+<<<<<<< HEAD
     return "<div class=\"ic_msg\" id=\"myprof2\" onmouseout=\"$('.js_titleRemove').remove();\">
          <div id=\"new_msg\">
             <div class=\"ic_newAct\">4</div>
@@ -445,6 +455,8 @@ function notify_ico(): string
  */
 function to_translit(string $value, bool $lower = true, bool $part = true): array|string|null
 {
+=======
+>>>>>>> semyon492-dev
     $lang_translit = array(
         'а' => 'a', 'б' => 'b', 'в' => 'v',
         'г' => 'g', 'д' => 'd', 'е' => 'e',

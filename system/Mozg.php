@@ -23,6 +23,7 @@ class Mozg
      */
     public static function initialize(): mixed
     {
+<<<<<<< HEAD
         if (isset($_POST['PHPSESSID'])) {
             \session_id($_POST['PHPSESSID']);
         }
@@ -85,11 +86,21 @@ class Mozg
                 }
             }
         }
+=======
+        $lang = I18n::dictionary();
+        Registry::set('lang', $lang);
+
+        Registry::set('server_time', \time());
+
+        /** @var array $user_info */
+        $user_info = Registry::get('user_info');
+>>>>>>> semyon492-dev
 
         $router = Router::fromGlobals();
         $params = [];
         $routers = [
             '/' => 'Home@main',
+<<<<<<< HEAD
             '/api/authorize' => 'Api@authorize',
             '/api/account/register' => 'Api@register',
             '/api/account/getinfo' => 'Api@getinfo',
@@ -156,6 +167,24 @@ class Mozg
             '/editmypage' => 'Editprofile@main',
 
             // '/admin/' => 'Admin@main',
+=======
+            '/api/authorize' => 'Auth@authorize',
+            '/api/account/register' => 'Auth@register',
+            '/api/account/getinfo' => 'Profile@getInfo',
+            '/api/account/restore' => 'Auth@restore',
+            '/api/account/reset_password' => 'Auth@reset_password',
+            '/api/account/change_pass' => 'Settings@change_pass',
+            '/api/account/change_name' => 'Settings@change_name',
+            '/api/account/change_avatar' => 'Settings@change_avatar',
+            '/api/users/profile' => 'Profile@profile',
+            '/api/albums/all' => 'Albums@all',            
+            '/api/search' => 'Search@all',            
+
+            '/api/profile' => 'Profile@api',
+
+            '/security/img' => 'Captcha@captcha',
+            '/security/code' => 'Captcha@code',
+>>>>>>> semyon492-dev
         ];
         $router->add($routers);
 
@@ -190,6 +219,6 @@ class Mozg
                 }
             }
         }
-        return '';//fixme
+        return true;
     }
 }

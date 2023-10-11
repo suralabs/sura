@@ -31,7 +31,11 @@
         <td class="container">
             <table>
                 <tr>
+<<<<<<< HEAD
                     <td class="content footer" align="center">
+=======
+                    <td class="content footer" align="center"> 
+>>>>>>> semyon492-dev
                         <p>Sent by <a href="{{ $home_url }}">{{ $site_name }}</a></p>
                         <p><a href="mailto:">{{ $admin_mail }}</a></p>
                     </td>
