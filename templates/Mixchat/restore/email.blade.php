@@ -31,7 +31,7 @@
         <td class="container">
             <table>
                 <tr>
-                    <td class="content footer" align="center">
+                    <td class="content footer" align="center"> 
                         <p>Sent by <a href="{{ $home_url }}">{{ $site_name }}</a></p>
                         <p><a href="mailto:">{{ $admin_mail }}</a></p>
                     </td>
