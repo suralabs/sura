@@ -23,7 +23,6 @@ class Mozg
      */
     public static function initialize(): mixed
     { 
-    {
         $lang = I18n::dictionary();
         Registry::set('lang', $lang);
 

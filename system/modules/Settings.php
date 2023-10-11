@@ -8,8 +8,9 @@ use Sura\Filesystem\Filesystem;
 use Sura\Http\Request;
 use Sura\Http\Response;
 use Sura\Support\Status;
+use Mozg\classes\Module;
 
-class Settings
+class Settings  extends Module
 {
 
     /**
@@ -94,7 +95,7 @@ class Settings
     function change_avatar()
     {
         $access_token = (new Request)->textFilter((string)$_POST['access_token']);
-        $check_user = $this->db->row('SELECT user_id, user_name, user_email, user_lastname, user_group, user_albums_num FROM `users` WHERE user_hid = ?', $access_token);
+        $check_user = $this->db->row('SELECT user_id, user_name, user_photo, user_email, user_lastname, user_group, user_albums_num FROM `users` WHERE user_hid = ?', $access_token);
 
         if ($check_user['user_id']) {
             //Create user dirs
@@ -165,9 +166,12 @@ class Settings
                         $image = $manager->read($upload_dir . $image_rename . $res_type);
                         $image->toPng(90)->save($upload_dir . $image_rename . $new_photo_type);
 
+                        if($res_type !== $new_photo_type)
+                        Filesystem::delete($upload_dir . $image_rename . $res_type);
+
                         //В альбом
-                        $image = $manager->read($upload_dir . $image_rename . $res_type);
-                        $image->toPng(90)->save($album_dir . $image_rename . $new_photo_type);
+                        // $image = $manager->read($upload_dir . $image_rename . $res_type);
+                        // $image->toPng(90)->save($album_dir . $image_rename . $new_photo_type);
 
                         $date = date('Y-m-d H:i:s', time());
 
@@ -232,6 +236,13 @@ class Settings
 
                         //Добавляем в ленту новостей
                         // $db->query("INSERT INTO `news` SET ac_user_id = '{$user_id}', action_type = 1, action_text = '{$wall_text}', obj_id = '{$dbid}', action_time = '{$server_time}'");
+
+
+                        //remove old photo !NB
+                        Filesystem::delete($upload_dir . $check_user['user_photo']);
+                        Filesystem::delete($upload_dir . 'o_' . $check_user['user_photo']);
+                        Filesystem::delete($upload_dir . '50_' . $check_user['user_photo']);
+                        Filesystem::delete($upload_dir . '100_' . $check_user['user_photo']);
 
                         //Обновляем имя фотки в бд
                         $this->db->update('users', [

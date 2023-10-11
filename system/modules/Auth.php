@@ -93,8 +93,6 @@ class Auth  extends Module
         if (!password_verify($data['password'], $repass)) {
             $response = array(
                 'status' => Status::BAD_PASSWORD,//5
-                'pass1' => $data['password'],
-                'pass2' => $data['repassword'],
             );
             (new Response)->_e_json($response);
             exit();
@@ -251,9 +249,9 @@ class Auth  extends Module
     {
         $data = json_decode(file_get_contents('php://input'), true);
         $pass = password_hash((new Request)->textFilter((string)$data['password']), PASSWORD_DEFAULT);
-        $repass = password_hash((new Request)->textFilter((string)$data['repassword']), PASSWORD_DEFAULT);
+        $repass = password_hash((new Request)->textFilter((string)$data['re_password']), PASSWORD_DEFAULT);
         $hash = (new Request)->textFilter((string)$data['hash']);
-        if (strlen($data['password']) >= 6 and $data['password'] === $data['repassword']) {
+        if (strlen($data['password']) >= 6 and $data['password'] === $data['re_password']) {
             $row = $this->db->row('SELECT email FROM `restore` WHERE hash = ? ', $hash);
             if ($row['email']) {
                 $this->db->update('users', [

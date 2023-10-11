@@ -15,7 +15,17 @@ It's recommended that you use [Composer](https://getcomposer.org/) to install Su
 $ composer create-project sura/sura:^0.0.1 MYPROJECT --prefer-dist
 ```
 
-The database configuration is located in config/config.php
+Copy config files
+
+```bash
+$ cp system/data/config.php.example system/data/config.php
+```
+
+```bash
+$ cp system/data/db_config.php.example system/data/db_config.php
+```
+
+The database configuration is located in system/data/db_config.php
 
 To create a migration, use the -migrate
 
@@ -46,7 +56,7 @@ However, if you are not using Homestead, you will need to make sure your server 
 
 ## License
 
-This software is distributed as open source with the [MIT](https://github.com/sura/sura/blob/master/LICENSE)
+This software is distributed as open source with the [MIT](https://github.com/suralabs/sura/blob/master/LICENSE)
 license.
 ## Contributors ✨
 
