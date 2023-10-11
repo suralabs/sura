@@ -3952,16 +3952,6 @@ $table_Chema[] = "CREATE TABLE `restore` (
   KEY `hash` (`hash`),
   KEY `ip` (`ip`)
 );";
-$table_Chema[] = "CREATE TABLE `reviews` (
-  `id` INT( 11 ) AUTO_INCREMENT PRIMARY KEY,
-  `user_id` int(11) NOT NULL,
-  `text` text NOT NULL,
-  `date` int(10) NOT NULL,
-  `approve` tinyint(1) NOT NULL,
-  KEY `date` (`date`),
-  KEY `for_sel` (`user_id`,`approve`),
-  KEY `approve` (`approve`)
-);";
 $table_Chema[] = "CREATE TABLE `sms_log` (
     `id` INT( 11 ) AUTO_INCREMENT PRIMARY KEY,
   `user_id` int(11) NOT NULL,
@@ -3973,13 +3963,6 @@ $table_Chema[] = "CREATE TABLE `sms_log` (
   `abonent_cost` float NOT NULL,
   `date` varchar(10) NOT NULL,
   KEY `user_id` (`user_id`)
-);";
-$table_Chema[] = "CREATE TABLE `static` (
-  `id` INT( 11 ) AUTO_INCREMENT PRIMARY KEY,
-  `alt_name` varchar(50) NOT NULL,
-  `title` varchar(150) NOT NULL,
-  `text` text NOT NULL,
-  KEY `alt_name` (`alt_name`)
 );";
 $table_Chema[] = "CREATE TABLE `support` (
   `id` INT( 11 ) AUTO_INCREMENT PRIMARY KEY,
@@ -4072,7 +4055,8 @@ $table_Chema[] = "CREATE TABLE `users` (
   `invties_pub_num` smallint(6) NOT NULL,
   `user_real` int(11) NOT NULL,
   `user_active` int(11) NOT NULL,
-    `notify` varchar(255) NOT NULL,
+  `notify` varchar(255) NOT NULL,
+  FULLTEXT KEY `ft1` (`user_name`,`user_lastname`),
   KEY `user_logged_hash` (`user_hid`),
   KEY `user_password` (`user_password`),
   KEY `user_email` (`user_email`),
