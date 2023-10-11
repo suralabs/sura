@@ -9,15 +9,26 @@
 
 ## Installation
 
-Install Sura with Composer.
+It's recommended that you use [Composer](https://getcomposer.org/) to install Sura.
 
-1. install [composer](https://getcomposer.org/)
+```bash
+$ composer create-project sura/sura:^0.0.1 MYPROJECT --prefer-dist
+```
 
-2. Please run install.php
+The database configuration is located in config/config.php
 
-It requires PHP version 8.0 and supports PHP up to 8.1.
+To create a migration, use the -migrate
 
-<a name="server-requirements"></a>
+```bash
+$ php sura -migrate
+```
+
+To create a user admin, use the -make:add-user <name> <lastname> <mail> <pass>
+
+```bash
+$ php sura -make:add-user Ivan Petrov petrov@example.com password
+```
+
 
 ### Server Requirements
 
@@ -25,7 +36,7 @@ Sura has a few system requirements.
 
 However, if you are not using Homestead, you will need to make sure your server meets the following requirements:
 
-- PHP ^8.1
+- PHP ^8.2
 - ICONV PHP Extension
 - GD PHP extension
 - MySQLI PHP Extension

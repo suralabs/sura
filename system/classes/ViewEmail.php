@@ -19,6 +19,9 @@ use Sura\View\myView;
  */
 class ViewEmail
 {
+    /**
+     * @var string
+     */
     public string $message = '';
 
     /**

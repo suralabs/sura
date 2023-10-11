@@ -8,6 +8,7 @@
  *
  */
 
+use Sura\Support\Declensions;
 use Sura\Support\Registry;
 use Mozg\classes\View;
 use Sura\Http\{Request, Response};
@@ -37,50 +38,6 @@ function informationText($array): string
         4 => $row['user_search_pref'] . ' обновил(а) фотографию беседы',
         5 => $row['user_search_pref'] . ' исключил(а) участника "' . $row2['user_search_pref'] . '"',);
     return $text[$array['type']];
-}
-
-/**
- * @param $gc
- * @param $num
- * @param $type
- * @return void
- * @deprecated
- */
-function navigation($gc, $num, $type): void
-{
-//    global $tpl, $page;
-//    $gcount = $gc;
-//    $cnt = $num;
-//    $items_count = $cnt;
-//    $items_per_page = $gcount;
-//    $page_refers_per_page = 5;
-//    $pages = '';
-//    $pages_count = (($items_count % $items_per_page !== 0)) ? floor($items_count / $items_per_page) + 1 : floor($items_count / $items_per_page);
-//    $start_page = ($page - $page_refers_per_page <= 0) ? 1 : $page - $page_refers_per_page + 1;
-//    $page_refers_per_page_count = (($page - $page_refers_per_page < 0) ? $page : $page_refers_per_page) + (($page + $page_refers_per_page > $pages_count) ? ($pages_count - $page) : $page_refers_per_page - 1);
-//    if ($page > 1) $pages.= '<a href="' . $type . ($page - 1) . '" onClick="Page.Go(this.href); return false">&laquo;</a>';
-//    else $pages.= '';
-//    if ($start_page > 1) {
-//        $pages.= '<a href="' . $type . '1" onClick="Page.Go(this.href); return false">1</a>';
-//        $pages.= '<a href="' . $type . ($start_page - 1) . '" onClick="Page.Go(this.href); return false">...</a>';
-//    }
-//    for ($index = - 1;++$index <= $page_refers_per_page_count - 1;) {
-//        if ($index + $start_page == $page) $pages.= '<span>' . ($start_page + $index) . '</span>';
-//        else $pages .= '<a href="' . $type . ($start_page + $index) . '" onClick="Page.Go(this.href); return false">' . ($start_page + $index) . '</a>';
-//    }
-//    if ($page + $page_refers_per_page <= $pages_count) {
-//        $pages .= '<a href="' . $type . ($start_page + $page_refers_per_page_count) . '" onClick="Page.Go(this.href); return false">...</a>';
-//        $pages .= '<a href="' . $type . $pages_count . '" onClick="Page.Go(this.href); return false">' . $pages_count . '</a>';
-//    }
-//    $resif = $cnt / $gcount;
-//    if (ceil($resif) == $page) $pages .= '';
-//    else $pages .= '<a href="' . $type . ($page + 1) . '" onClick="Page.Go(this.href); return false">&raquo;</a>';
-//    if ($pages_count <= 1) $pages = '';
-//
-//    $content = <<<HTML
-//<div class="nav" id="nav">{$pages}</div>
-//HTML;
-//    $tpl->result['content'] .= $content;
 }
 
 /**
@@ -126,89 +83,6 @@ function navigationNew($items_per_page, $items_count, $type): string
         $pages = '';
     }
     return "<div class=\"nav\" id=\"nav\">{$pages}</div>";
-}
-
-/**
- * @param $gc
- * @param $num
- * @param $id
- * @param $function
- * @param $act
- * @return void
- * @deprecated
- */
-function box_navigation($gc, $num, $id, $function, $act)
-{
-//    global $tpl, $page;
-//    $gcount = $gc;
-//    $cnt = $num;
-//    $items_count = $cnt;
-//    $items_per_page = $gcount;
-//    $page_refers_per_page = 5;
-//    $pages = '';
-//    $pages_count = (($items_count % $items_per_page != 0)) ? floor($items_count / $items_per_page) + 1 : floor($items_count / $items_per_page);
-//    $start_page = ($page - $page_refers_per_page <= 0) ? 1 : $page - $page_refers_per_page + 1;
-//    $page_refers_per_page_count = (($page - $page_refers_per_page < 0) ? $page : $page_refers_per_page) + (($page + $page_refers_per_page > $pages_count) ? ($pages_count - $page) : $page_refers_per_page - 1);
-//    if (!$act) $act = "''";
-//    else $act = "'{$act}'";
-//    if ($page > 1) $pages.= '<a href="" onClick="' . $function . '(' . $id . ', ' . ($page - 1) . ', ' . $act . '); return false">&laquo;</a>';
-//    else $pages.= '';
-//    if ($start_page > 1) {
-//        $pages.= '<a href="" onClick="' . $function . '(' . $id . ', 1, ' . $act . '); return false">1</a>';
-//        $pages.= '<a href="" onClick="' . $function . '(' . $id . ', ' . ($start_page - 1) . ', ' . $act . '); return false">...</a>';
-//    }
-//    for ($index = - 1;++$index <= $page_refers_per_page_count - 1;) {
-//        if ($index + $start_page == $page) $pages.= '<span>' . ($start_page + $index) . '</span>';
-//        else $pages .= '<a href="" onClick="' . $function . '(' . $id . ', ' . ($start_page + $index) . ', ' . $act . '); return false">' . ($start_page + $index) . '</a>';
-//    }
-//    if ($page + $page_refers_per_page <= $pages_count) {
-//        $pages .= '<a href="" onClick="' . $function . '(' . $id . ', ' . ($start_page + $page_refers_per_page_count) . ', ' . $act . '); return false">...</a>';
-//        $pages .= '<a href="" onClick="' . $function . '(' . $id . ', ' . $pages_count . ', ' . $act . '); return false">' . $pages_count . '</a>';
-//    }
-//    $resif = $cnt / $gcount;
-//    if (ceil($resif) == $page) $pages .= '';
-//    else $pages .= '<a href="/" onClick="' . $function . '(' . $id . ', ' . ($page + 1) . ', ' . $act . '); return false">&raquo;</a>';
-//    if ($pages_count <= 1) $pages = '';
-//    $navigation = "<div class=\"nav\" id=\"nav\">{$pages}</div>";
-//    $tpl->result['content'] .= $navigation;
-}
-
-/**
- * @param $title
- * @param $text
- * @param $tpl_name
- * @return void
- * @deprecated
- */
-function msgbox($title, $text, $tpl_name)
-{
-//    global $tpl;
-//    $tpl_2 = new Templates();
-//    $config = settings_get();
-//    $tpl_2->dir = ROOT_DIR . '/templates/' . $config['temp'];
-//    $tpl_2->load_template($tpl_name . '.tpl');
-//    $tpl_2->set('{error}', $text);
-//    $tpl_2->set('{title}', $title);
-//    $tpl_2->compile('info');
-//    $tpl_2->clear();
-}
-
-/**
- * @deprecated
- * @param $tpl
- * @param $title
- * @param $text
- * @param $tpl_name
- * @return int
- */
-function msgBoxNew($tpl, $title, $text, $tpl_name): int
-{
-//    $tpl->load_template($tpl_name);
-//    $tpl->set('{error}', $text);
-//    $tpl->set('{title}', $title);
-//    $tpl->compile('content');
-//    return $tpl->render();
-    return 0;
 }
 
 /**
@@ -281,7 +155,7 @@ function declWord(int $num, string $type): string
 {
     $lang = I18n::getLang();
     $decl_list = require ROOT_DIR . "/lang/{$lang}/declensions.php";
-    return (new \Sura\Support\Declensions($decl_list))->makeWord($num, $type);
+    return (new Declensions($decl_list))->makeWord($num, $type);
 }
 
 /**
@@ -295,53 +169,14 @@ function grammaticalName($source): string
     $str_2_name = $str_1_name - 2;
     $str_3_name = substr($name_u_gram, $str_2_name, $str_1_name);
     $str_5_name = substr($name_u_gram, 0, $str_2_name);
-    $str_4_name = strtr($str_3_name, array('ай' => 'ая', 'ил' => 'ила', 'др' => 'дра', 'ей' => 'ея', 'кс' => 'кса', 'ша' => 'ши', 'на' => 'ны', 'ка' => 'ки', 'ад' => 'ада', 'ма' => 'мы', 'ля' => 'ли', 'ня' => 'ни', 'ин' => 'ина', 'ик' => 'ика', 'ор' => 'ора', 'им' => 'има', 'ём' => 'ёма', 'ий' => 'ия', 'рь' => 'ря', 'тя' => 'ти', 'ся' => 'си', 'из' => 'иза', 'га' => 'ги', 'ур' => 'ура', 'са' => 'сы', 'ис' => 'иса', 'ст' => 'ста', 'ел' => 'ла', 'ав' => 'ава', 'он' => 'она', 'ра' => 'ры', 'ан' => 'ана', 'ир' => 'ира', 'рд' => 'рда', 'ян' => 'яна', 'ов' => 'ова', 'ла' => 'лы', 'ия' => 'ии', 'ва' => 'вой', 'ыч' => 'ыча', 'ич' => 'ича'));
+    $str_4_name = strtr($str_3_name, array(
+        'ай' => 'ая', 'ил' => 'ила', 'др' => 'дра', 'ей' => 'ея', 'кс' => 'кса', 'ша' => 'ши', 'на' => 'ны',
+        'ка' => 'ки', 'ад' => 'ада', 'ма' => 'мы', 'ля' => 'ли', 'ня' => 'ни', 'ин' => 'ина', 'ик' => 'ика',
+        'ор' => 'ора', 'им' => 'има', 'ём' => 'ёма', 'ий' => 'ия', 'рь' => 'ря', 'тя' => 'ти', 'ся' => 'си',
+        'из' => 'иза', 'га' => 'ги', 'ур' => 'ура', 'са' => 'сы', 'ис' => 'иса', 'ст' => 'ста', 'ел' => 'ла',
+        'ав' => 'ава', 'он' => 'она', 'ра' => 'ры', 'ан' => 'ана', 'ир' => 'ира', 'рд' => 'рда', 'ян' => 'яна',
+        'ов' => 'ова', 'ла' => 'лы', 'ия' => 'ии', 'ва' => 'вой', 'ыч' => 'ыча', 'ич' => 'ича'));
     return $str_5_name . $str_4_name;
-}
-
-/**
- * FIXME
- * @return void
- */
-function Hacking()
-{
-    global $lang;
-    $ajax = (new Request)->checkAjax();
-    if ($ajax) {
-        NoAjaxQuery();
-        echo <<<HTML
-<script type="text/javascript">
-document.title = '{$lang['error']}';
-document.getElementById('speedbar').innerHTML = '{$lang['error']}';
-document.getElementById('page').innerHTML = '{$lang['no_notes']}';
-</script>
-HTML;
-        die();
-    } else {
-        header('Location: /index.php?go=none');
-    }
-}
-
-/**
- * @deprecated
- * @param $time
- * @param $mobile
- * @return void
- */
-function OnlineTpl($time, $mobile = false)
-{
-    global $tpl, $online_time, $lang;
-    $config = settings_get();
-    $online_time = time() - $config['online_time'];
-    //Если человек сидит с мобильнйо версии
-    if ($mobile)
-        $mobile_icon = '<img src="/images/spacer.gif" class="mobile_online" />';
-    else
-        $mobile_icon = '';
-    if ($time >= $online_time)
-        return $tpl->set('{online}', $lang['online'] . $mobile_icon);
-    else
-        return $tpl->set('{online}', '');
 }
 
 function GenerateAlbumPhotosPosition($uid, $aid = false)
@@ -465,67 +300,6 @@ function normalizeName(string $value, bool $part = true): array|null|string
     }
     $value = preg_replace('#[\-]+#i', '-', $value);
     return preg_replace('#[.]+#i', '.', $value);
-}
-
-function clearFilePath($file, $ext = array()): string
-{
-    $file = trim(str_replace(chr(0), '', (string)$file));
-    $file = str_replace(array('/', '\\'), '/', $file);
-
-    $path_parts = pathinfo($file);
-
-    if (count($ext) && !in_array($path_parts['extension'], $ext, true)) {
-        return '';
-    }
-
-    $filename = normalizeName($path_parts['basename'], true);
-
-    if (!$filename) {
-        return '';
-    }
-
-    $parts = array_filter(explode('/', $path_parts['dirname']), 'strlen');
-
-    $absolutes = array();
-
-    foreach ($parts as $part) {
-        if ('.' === $part) {
-            continue;
-        }
-        if ('..' === $part) {
-            array_pop($absolutes);
-        } else {
-            $absolutes[] = normalizeName($part, false);
-        }
-    }
-    //fixme
-    $path = implode('/', $absolutes);
-
-    if ($path) {
-        return implode('/', $absolutes) . '/' . $filename;
-    }
-
-    return '';
-
-}
-
-function cleanPath($path): string
-{
-    $path = trim(str_replace(chr(0), '', (string)$path));
-    $path = str_replace(array('/', '\\'), '/', $path);
-    $parts = array_filter(explode('/', $path), 'strlen');
-    $absolutes = array();
-    foreach ($parts as $part) {
-        if ('.' === $part) {
-            continue;
-        }
-        if ('..' === $part) {
-            array_pop($absolutes);
-        } else {
-            $absolutes[] = to_translit($part, false, false);
-        }
-    }
-    return implode('/', $absolutes);
 }
 
 /**
@@ -661,4 +435,76 @@ function notify_ico(): string
             <div class=\"ic_newAct\">4</div>
          </div>
      </div>";
+}
+
+/**
+ * @param string $value
+ * @param bool $lower
+ * @param bool $part
+ * @return array|string|null
+ */
+function to_translit(string $value, bool $lower = true, bool $part = true): array|string|null
+{
+    $lang_translit = array(
+        'а' => 'a', 'б' => 'b', 'в' => 'v',
+        'г' => 'g', 'д' => 'd', 'е' => 'e',
+        'ё' => 'e', 'ж' => 'zh', 'з' => 'z',
+        'и' => 'i', 'й' => 'j', 'к' => 'k',
+        'л' => 'l', 'м' => 'm', 'н' => 'n',
+        'о' => 'o', 'п' => 'p', 'р' => 'r',
+        'с' => 's', 'т' => 't', 'у' => 'u',
+        'ф' => 'f', 'х' => 'h', 'ц' => 'c',
+        'ч' => 'ch', 'ш' => 'sh', 'щ' => 'sch',
+        'ь' => '', 'ы' => 'y', 'ъ' => '',
+        'э' => 'je', 'ю' => 'ju', 'я' => 'ja',
+        "ї" => "ji", "є" => "ye", "ґ" => "g",
+        
+        'А' => 'A', 'Б' => 'B', 'В' => 'V',
+        'Г' => 'G', 'Д' => 'D', 'Е' => 'E',
+        'Ё' => 'E', 'Ж' => 'Zh', 'З' => 'Z',
+        'И' => 'I', 'Й' => 'J', 'К' => 'K',
+        'Л' => 'L', 'М' => 'M', 'Н' => 'N',
+        'О' => 'O', 'П' => 'P', 'Р' => 'R',
+        'С' => 'S', 'Т' => 'T', 'У' => 'U',
+        'Ф' => 'F', 'Х' => 'H', 'Ц' => 'C',
+        'Ч' => 'Ch', 'Ш' => 'Sh', 'Щ' => 'Sch',
+        'Ь' => '', 'Ы' => 'Y', 'Ъ' => '',
+        'Э' => 'Je', 'Ю' => 'Ju', 'Я' => 'Ja',
+        "Ї" => "Ji", "Є" => "ye", "Ґ" => "G",
+        "À"=>"A", "à"=>"a", "Á"=>"A", "á"=>"a", 
+        "Â"=>"A", "â"=>"a", "Ä"=>"A", "ä"=>"a", 
+        "Ã"=>"A", "ã"=>"a", "Å"=>"A", "å"=>"a", 
+        "Æ"=>"AE", "æ"=>"ae", "Ç"=>"C", "ç"=>"c", 
+        "Ð"=>"D", "È"=>"E", "è"=>"e", "É"=>"E", 
+        "é"=>"e", "Ê"=>"E", "ê"=>"e", "Ì"=>"I", 
+        "ì"=>"i", "Í"=>"I", "í"=>"i", "Î"=>"I", 
+        "î"=>"i", "Ï"=>"I", "ï"=>"i", "Ñ"=>"N", 
+        "ñ"=>"n", "Ò"=>"O", "ò"=>"o", "Ó"=>"O", 
+        "ó"=>"o", "Ô"=>"O", "ô"=>"o", "Ö"=>"O", 
+        "ö"=>"o", "Õ"=>"O", "õ"=>"o", "Ø"=>"O", 
+        "ø"=>"o", "Œ"=>"OE", "œ"=>"oe", "Š"=>"S", 
+        "š"=>"s", "Ù"=>"U", "ù"=>"u", "Û"=>"U", 
+        "û"=>"u", "Ú"=>"U", "ú"=>"u", "Ü"=>"U", 
+        "ü"=>"u", "Ý"=>"Y", "ý"=>"y", "Ÿ"=>"Y", 
+        "ÿ"=>"y", "Ž"=>"Z", "ž"=>"z", "Þ"=>"B", 
+        "þ"=>"b", "ß"=>"ss", "£"=>"pf", "¥"=>"ien", 
+        "І"=>"I", "і"=>"i", "ð"=>"eth", "ѓ"=>"r"
+    );
+    $value = str_ireplace( ".php", ".ppp", $value );
+    $value = trim(strip_tags($value));
+    $value = str_replace(chr(0), '', $value);
+    $value = preg_replace( '/\-+/', '-', $value );
+    $value = strtr($value, $lang_translit);
+    if ($part)
+        $value = preg_replace("/[^a-z0-9\_\-.]+/mi", "", $value);
+    else
+        $value = preg_replace("/[^a-z0-9\_\-]+/mi", "", $value);
+    $value = preg_replace('#[\-]+#i', '-', $value);
+    if ($lower)
+        $value = strtolower($value);
+    if (strlen($value) > 200) {
+        $value = substr($value, 0, 200);
+        if (($temp_max = strrpos($value, '-'))) $value = substr($value, 0, $temp_max);
+    }
+    return $value;
 }
