@@ -22,14 +22,12 @@ class Mozg
      * @throws ErrorException|JsonException
      */
     public static function initialize(): mixed
+    { 
     {
         $lang = I18n::dictionary();
         Registry::set('lang', $lang);
 
         Registry::set('server_time', \time());
-
-        /** @var array $user_info */
-        $user_info = Registry::get('user_info');
 
         $router = Router::fromGlobals();
         $params = [];
@@ -48,9 +46,6 @@ class Mozg
             '/api/search' => 'Search@all',            
 
             '/api/profile' => 'Profile@api',
-
-            '/security/img' => 'Captcha@captcha',
-            '/security/code' => 'Captcha@code',
         ];
         $router->add($routers);
 
