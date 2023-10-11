@@ -27,27 +27,27 @@ class Mozg
             \session_id($_POST['PHPSESSID']);
         }
 
-//        $db = require ENGINE_DIR . '/data/db_config.php';
-//        Registry::set('db', $db);
+        //        $db = require ENGINE_DIR . '/data/db_config.php';
+        //        Registry::set('db', $db);
 
-//        $checkLang = I18n::getLang();
+        //        $checkLang = I18n::getLang();
         $lang = I18n::dictionary();
         Registry::set('lang', $lang);
 
-//        $config = settings_get();
+        //        $config = settings_get();
         Registry::set('server_time', \time());
         (new classes\Auth)->login();
-//        if ($config['offline'] === 'yes') {
-//            include ENGINE_DIR . '/modules/offline.php';
-//        }
+        //        if ($config['offline'] === 'yes') {
+        //            include ENGINE_DIR . '/modules/offline.php';
+        //        }
         /** @var array $user_info */
         $user_info = Registry::get('user_info');
-//        if ($user_info['user_delet'] > 0) {
-//            include_once ENGINE_DIR . '/modules/profile_delet.php';
-//        }
-//        if ((Registry::get('logged') && $user_info['user_ban_date'] >= Registry::get('server_time')) || (Registry::get('logged') && ($user_info['user_ban_date'] === '0'))) {
-//            include_once ENGINE_DIR . '/modules/profile_ban.php';
-//        }
+        //        if ($user_info['user_delet'] > 0) {
+        //            include_once ENGINE_DIR . '/modules/profile_delet.php';
+        //        }
+        //        if ((Registry::get('logged') && $user_info['user_ban_date'] >= Registry::get('server_time')) || (Registry::get('logged') && ($user_info['user_ban_date'] === '0'))) {
+        //            include_once ENGINE_DIR . '/modules/profile_ban.php';
+        //        }
 
         /**
          * Если юзер авторизован,
@@ -90,6 +90,21 @@ class Mozg
         $params = [];
         $routers = [
             '/' => 'Home@main',
+            '/api/authorize' => 'Api@authorize',
+            '/api/account/register' => 'Api@register',
+            '/api/account/getinfo' => 'Api@getinfo',
+            '/api/account/restore' => 'Api@restore',
+            '/api/account/reset_password' => 'Api@reset_password',
+            '/api/account/change_pass' => 'Api@change_pass',
+            '/api/account/change_name' => 'Api@change_name',
+            '/api/account/change_avatar' => 'Api@change_avatar',
+            '/api/users/profile' => 'Profile@profile',
+            '/api/albums/all' => 'Albums@all',            
+            '/api/search' => 'Search@all',            
+            
+            '/api' => 'Api@main',
+            '/api/profile' => 'Profile@api',
+
 
             '/register/send' => 'Register@send',
             '/register/rules' => 'Register@rules',
@@ -124,16 +139,7 @@ class Mozg
             '/balance/payment_2' => 'Balance@payment_2',
             '/balance/ok_payment' => 'Balance@ok_payment',
 
-            '/balance/payment' => 'Balance@createOrderBox',//1
-            '/pay/test/create/' => 'Balance@payCreateTest',//2
-            '/pay/fkw/create/' => 'Balance@payCreateFkw',//2
-            '/pay/test/' => 'Balance@payMain',//3
-            '/pay/test/success/' => 'Balance@payTestSuccess',//4
-            '/pay/fw/check/' => 'Balance@checkFWKassa',
-            '/pay/fw/success/' => 'Balance@main',//4
-            '/pay/fkw/success/' => 'Balance@main',//4
-            '/pay/fw/bad/' => 'Balance@main',//4
-            '/pay/fkw/bad/' => 'Balance@main',//4
+            '/balance/payment' => 'Balance@createOrderBox',
 
             '/support' => 'Support@main',
 
@@ -149,7 +155,7 @@ class Mozg
             '/editprofile/delete/photo' => 'Editprofile@deletePhoto',
             '/editmypage' => 'Editprofile@main',
 
-            '/admin/' => 'Admin@main',
+            // '/admin/' => 'Admin@main',
         ];
         $router->add($routers);
 
@@ -158,13 +164,14 @@ class Mozg
         } else {
             //todo update
             $module = isset($_GET['go']) ?
-                htmlspecialchars(strip_tags(stripslashes(trim(urldecode($_GET['go']))))) : 'main';
+                htmlspecialchars(strip_tags(stripslashes(trim(urldecode($_GET['go']))))) : 'Home';
             $action = (new Request)->filter('act');
             $class = ucfirst($module);
             if (!class_exists($class) || $action === '' || $class === 'Wall') {
-                $text = 'error 500';
+
+                $text = 'error 404';
                 $params = [
-                    'title' => 'error 500',
+                    'title' => $text,
                     'text' => $text,
                 ];
                 view('info.info', $params);

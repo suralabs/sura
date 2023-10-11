@@ -1,7 +1,7 @@
 {
   "name": "sura/sura",
   "description": "Sura",
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "license": "MIT",
   "authors": [
     {
@@ -18,7 +18,8 @@
     "sura/view": "^2.0",
     "sura/database": "^0.2",
     "sinergi/browser-detector": "^6.1",
-    "james-heinrich/getid3": "^2.0-dev"
+    "james-heinrich/getid3": "^2.0-dev",
+    "intervention/image": "3.0.*@beta"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

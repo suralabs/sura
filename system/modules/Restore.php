@@ -161,6 +161,7 @@ class Restore extends Module
     {
         NoAjaxQuery();
         $hash = strip_data((new Request)->filter('hash'));
+        $_IP = "0.0.0.0";
         $row = $this->db->row('SELECT email FROM `restore` WHERE hash = ? AND ip = ?', $hash, $_IP);
         if ($row) {
             $new_pass = md5(md5((new Request)->filter('new_pass')));
