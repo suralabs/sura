@@ -23,70 +23,6 @@ class Mozg
      */
     public static function initialize(): mixed
     {
-<<<<<<< HEAD
-        if (isset($_POST['PHPSESSID'])) {
-            \session_id($_POST['PHPSESSID']);
-        }
-
-        //        $db = require ENGINE_DIR . '/data/db_config.php';
-        //        Registry::set('db', $db);
-
-        //        $checkLang = I18n::getLang();
-        $lang = I18n::dictionary();
-        Registry::set('lang', $lang);
-
-        //        $config = settings_get();
-        Registry::set('server_time', \time());
-        (new classes\Auth)->login();
-        //        if ($config['offline'] === 'yes') {
-        //            include ENGINE_DIR . '/modules/offline.php';
-        //        }
-        /** @var array $user_info */
-        $user_info = Registry::get('user_info');
-        //        if ($user_info['user_delet'] > 0) {
-        //            include_once ENGINE_DIR . '/modules/profile_delet.php';
-        //        }
-        //        if ((Registry::get('logged') && $user_info['user_ban_date'] >= Registry::get('server_time')) || (Registry::get('logged') && ($user_info['user_ban_date'] === '0'))) {
-        //            include_once ENGINE_DIR . '/modules/profile_ban.php';
-        //        }
-
-        /**
-         * Если юзер авторизован,
-         * то обновляем последнюю дату посещения в таблице друзей и на личной стр
-         */
-        if (Registry::get('logged')) {
-            //Начисления 1 убм.
-            if (empty($user_info['user_lastupdate'])) {
-                $user_info['user_lastupdate'] = 1;
-            }
-            $server_time = Registry::get('server_time');
-            //Определяем устройство
-            $device_user = 0;
-            if (empty($user_info['user_last_visit'])) {
-                $user_info['user_last_visit'] = $server_time;
-            }
-
-            if (($user_info['user_last_visit'] + 60) <= $server_time) {
-                if (\date('Y-m-d', $user_info['user_lastupdate']) < \date('Y-m-d', $server_time)) {
-                    DB::getDB()->update('users', [
-                        'user_logged_mobile' => $device_user,
-                        'user_last_visit' => $server_time,
-                        'user_balance' => 'user_balance + 1',
-                        'user_lastupdate' => $server_time,
-                    ], [
-                        'user_id' => $user_info['user_id']
-                    ]);
-                } else {
-                    DB::getDB()->update('users', [
-                        'user_logged_mobile' => $device_user,
-                        'user_last_visit' => $server_time,
-                    ], [
-                        'user_id' => $user_info['user_id']
-                    ]);
-                }
-            }
-        }
-=======
         $lang = I18n::dictionary();
         Registry::set('lang', $lang);
 
@@ -94,80 +30,11 @@ class Mozg
 
         /** @var array $user_info */
         $user_info = Registry::get('user_info');
->>>>>>> semyon492-dev
 
         $router = Router::fromGlobals();
         $params = [];
         $routers = [
             '/' => 'Home@main',
-<<<<<<< HEAD
-            '/api/authorize' => 'Api@authorize',
-            '/api/account/register' => 'Api@register',
-            '/api/account/getinfo' => 'Api@getinfo',
-            '/api/account/restore' => 'Api@restore',
-            '/api/account/reset_password' => 'Api@reset_password',
-            '/api/account/change_pass' => 'Api@change_pass',
-            '/api/account/change_name' => 'Api@change_name',
-            '/api/account/change_avatar' => 'Api@change_avatar',
-            '/api/users/profile' => 'Profile@profile',
-            '/api/albums/all' => 'Albums@all',            
-            '/api/search' => 'Search@all',            
-            
-            '/api' => 'Api@main',
-            '/api/profile' => 'Profile@api',
-
-
-            '/register/send' => 'Register@send',
-            '/register/rules' => 'Register@rules',
-            '/register/step2' => 'Register@step2',
-            '/register/step3' => 'Register@step3',
-            '/register/activate' => 'Register@activate',
-            '/register/finish' => 'Register@finish',
-            '/login' => 'Register@login',
-
-            '/u:num' => 'Profile@main',
-            '/u:numafter' => 'Profile@main',
-
-            '/public:num' => 'Communities@main',
-
-            //restore
-            '/restore' => 'Restore@main',
-            '/restore/next' => 'Restore@next',
-            '/restore/next/' => 'Restore@next',
-            '/restore/send' => 'Restore@send',
-            '/restore/prefinish' => 'Restore@preFinish',
-
-            '/wall:num' => 'WallPage@main',
-            '/wall:num_:num' => 'WallPage@main',
-
-            '/security/img' => 'Captcha@captcha',
-            '/security/code' => 'Captcha@code',
-
-            '/langs/box' => 'Lang@main',
-            '/langs/change' => 'Lang@change',
-
-            '/balance' => 'Balance@main',
-            '/balance/payment_2' => 'Balance@payment_2',
-            '/balance/ok_payment' => 'Balance@ok_payment',
-
-            '/balance/payment' => 'Balance@createOrderBox',
-
-            '/support' => 'Support@main',
-
-            '/messages' => 'Im@main',
-
-            '/settings' => 'Settings@main',
-            '/wall/send' => 'Wall@sendRecord',
-
-            '/updates' => 'Updates@main',
-            '/search' => 'Search@main',
-            '/news' => 'News@main',
-
-            '/editprofile/delete/photo' => 'Editprofile@deletePhoto',
-            '/editmypage' => 'Editprofile@main',
-
-            // '/admin/' => 'Admin@main',
-=======
             '/api/authorize' => 'Auth@authorize',
             '/api/account/register' => 'Auth@register',
             '/api/account/getinfo' => 'Profile@getInfo',
@@ -184,7 +51,6 @@ class Mozg
 
             '/security/img' => 'Captcha@captcha',
             '/security/code' => 'Captcha@code',
->>>>>>> semyon492-dev
         ];
         $router->add($routers);
 
