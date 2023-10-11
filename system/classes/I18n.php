@@ -13,9 +13,18 @@ namespace Mozg\classes;
 use Sura\Support\Cookie;
 use Sinergi\BrowserDetector\Language;
 
+/**
+ *
+ */
 class I18n
 {
+    /**
+     *
+     */
     public const EN = '1';
+    /**
+     *
+     */
     public const RU = '2';
 
     /**

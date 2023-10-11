@@ -9,8 +9,15 @@
 
 namespace Mozg\classes;
 
+/**
+ *
+ */
 class User
 {
+    /**
+     * @param $id
+     * @return array
+     */
     public static function getUser($id): array
     {
         return DB::getDB()->row('SELECT user_id, user_real, user_search_pref, user_country_city_name, 

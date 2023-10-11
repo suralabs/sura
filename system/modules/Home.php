@@ -11,7 +11,6 @@ class Home extends \Mozg\classes\Module
     {
         $logged = $this->logged;
         if ($logged === true) {
-//            (new Profile)->main();
             (new News)->main();
         } else {
             (new Register)->main();
