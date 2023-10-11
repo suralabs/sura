@@ -24,12 +24,12 @@ class Settings
         $password_renew = password_hash((new Request)->textFilter((string)$data['repassword']), PASSWORD_DEFAULT);
         $access_token = (new Request)->textFilter((string)$data['access_token']);
 
-        $check_user = DB::getDB()->row('SELECT user_password FROM `users` WHERE user_hid = ?', $access_token);
+        $check_user = $this->db->row('SELECT user_password FROM `users` WHERE user_hid = ?', $access_token);
         if ($check_user['user_password']) {
             //check current password
             if (password_verify((string)$data['oldpassword'], $check_user['user_password'])) {
                 if ($data['password'] == $data['repassword']) {
-                    DB::getDB()->update('users', [
+                    $this->db->update('users', [
                         'user_hid' => $password_new, //access_token
                         'user_password' => $password_new //access_token
                     ], [
@@ -94,7 +94,7 @@ class Settings
     function change_avatar()
     {
         $access_token = (new Request)->textFilter((string)$_POST['access_token']);
-        $check_user = DB::getDB()->row('SELECT user_id, user_name, user_email, user_lastname, user_group, user_albums_num FROM `users` WHERE user_hid = ?', $access_token);
+        $check_user = $this->db->row('SELECT user_id, user_name, user_email, user_lastname, user_group, user_albums_num FROM `users` WHERE user_hid = ?', $access_token);
 
         if ($check_user['user_id']) {
             //Create user dirs
@@ -102,13 +102,13 @@ class Settings
             Filesystem::createDir($upload_dir);
             Filesystem::createDir($upload_dir . $check_user['user_id']);
             Filesystem::createDir($upload_dir . $check_user['user_id'] . '/albums');
-            $check_system_albums = DB::getDB()->row('SELECT aid, cover FROM `albums` WHERE user_id = ? AND system = 1', $check_user['user_id']);
+            $check_system_albums = $this->db->row('SELECT aid, cover FROM `albums` WHERE user_id = ? AND system = 1', $check_user['user_id']);
 
             if (!$check_system_albums) {
                 $hash = md5(md5(time()) . md5($check_user['user_id']) . md5($check_user['user_email']));
                 $date_create = date('Y-m-d H:i:s', time());
                 $sql_privacy = '';
-                DB::getDB()->insert('albums', [
+                $this->db->insert('albums', [
                     'user_id' => $check_user['user_id'],
                     'name' => 'Фотографии со страницы',
                     'descr' => '',
@@ -118,8 +118,8 @@ class Settings
                     'system' => '1',
                     'privacy' => $sql_privacy,
                 ]);
-                $aid_fors = DB::getDB()->getInsertId();
-                DB::getDB()->update('users', [
+                $aid_fors = $this->db->getInsertId();
+                $this->db->update('users', [
                     'user_albums_num' => $check_user['user_albums_num'] + 1,
                 ], [
                     'user_id' => $check_user['user_id']
@@ -178,7 +178,7 @@ class Settings
                             $position_all = 100000;
                         }
 
-                        DB::getDB()->insert('photos', [
+                        $this->db->insert('photos', [
                             'album_id' => $aid_fors,
                             'photo_name' => $image_rename . $new_photo_type,
                             'user_id' => $check_user['user_id'],
@@ -190,11 +190,11 @@ class Settings
                             'rating_num' => '0',
                             'rating_max' => '0',
                         ]);
-                        $ins_id = DB::getDB()->lastInsertId();
+                        $ins_id = $this->db->lastInsertId();
 
-                        $check_album = DB::getDB()->row('SELECT photo_num FROM `albums` WHERE aid = ?', $aid_fors);
+                        $check_album = $this->db->row('SELECT photo_num FROM `albums` WHERE aid = ?', $aid_fors);
                         if (!$check_system_albums['cover']) {
-                            DB::getDB()->update('albums', [
+                            $this->db->update('albums', [
                                 'cover' => '',
                                 'photo_num' => $check_album['photo_num'] + 1, // note +=
                                 'adate' => $date
@@ -202,7 +202,7 @@ class Settings
                                 'aid' => $aid_fors
                             ]);
                         } else {
-                            DB::getDB()->update('albums', [
+                            $this->db->update('albums', [
                                 'cover' => $image_rename . $new_photo_type,
                                 'photo_num' => $check_album['photo_num'] + 1, // note +=
                                 'adate' => $date
@@ -234,7 +234,7 @@ class Settings
                         // $db->query("INSERT INTO `news` SET ac_user_id = '{$user_id}', action_type = 1, action_text = '{$wall_text}', obj_id = '{$dbid}', action_time = '{$server_time}'");
 
                         //Обновляем имя фотки в бд
-                        DB::getDB()->update('users', [
+                        $this->db->update('users', [
                             'user_photo' => $image_rename . $new_photo_type, // note +=
                             // 'user_wall_id' => $dbid
                         ], [

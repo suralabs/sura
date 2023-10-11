@@ -33,7 +33,7 @@ class Auth  extends Module
             exit();
         }
         if (!empty($email)) {
-            $check_user = DB::getDB()->row('SELECT user_id, user_password, user_hid FROM `users` WHERE user_email = ?', $email);
+            $check_user = $this->db->row('SELECT user_id, user_password, user_hid FROM `users` WHERE user_email = ?', $email);
             if ($check_user) {
                 if (password_verify($data['password'], $check_user['user_password'])) {
                     $hid = $password;
@@ -77,11 +77,11 @@ class Auth  extends Module
     function register(): void
     {
         $data = json_decode(file_get_contents('php://input'), true);
-        $name = (new Request)->textFilter((string)$data['firstname']);
-        $lastname = (new Request)->textFilter((string)$data['lastname']);
+        $name = (new Request)->textFilter((string)$data['first_name']);
+        $last_name = (new Request)->textFilter((string)$data['last_name']);
         $email = (new Request)->textFilter((string)$data['email']);
         $pass = password_hash((new Request)->textFilter((string)$data['password']), PASSWORD_DEFAULT);
-        $repass = password_hash((new Request)->textFilter((string)$data['repassword']), PASSWORD_DEFAULT);
+        $repass = password_hash((new Request)->textFilter((string)$data['re_password']), PASSWORD_DEFAULT);
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $response = array(
                 'status' => Status::BAD_MAIL,
@@ -104,14 +104,14 @@ class Auth  extends Module
         $hid = $repass;
         $time = time();
         $server_time = time();
-        $check_email = DB::getDB()->row('SELECT COUNT(*) AS cnt FROM `users` WHERE user_email = ?', $email);
+        $check_email = $this->db->row('SELECT COUNT(*) AS cnt FROM `users` WHERE user_email = ?', $email);
         if (!$check_email['cnt']) {
             DB::getDB()->insert('users', [
                 'user_last_visit' => $server_time,
                 'user_email' => $email,
                 'user_password' => $pass,
                 'user_name' => $name,
-                'user_lastname' => $lastname,
+                'user_lastname' => $last_name,
                 'user_photo' => '',
                 'user_day' => '0',
                 'user_month' => '0',
@@ -122,7 +122,7 @@ class Auth  extends Module
                 'user_lastdate' => $server_time,
                 'user_group' => '5',
                 'user_hid' => $hid,
-                'user_search_pref' => $name . ' ' . $lastname,
+                'user_search_pref' => $name . ' ' . $last_name,
                 'user_birthday' => '0-0-0',
                 'user_privacy' => 'val_msg|1||val_wall1|1||val_wall2|1||val_wall3|1||val_info|1||',
                 'user_wall_id' => '0',
@@ -196,7 +196,7 @@ class Auth  extends Module
             (new Response)->_e_json($response);
             exit();
         }
-        $check = DB::getDB()->row('SELECT user_id, user_search_pref, user_photo, user_name FROM `users` WHERE user_email = ?', $email);
+        $check = $this->db->row('SELECT user_id, user_search_pref, user_photo, user_name FROM `users` WHERE user_email = ?', $email);
         if ($check) {
             //Удаляем все предыдущие запросы на восстановление
             DB::getDB()->delete('restore', [
@@ -254,15 +254,15 @@ class Auth  extends Module
         $repass = password_hash((new Request)->textFilter((string)$data['repassword']), PASSWORD_DEFAULT);
         $hash = (new Request)->textFilter((string)$data['hash']);
         if (strlen($data['password']) >= 6 and $data['password'] === $data['repassword']) {
-            $row = DB::getDB()->row('SELECT email FROM `restore` WHERE hash = ? ', $hash);
+            $row = $this->db->row('SELECT email FROM `restore` WHERE hash = ? ', $hash);
             if ($row['email']) {
-                DB::getDB()->update('users', [
+                $this->db->update('users', [
                     'user_password' => $pass,
                     'user_hid' => $repass,
                 ], [
                     'user_email' => $row['email']
                 ]);
-                DB::getDB()->delete('restore', [
+                $this->db->delete('restore', [
                     'email' => $row['email']
                 ]);
 
