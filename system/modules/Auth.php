@@ -152,7 +152,7 @@ class Auth  extends Module
                 'user_logged_mobile' => '0',
                 'balance_rub' => '0',
                 'user_rating' => '0',
-                'invties_pub_num' => '0',
+                'invite_pub_num' => '0',
                 'user_real' => '0',
                 'user_active' => '0',
                 'notify' => '0',
