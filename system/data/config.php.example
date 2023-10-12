@@ -2,7 +2,8 @@
     return [
         'home' => "Site name",
         'charset' => "utf-8",
-        'home_url' => "https://site.ru/",
+        'home_url' => "https://rapigram.ru/",
+        'api_url' => "https://api.rapigram.ru/",
         'temp' => "Mixchat",
         'online_time' => "150",
         'lang' => "Russian",
