@@ -78,7 +78,7 @@ class Settings  extends Module
 
         DB::getDB()->update('users', [
             'user_name' => $first_name,
-            'user_lastname' => $last_name
+            'user_last_name' => $last_name
         ], [
             'user_hid' => $access_token
         ]);
@@ -95,7 +95,7 @@ class Settings  extends Module
     function change_avatar()
     {
         $access_token = (new Request)->textFilter((string)$_POST['access_token']);
-        $check_user = $this->db->row('SELECT user_id, user_name, user_photo, user_email, user_lastname, user_group, user_albums_num FROM `users` WHERE user_hid = ?', $access_token);
+        $check_user = $this->db->row('SELECT user_id, user_name, user_photo, user_email, user_last_name, user_group, user_albums_num FROM `users` WHERE user_hid = ?', $access_token);
 
         if ($check_user['user_id']) {
             //Create user dirs

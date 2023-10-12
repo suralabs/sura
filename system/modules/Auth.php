@@ -109,7 +109,7 @@ class Auth  extends Module
                 'user_email' => $email,
                 'user_password' => $pass,
                 'user_name' => $name,
-                'user_lastname' => $last_name,
+                'user_last_name' => $last_name,
                 'user_photo' => '',
                 'user_day' => '0',
                 'user_month' => '0',
@@ -117,18 +117,14 @@ class Auth  extends Module
                 'user_country' => '0',
                 'user_city' => '0',
                 'user_reg_date' => $server_time,
-                'user_lastdate' => $server_time,
+                'user_last_date' => $server_time,
                 'user_group' => '5',
                 'user_hid' => $hid,
-                'user_search_pref' => $name . ' ' . $last_name,
                 'user_birthday' => '0-0-0',
                 'user_privacy' => 'val_msg|1||val_wall1|1||val_wall2|1||val_wall3|1||val_info|1||',
                 'user_wall_id' => '0',
                 'user_sex' => '0',
                 'user_country_city_name' => '',
-                'user_xfields' => '',
-                'xfields' => '',
-                'user_xfields_all' => '',
                 'user_albums_num' => '0',
                 'user_friends_demands' => '0',
                 'user_friends_num' => '0',
@@ -144,12 +140,11 @@ class Auth  extends Module
                 'user_sp' => '',
                 'user_support' => '0',
                 'user_balance' => '0',
-                'user_lastupdate' => $server_time,
+                'user_last_update' => $server_time,
                 'user_gifts' => '0',
                 'user_public_num' => '0',
                 'user_audio' => '0',
-                'user_msg_type' => '0',
-                'user_delet' => '0',
+                'user_delete' => '0',
                 'user_ban' => '0',
                 'user_ban_date' => '0',
                 'user_new_mark_photos' => 0,
@@ -194,7 +189,7 @@ class Auth  extends Module
             (new Response)->_e_json($response);
             exit();
         }
-        $check = $this->db->row('SELECT user_id, user_search_pref, user_photo, user_name FROM `users` WHERE user_email = ?', $email);
+        $check = $this->db->row('SELECT user_id, user_photo, user_name FROM `users` WHERE user_email = ?', $email);
         if ($check) {
             //Удаляем все предыдущие запросы на восстановление
             DB::getDB()->delete('restore', [

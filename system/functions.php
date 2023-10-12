@@ -23,20 +23,20 @@ function informationText($array): string
 {
     $db = Registry::get('db');
     $array = json_decode($array, 1, 512, JSON_THROW_ON_ERROR);
-    $row = $db->super_query("SELECT user_search_pref FROM  users WHERE user_id = '" . ($array['type'] == 1 ? $array['oid2'] : $array['oid']) . "'");
+    $row = $db->super_query("SELECT user_name, user_last_name FROM  users WHERE user_id = '" . ($array['type'] == 1 ? $array['oid2'] : $array['oid']) . "'");
     if ($array['type'] == 5) {
-        $row2 = $db->super_query("SELECT user_search_pref FROM  users WHERE user_id = '" . $array['oid2'] . "'");
+        $row2 = $db->super_query("SELECT user_name, user_last_name FROM  users WHERE user_id = '" . $array['oid2'] . "'");
     } else {
-        $row2['user_search_pref'] = null;
+        $row2['user_name'] = null;
     }
 
     $text = array(
-        0 => $row['user_search_pref'] . ' создал(а) беседу',
-        1 => $row['user_search_pref'] . ' приглашен(а) в беседу',
-        2 => $row['user_search_pref'] . ' покинул(а) беседу',
-        3 => $row['user_search_pref'] . ' обновил(а) название беседы',
-        4 => $row['user_search_pref'] . ' обновил(а) фотографию беседы',
-        5 => $row['user_search_pref'] . ' исключил(а) участника "' . $row2['user_search_pref'] . '"',);
+        0 => $row['user_name'] . ' создал(а) беседу',
+        1 => $row['user_name'] . ' приглашен(а) в беседу',
+        2 => $row['user_name'] . ' покинул(а) беседу',
+        3 => $row['user_name'] . ' обновил(а) название беседы',
+        4 => $row['user_name'] . ' обновил(а) фотографию беседы',
+        5 => $row['user_name'] . ' исключил(а) участника "' . $row2['user_name'] . '"',);
     return $text[$array['type']];
 }
 

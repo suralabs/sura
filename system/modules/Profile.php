@@ -44,7 +44,7 @@ class Profile extends Module
         $data = json_decode(file_get_contents('php://input'), true);
         $user_id = (new Request)->textFilter((string)$data['id']);
         $access_token = (new Request)->textFilter((string)$data['access_token']);
-        $check_user = $this->db->row('SELECT user_id, user_name, user_lastname, user_photo, user_group FROM `users` WHERE user_id = ?', $user_id);
+        $check_user = $this->db->row('SELECT user_id, user_name, user_last_name, user_photo, user_group FROM `users` WHERE user_id = ?', $user_id);
 
         if ($check_user) {
             // $check_user['access_token'] = $access_token;
@@ -71,7 +71,7 @@ class Profile extends Module
                     'id' => $check_user['user_id'],
                     // 'access_token' => $check_user['access_token'],
                     'first_name' => $check_user['user_name'],
-                    'last_name' => $check_user['user_lastname'],
+                    'last_name' => $check_user['user_last_name'],
                     'photo' => $photo,
                     'photo_50' => $photo_50,
                     'photo_100' => $photo_100,
@@ -98,7 +98,7 @@ class Profile extends Module
         $config = settings_get();
         $data = json_decode(file_get_contents('php://input'), true);
         $access_token = (new Request)->textFilter((string)$data['access_token']);
-        $check_user = $this->db->row('SELECT user_id, user_name, user_lastname, user_photo, user_group FROM `users` WHERE user_hid = ?', $access_token);
+        $check_user = $this->db->row('SELECT user_id, user_name, user_last_name, user_photo, user_group FROM `users` WHERE user_hid = ?', $access_token);
 
         if ($check_user) {
             $check_user['access_token'] = $access_token;
@@ -124,7 +124,7 @@ class Profile extends Module
                     'user_id' => $check_user['user_id'],
                     'access_token' => $check_user['access_token'],
                     'first_name' => $check_user['user_name'],
-                    'last_name' => $check_user['user_lastname'],
+                    'last_name' => $check_user['user_last_name'],
                     'photo_50' => $photo_50,
                     'roles' => $check_user['roles'],
                 ),

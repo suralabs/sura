@@ -44,7 +44,7 @@ class Dialog
     {
         /** @var array $user_info */
         $user_info = DB::getDB()->row(
-            "SELECT user_id, user_photo, user_search_pref FROM `users` WHERE user_id = ?", $this->user_id);
+            "SELECT user_id, user_photo, user_name, user_last_name FROM `users` WHERE user_id = ?", $this->user_id);
         if (Flood::check('messages')) {
             return [
                 'status' => Status::LIMIT
@@ -156,7 +156,7 @@ class Dialog
                                 'date' => time(),
                                 'text' => $msg,
                                 'user_photo' => $user_info['user_photo'],
-                                'user_search_pref' => $user_info['user_search_pref'],
+                                'user_name' => $user_info['user_name'],
                                 'lnk' => $msg_lnk,
                             ]);
 
@@ -192,7 +192,7 @@ class Dialog
                         'status' => Status::OK,
                         'id' => $dbid,
                         'user_photo' => $user_info['user_photo'],
-                        'user_name' => $user_info['user_search_pref']
+                        'user_name' => $user_info['user_name']
                     ];
                 }
                 return [

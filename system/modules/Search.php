@@ -41,14 +41,14 @@ class Search extends Module
         $results_count = 20;
         $limit_page = ($page - 1) * $results_count;
 
-        //$where_sql_gen = "WHERE user_delet = '0' AND user_ban = '0'";
+        //$where_sql_gen = "WHERE user_delete = '0' AND user_ban = '0'";
 
         if ($query == null) {
-            $sql_query = $this->db->run('SELECT user_id, user_name, user_lastname, user_photo, user_group 
+            $sql_query = $this->db->run('SELECT user_id, user_name, user_last_name, user_photo, user_group 
             FROM `users` LIMIT '.$limit_page.', '.$results_count);
         } else {
-            $sql_query = $this->db->run('SELECT user_id, user_name, user_lastname, user_photo, user_group 
-            FROM users WHERE MATCH (user_name,user_lastname) AGAINST (?) 
+            $sql_query = $this->db->run('SELECT user_id, user_name, user_last_name, user_photo, user_group 
+            FROM users WHERE MATCH (user_name,user_last_name) AGAINST (?) 
             LIMIT '.$limit_page.', '.$results_count, $query);
         }
         
@@ -57,7 +57,7 @@ class Search extends Module
             foreach ($sql_query as $key => $item) {
                 $results[$key]['id'] = $item['user_id'];
                 $results[$key]['first_name'] = $item['user_name'];
-                $results[$key]['last_name'] = $item['user_lastname'];
+                $results[$key]['last_name'] = $item['user_last_name'];
                 if ($item['user_photo']) {
                     $results[$key]['photo'] = $config['api_url'] . 'uploads/users/' . $item['user_id'] . '/' . $item['user_photo'];
                     $results[$key]['photo_50'] = $config['api_url'] . 'uploads/users/' . $item['user_id'] . '/50_' . $item['user_photo'];

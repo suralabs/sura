@@ -29,33 +29,29 @@ class Users
         'user_id' => 'int',
         'user_email' => 'string',
         'user_group' => 'int',
-        'user_friends_demands ' => 'int',
-        'user_pm_num ' => 'int',
-        'user_support ' => 'int',
-        'user_lastupdate ' => 'int',
-        'user_photo ' => 'string',
-        'user_msg_type ' => 'int',
-        'user_delet ' => 'int',
-        'user_ban_date ' => 'int',
-        'user_new_mark_photos ' => 'int',
-        'user_search_pref ' => 'string',
-        'user_status ' => 'string',
-        'user_last_visit ' => 'int',
-        'user_hid ' => 'string',
-        'invties_pub_num ' => 'int',
-        'user_password ' => 'string'
+        'user_friends_demands' => 'int',
+        'user_pm_num' => 'int',
+        'user_support' => 'int',
+        'user_last_update' => 'int',
+        'user_photo' => 'string',
+        'user_msg_type' => 'int',
+        'user_delete' => 'int',
+        'user_ban_date' => 'int',
+        'user_new_mark_photos' => 'int',
+        'user_name' => 'string',
+        'user_last_name' => 'string',
+        'user_status' => 'string',
+        'user_last_visit' => 'int',
+        'user_hid' => 'string',
+        'invties_pub_num' => 'int',
+        'user_password' => 'string'
     ])]
     public static function profile(int $id): array
     {
         return DB::getDB()->row('SELECT user_id, user_email, user_group, user_friends_demands, 
-       user_pm_num, user_support, user_lastupdate, user_photo, user_msg_type, user_delet, user_ban_date, 
-       user_new_mark_photos, user_search_pref, user_status, user_last_visit, invties_pub_num, user_hid, user_password
+       user_pm_num, user_support, user_last_update, user_photo, user_delete, user_ban_date, 
+       user_new_mark_photos, user_name, user_last_name, user_status, user_last_visit, invties_pub_num, user_hid, user_password
         FROM `users` WHERE user_id = ?', $id);
-
-//        return (Registry::get('db'))->super_query("SELECT user_id, user_email, user_group, user_friends_demands,
-//       user_pm_num, user_support, user_lastupdate, user_photo, user_msg_type, user_delet, user_ban_date,
-//       user_new_mark_photos, user_search_pref, user_status, user_last_visit, invties_pub_num, user_hid, user_password
-//        FROM `users` WHERE user_id = '{$id}'");
     }
 
     /**
@@ -91,8 +87,8 @@ class Users
 
             $user_info['user_id'] = (int)$user_info['user_id'];
             $user_info['user_group'] = (int)$user_info['user_group'];
-            $user_info['user_lastupdate'] = (int)$user_info['user_lastupdate'];
-            $user_info['user_delet'] = (int)$user_info['user_delet'];
+            $user_info['user_last_update'] = (int)$user_info['user_last_update'];
+            $user_info['user_delete'] = (int)$user_info['user_delete'];
             $user_info['user_ban_date'] = (int)$user_info['user_ban_date'];
             $user_info['user_last_visit'] = (int)$user_info['user_last_visit'];
             $user_info['invties_pub_num'] = (int)$user_info['invties_pub_num'];
