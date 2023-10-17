@@ -134,7 +134,6 @@ class Auth  extends Module
                 'user_subscriptions_num' => '0',
                 'user_videos_num' => '0',
                 'user_wall_num' => '0',
-                'user_status' => '',
                 'user_blacklist_num' => '0',
                 'user_blacklist' => '0',
                 'user_sp' => '',
@@ -156,6 +155,7 @@ class Auth  extends Module
                 'user_real' => '0',
                 'user_active' => '0',
                 'notify' => '0',
+                'user_bio' => '',
             ]);
 
             $response = array(

@@ -7,21 +7,21 @@
             <table>
                 <tr>
                     <td class="content">
-                        <p>Здравствуйте, {{ $user_name }}!</p>
-                        <p>Кто-то пытался войти в ваш аккаунт.</p>
-                        <p>Если это были вы, подтвердите свою личность с помощью следующего кода:</p>
+                        <p>@_e('restore_1'){{ $user_name }}!</p>
+                        <p>@_e('restore_2')</p>
+                        <p>@_e('restore_3')</p>
                         <table>
                             <tbody><tr>
                                 <td align="center">
                                     <p>
                                         <!-- {{ $hash }} -->
-                                        <a href="{{ $home_url }}restore?hash={{ $hash }}" class="button">Сменить пароль</a>
+                                        <a href="{{ $home_url }}restore?hash={{ $hash }}" class="button">@_e('restore_3')</a>
                                     </p>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
-                        <p>С уважением, <em>{{ $site_name }}</em> {{ $home_url }}.</p>
+                        <p>@_e('restore_5')<em>{{ $site_name }}</em> {{ $home_url }}.</p>
                     </td>
                 </tr>
             </table>
@@ -31,12 +31,8 @@
         <td class="container">
             <table>
                 <tr>
-<<<<<<< HEAD
                     <td class="content footer" align="center">
-=======
-                    <td class="content footer" align="center"> 
->>>>>>> semyon492-dev
-                        <p>Sent by <a href="{{ $home_url }}">{{ $site_name }}</a></p>
+                        <p>@_e('restore_6')<a href="{{ $home_url }}">{{ $site_name }}</a></p>
                         <p><a href="mailto:">{{ $admin_mail }}</a></p>
                     </td>
                 </tr>

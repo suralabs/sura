@@ -40,7 +40,6 @@ class Users
         'user_new_mark_photos' => 'int',
         'user_name' => 'string',
         'user_last_name' => 'string',
-        'user_status' => 'string',
         'user_last_visit' => 'int',
         'user_hid' => 'string',
         'invties_pub_num' => 'int',
@@ -50,7 +49,7 @@ class Users
     {
         return DB::getDB()->row('SELECT user_id, user_email, user_group, user_friends_demands, 
        user_pm_num, user_support, user_last_update, user_photo, user_delete, user_ban_date, 
-       user_new_mark_photos, user_name, user_last_name, user_status, user_last_visit, invties_pub_num, user_hid, user_password
+       user_new_mark_photos, user_name, user_last_name, user_last_visit, invties_pub_num, user_hid, user_password
         FROM `users` WHERE user_id = ?', $id);
     }
 

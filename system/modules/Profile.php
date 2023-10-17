@@ -44,7 +44,7 @@ class Profile extends Module
         $data = json_decode(file_get_contents('php://input'), true);
         $user_id = (new Request)->textFilter((string)$data['id']);
         $access_token = (new Request)->textFilter((string)$data['access_token']);
-        $check_user = $this->db->row('SELECT user_id, user_name, user_last_name, user_photo, user_group FROM `users` WHERE user_id = ?', $user_id);
+        $check_user = $this->db->row('SELECT user_id, user_name, user_last_name, user_photo, user_group, user_hid, user_bio FROM `users` WHERE user_id = ?', $user_id);
 
         if ($check_user) {
             // $check_user['access_token'] = $access_token;
@@ -65,17 +65,20 @@ class Profile extends Module
                 $photo_100 = $config['api_url'] . '/images/no_ava.gif';
             }
 
+            $owner = ($check_user['user_hid'] == $access_token) ?? false;
+
             $response = array(
                 'status' => Status::OK,
                 'data' => array(
                     'id' => $check_user['user_id'],
-                    // 'access_token' => $check_user['access_token'],
                     'first_name' => $check_user['user_name'],
                     'last_name' => $check_user['user_last_name'],
                     'photo' => $photo,
                     'photo_50' => $photo_50,
                     'photo_100' => $photo_100,
                     'roles' => $check_user['roles'],
+                    'bio' => $check_user['user_bio'],
+                    'owner' => $owner,
                 ),
             );
 
@@ -142,4 +145,29 @@ class Profile extends Module
 
     }
 
+    function bioEdit()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $access_token = (new Request)->textFilter((string)$data['access_token']);
+        $bio = (new Request)->textFilter((string)$data['bio']);
+        $check_user = $this->db->row('SELECT user_id, user_bio FROM `users` WHERE user_hid = ?', $access_token);
+        if ($check_user) {
+            $this->db->update('users', [
+                'user_bio' => $bio,
+            ], [
+                'user_hid' => $access_token
+            ]);
+            $response = array(
+                'status' => Status::OK,
+            );
+
+            (new Response)->_e_json($response);
+        }else{
+            $response = array(
+                'status' => Status::NOT_DATA,
+            );
+    
+            (new Response)->_e_json($response); 
+        }
+    }
 }

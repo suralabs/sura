@@ -63,7 +63,6 @@ $go = (!empty($_SERVER['argv']['1'])) ? $_SERVER['argv']['1'] : '';
                 'user_subscriptions_num' => '0',
                 'user_videos_num' => '0',
                 'user_wall_num' => '0',
-                'user_status' => '',
                 'user_blacklist_num' => '0',
                 'user_blacklist' => '0',
                 'user_sp' => '',
@@ -155,7 +154,7 @@ $go = (!empty($_SERVER['argv']['1'])) ? $_SERVER['argv']['1'] : '';
 
         // $_POST['name'] = strip_tags($_POST['name']);
         // $_POST['lastname'] = strip_tags($_POST['lastname']);
-        $table_Chema = array();
+        $db_table = array();
         $table_data = array();
 
         include_once ENGINE_DIR . '/data/mysql_tables.php';
@@ -165,7 +164,7 @@ $go = (!empty($_SERVER['argv']['1'])) ? $_SERVER['argv']['1'] : '';
             $db_config['pass']);
         try {
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);//Error Handling
-            foreach ($table_Chema as $sql) {
+            foreach ($db_table as $sql) {
                 try {
                     $db->exec($sql);
                 } catch (Error $e) {
@@ -238,66 +237,66 @@ $go = (!empty($_SERVER['argv']['1'])) ? $_SERVER['argv']['1'] : '';
 
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);//Error Handling
 
-        $table_Chema = array();
-        $table_Chema[] = "DROP TABLE IF EXISTS `room`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `room_users`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `albums`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `attach`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `antispam`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `attach`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `attach_comm`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `audio`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `banned`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `blog`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `city`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `communities`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `communities_audio`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `communities_feedback`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `communities_forum`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `communities_forum_msg`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `communities_join`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `communities_stats`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `communities_stats_log`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `communities_wall`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `communities_wall_like`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `country`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `doc`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `fave`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `friends`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `friends_demands`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `gifts`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `gifts_list`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `im`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `invites`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `log`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `mail_tpl`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `messages`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `news`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `notes`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `notes_comments`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `photos`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `photos_comments`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `photos_mark`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `photos_rating`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `report`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `restore`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `reviews`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `sms_log`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `static`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `support`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `support_answers`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `updates`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `users`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `users_rating`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `users_stats`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `users_stats_log`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `videos`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `videos_comments`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `votes`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `votes_result`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `wall`";
-        $table_Chema[] = "DROP TABLE IF EXISTS `wall_like`";
-        foreach ($table_Chema as $query) {
+        $db_table = array();
+        $db_table[] = "DROP TABLE IF EXISTS `room`";
+        $db_table[] = "DROP TABLE IF EXISTS `room_users`";
+        $db_table[] = "DROP TABLE IF EXISTS `albums`";
+        $db_table[] = "DROP TABLE IF EXISTS `attach`";
+        $db_table[] = "DROP TABLE IF EXISTS `antispam`";
+        $db_table[] = "DROP TABLE IF EXISTS `attach`";
+        $db_table[] = "DROP TABLE IF EXISTS `attach_comm`";
+        $db_table[] = "DROP TABLE IF EXISTS `audio`";
+        $db_table[] = "DROP TABLE IF EXISTS `banned`";
+        $db_table[] = "DROP TABLE IF EXISTS `blog`";
+        $db_table[] = "DROP TABLE IF EXISTS `city`";
+        $db_table[] = "DROP TABLE IF EXISTS `communities`";
+        $db_table[] = "DROP TABLE IF EXISTS `communities_audio`";
+        $db_table[] = "DROP TABLE IF EXISTS `communities_feedback`";
+        $db_table[] = "DROP TABLE IF EXISTS `communities_forum`";
+        $db_table[] = "DROP TABLE IF EXISTS `communities_forum_msg`";
+        $db_table[] = "DROP TABLE IF EXISTS `communities_join`";
+        $db_table[] = "DROP TABLE IF EXISTS `communities_stats`";
+        $db_table[] = "DROP TABLE IF EXISTS `communities_stats_log`";
+        $db_table[] = "DROP TABLE IF EXISTS `communities_wall`";
+        $db_table[] = "DROP TABLE IF EXISTS `communities_wall_like`";
+        $db_table[] = "DROP TABLE IF EXISTS `country`";
+        $db_table[] = "DROP TABLE IF EXISTS `doc`";
+        $db_table[] = "DROP TABLE IF EXISTS `fave`";
+        $db_table[] = "DROP TABLE IF EXISTS `friends`";
+        $db_table[] = "DROP TABLE IF EXISTS `friends_demands`";
+        $db_table[] = "DROP TABLE IF EXISTS `gifts`";
+        $db_table[] = "DROP TABLE IF EXISTS `gifts_list`";
+        $db_table[] = "DROP TABLE IF EXISTS `im`";
+        $db_table[] = "DROP TABLE IF EXISTS `invites`";
+        $db_table[] = "DROP TABLE IF EXISTS `log`";
+        $db_table[] = "DROP TABLE IF EXISTS `mail_tpl`";
+        $db_table[] = "DROP TABLE IF EXISTS `messages`";
+        $db_table[] = "DROP TABLE IF EXISTS `news`";
+        $db_table[] = "DROP TABLE IF EXISTS `notes`";
+        $db_table[] = "DROP TABLE IF EXISTS `notes_comments`";
+        $db_table[] = "DROP TABLE IF EXISTS `photos`";
+        $db_table[] = "DROP TABLE IF EXISTS `photos_comments`";
+        $db_table[] = "DROP TABLE IF EXISTS `photos_mark`";
+        $db_table[] = "DROP TABLE IF EXISTS `photos_rating`";
+        $db_table[] = "DROP TABLE IF EXISTS `report`";
+        $db_table[] = "DROP TABLE IF EXISTS `restore`";
+        $db_table[] = "DROP TABLE IF EXISTS `reviews`";
+        $db_table[] = "DROP TABLE IF EXISTS `sms_log`";
+        $db_table[] = "DROP TABLE IF EXISTS `static`";
+        $db_table[] = "DROP TABLE IF EXISTS `support`";
+        $db_table[] = "DROP TABLE IF EXISTS `support_answers`";
+        $db_table[] = "DROP TABLE IF EXISTS `updates`";
+        $db_table[] = "DROP TABLE IF EXISTS `users`";
+        $db_table[] = "DROP TABLE IF EXISTS `users_rating`";
+        $db_table[] = "DROP TABLE IF EXISTS `users_stats`";
+        $db_table[] = "DROP TABLE IF EXISTS `users_stats_log`";
+        $db_table[] = "DROP TABLE IF EXISTS `videos`";
+        $db_table[] = "DROP TABLE IF EXISTS `videos_comments`";
+        $db_table[] = "DROP TABLE IF EXISTS `votes`";
+        $db_table[] = "DROP TABLE IF EXISTS `votes_result`";
+        $db_table[] = "DROP TABLE IF EXISTS `wall`";
+        $db_table[] = "DROP TABLE IF EXISTS `wall_like`";
+        foreach ($db_table as $query) {
             try {
                 $db->query($query);
             } catch (Error $e) {

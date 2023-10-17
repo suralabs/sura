@@ -22,8 +22,8 @@ class User
     {
         return DB::getDB()->row('SELECT user_id, user_real, user_name, user_last_name, user_country_city_name, 
        user_birthday, user_city, user_country, user_photo, user_friends_num, 
-       user_notes_num, user_subscriptions_num, user_wall_num, user_albums_num, user_last_visit, user_videos_num, 
-       user_status, user_privacy, user_sp, user_sex, user_gifts, user_public_num, user_audio, user_delete, 
+       user_notes_num, user_subscriptions_num, user_wall_num, user_albums_num, user_last_visit, user_videos_num,  
+       user_privacy, user_sp, user_sex, user_gifts, user_public_num, user_audio, user_delete, 
        user_ban_date, user_logged_mobile, user_rating FROM `users` WHERE user_id =  ?', $id);
     }
 
@@ -75,7 +75,6 @@ class User
                 'user_subscriptions_num' => '0',
                 'user_videos_num' => '0',
                 'user_wall_num' => '0',
-                'user_status' => '',
                 'user_blacklist_num' => '0',
                 'user_blacklist' => '0',
                 'user_sp' => '',
