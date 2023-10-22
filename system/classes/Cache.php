@@ -24,8 +24,8 @@ class Cache
     public static function mozgClearCache(): void
     {
         $folder = '';
-        $fdir = opendir(ENGINE_DIR . '/cache/' . $folder);
-        while ($file = readdir($fdir)) {
+        $cache_dir = opendir(ENGINE_DIR . '/cache/' . $folder);
+        while ($file = readdir($cache_dir)) {
             if ($file !== '.' && $file !== '..' && $file !== '.htaccess' && $file !== 'system'
                 && is_file(ENGINE_DIR . '/cache/' . $file)) {
                 Filesystem::delete(ENGINE_DIR . '/cache/' . $file);
@@ -39,8 +39,8 @@ class Cache
      */
     public static function mozgClearCacheFolder(string $folder): void
     {
-        $fdir = opendir(ENGINE_DIR . '/cache/' . $folder);
-        while ($file = readdir($fdir)) {
+        $cache_dir = opendir(ENGINE_DIR . '/cache/' . $folder);
+        while ($file = readdir($cache_dir)) {
             if (is_file(ENGINE_DIR . '/cache/' . $folder . '/' . $file)) {
                 Filesystem::delete(ENGINE_DIR . '/cache/' . $folder . '/' . $file);
             }

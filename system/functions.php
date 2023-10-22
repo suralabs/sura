@@ -358,17 +358,20 @@ function view_json(?string $view, array $variables = []): string
     'language ' => 'string'])]
 function get_device(): array
 {
-    $browser = new \Sinergi\BrowserDetector\Browser();
-    $operating_system = new \Sinergi\BrowserDetector\Os();
-    $user_device = new \Sinergi\BrowserDetector\Device();
-    $language = new \Sinergi\BrowserDetector\Language();
+    // $detect = new \Detection\MobileDetect();
+    // $deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer');
+
+    $browser = '';
+    $operating_system = '';
+    $user_device = '';
+    $language = '';
 
     return [
-        'browser' => $browser->getName(),
-        'browser_ver' => $browser->getVersion(),
-        'operating_system' => $operating_system->getName(),
-        'device ' => $user_device->getName(),
-        'language ' => $language->getLanguage(),
+        'browser' => $browser,
+        'browser_ver' => $browser,
+        'operating_system' => $operating_system,
+        'device ' => $user_device,
+        'language ' => $language,
     ];
 }
 

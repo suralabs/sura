@@ -10,7 +10,6 @@
 namespace Mozg\classes;
 
 use Sura\Database\Database;
-use Sura\Database\Factory;
 
 /**
  *
@@ -43,15 +42,10 @@ class DB
     {
         if (self::$database === null) {
             if (!\is_file(ENGINE_DIR . '/data/db_config.php')) {
-                echo 'err';
+                echo 'err';//todo upd
                 exit();
             }
             $db_config = require ENGINE_DIR . '/data/db_config.php';
-            // self::$database = Factory::fromArray([
-            //     'mysql:host=' . $db_config['host'] . ';dbname=' . $db_config['name'],
-            //     $db_config['user'],
-            //     $db_config['pass']
-            // ]);
             $dsn = 'mysql:host=' . $db_config['host'] . ';dbname=' . $db_config['name'];
             self::$database = new Database($dsn, $db_config['user'], $db_config['pass']);
         }
