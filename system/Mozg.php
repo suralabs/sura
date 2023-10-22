@@ -9,7 +9,6 @@
 
 namespace Mozg;
 
-use Sura\Corner\Error;
 use Mozg\exception\ErrorException;
 use Sura\Http\Request;
 use JsonException;
@@ -31,7 +30,7 @@ class Mozg
         $router = Router::fromGlobals();
         $params = [];
         $routers = [
-            '/' => 'Home@main',
+            '/' => 'Main@main',
             '/api/authorize' => 'Auth@authorize',
             '/api/account/register' => 'Auth@register',
             '/api/account/getinfo' => 'Profile@getInfo',
@@ -53,13 +52,11 @@ class Mozg
         if ($router->isFound()) {
             $router->executeHandler($router::getRequestHandler(), $params);
         } else {
-            //todo update
             $module = isset($_GET['go']) ?
                 htmlspecialchars(strip_tags(stripslashes(trim(urldecode($_GET['go']))))) : 'Home';
             $action = (new Request)->filter('act');
             $class = ucfirst($module);
             if (!class_exists($class) || $action === '' || $class === 'Wall') {
-
                 $text = 'error 404';
                 $params = [
                     'title' => $text,
@@ -72,7 +69,7 @@ class Mozg
                 $params = [$params];
                 try {
                     return call_user_func_array([$controller, $action], $params);
-                } catch (Error $error) {
+                } catch (ErrorException $error) {
                     $params = [
                         'title' => 'error 500',
                         'text' => 'error 500',

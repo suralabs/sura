@@ -2,13 +2,10 @@
 
 namespace Mozg\modules;
 
-use JetBrains\PhpStorm\NoReturn;
 use \Sura\Http\Response;
 use \Sura\Http\Request;
 use \Sura\Support\Status;
 use Mozg\classes\{DB, Module, ViewEmail, Email};
-use Intervention\Image\ImageManager;
-use Sura\Filesystem\Filesystem;
 
 class Albums  extends Module
 {
@@ -22,7 +19,7 @@ class Albums  extends Module
         $user_id = (new Request)->textFilter((string)$data['id']);
         $access_token = (new Request)->textFilter((string)$data['access_token']);
 
-        $check_albums = $this->db->run("SELECT aid, name, cover, system FROM `albums` WHERE user_id = ? ORDER by `adate` DESC LIMIT 0, 50", $user_id);
+        $check_albums = $this->db->fetchAll("SELECT aid, name, cover, system FROM `albums` WHERE user_id = ? ORDER by `adate` DESC LIMIT 0, 50", $user_id);
 
         if ($check_albums) {
             $results = array();

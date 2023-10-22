@@ -33,18 +33,17 @@ class Auth  extends Module
             exit();
         }
         if (!empty($email)) {
-            $check_user = $this->db->row('SELECT user_id, user_password, user_hid FROM `users` WHERE user_email = ?', $email);
+            $check_user = $this->db->fetch('SELECT user_id, user_password, user_hid FROM `users` WHERE user_email = ?', $email);
             if ($check_user) {
                 if (password_verify($data['password'], $check_user['user_password'])) {
                     $hid = $password;
-                    DB::getDB()->update('users', [
+                    DB::getDB()->query('UPDATE users SET', [
                         'user_hid' => $hid
-                    ], [
-                        'user_id' => $check_user['user_id']
-                    ]);
-                    DB::getDB()->delete('updates', [
-                        'for_user_id' => $check_user['user_id']
-                    ]);
+                    ], 
+                    'WHERE user_id = ?', $check_user['user_id']);
+
+                    DB::getDB()->query('DELETE FROM updates WHERE for_user_id = ?', $check_user['user_id']);
+
                     $response = array(
                         'status' => Status::OK,
                         'access_token' => $hid,
@@ -102,9 +101,9 @@ class Auth  extends Module
         $hid = $repass;
         $time = time();
         $server_time = time();
-        $check_email = $this->db->row('SELECT COUNT(*) AS cnt FROM `users` WHERE user_email = ?', $email);
+        $check_email = $this->db->fetch('SELECT COUNT(*) AS cnt FROM `users` WHERE user_email = ?', $email);
         if (!$check_email['cnt']) {
-            DB::getDB()->insert('users', [
+            DB::getDB()->query('INSERT INTO users', [
                 'user_last_visit' => $server_time,
                 'user_email' => $email,
                 'user_password' => $pass,
@@ -189,12 +188,10 @@ class Auth  extends Module
             (new Response)->_e_json($response);
             exit();
         }
-        $check = $this->db->row('SELECT user_id, user_photo, user_name FROM `users` WHERE user_email = ?', $email);
+        $check = $this->db->fetch('SELECT user_id, user_photo, user_name FROM `users` WHERE user_email = ?', $email);
         if ($check) {
             //Удаляем все предыдущие запросы на восстановление
-            DB::getDB()->delete('restore', [
-                'email' => $email
-            ]);
+            DB::getDB()->query('DELETE FROM restore WHERE email = ?', $email);
             $salt = 'abchefghjkmnpqrstuvwxyz0123456789';
             $rand_lost = '';
             for ($i = 0; $i < 15; $i++) {
@@ -205,7 +202,7 @@ class Auth  extends Module
             // $hash = random_int(100000, 999999);
             //Вставляем в базу
             $_IP = '';//FIXME
-            DB::getDB()->insert('restore', [
+            DB::getDB()->query('INSERT INTO restore', [
                 'email' => $email,
                 'hash' => $hash,
                 'ip' => $_IP,
@@ -247,17 +244,14 @@ class Auth  extends Module
         $repass = password_hash((new Request)->textFilter((string)$data['re_password']), PASSWORD_DEFAULT);
         $hash = (new Request)->textFilter((string)$data['hash']);
         if (strlen($data['password']) >= 6 and $data['password'] === $data['re_password']) {
-            $row = $this->db->row('SELECT email FROM `restore` WHERE hash = ? ', $hash);
+            $row = $this->db->fetch('SELECT email FROM `restore` WHERE hash = ? ', $hash);
             if ($row['email']) {
-                $this->db->update('users', [
+                $this->db->query('UPDATE users SET', [
                     'user_password' => $pass,
                     'user_hid' => $repass,
-                ], [
-                    'user_email' => $row['email']
-                ]);
-                $this->db->delete('restore', [
-                    'email' => $row['email']
-                ]);
+                ], 'WHERE user_email = ?', $row['email']);
+
+                $this->db->query('DELETE FROM restore WHERE email = ?', $row['email']);
 
                 $response = array(
                     'status' => Status::OK,

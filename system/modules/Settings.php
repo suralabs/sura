@@ -3,7 +3,6 @@
 namespace Mozg\modules;
 
 use Intervention\Image\ImageManager;
-use Mozg\classes\DB;
 use Sura\Filesystem\Filesystem;
 use Sura\Http\Request;
 use Sura\Http\Response;
@@ -25,17 +24,16 @@ class Settings  extends Module
         $password_renew = password_hash((new Request)->textFilter((string)$data['repassword']), PASSWORD_DEFAULT);
         $access_token = (new Request)->textFilter((string)$data['access_token']);
 
-        $check_user = $this->db->row('SELECT user_password FROM `users` WHERE user_hid = ?', $access_token);
+        $check_user = $this->db->fetch('SELECT user_password FROM `users` WHERE user_hid = ?', $access_token);
         if ($check_user['user_password']) {
             //check current password
             if (password_verify((string)$data['oldpassword'], $check_user['user_password'])) {
                 if ($data['password'] == $data['repassword']) {
-                    $this->db->update('users', [
-                        'user_hid' => $password_new, //access_token
-                        'user_password' => $password_new //access_token
-                    ], [
-                        'user_hid' => $access_token
-                    ]);
+                    $this->db->query('UPDATE users SET', [
+                        'user_password' => $password_new,
+                        'user_hid' => $password_new,
+                    ], 'WHERE user_hid = ?', $access_token);
+
                     $response = array(
                         'status' => Status::OK,
                         'access_token' => $password_new,
@@ -76,12 +74,11 @@ class Settings  extends Module
         $last_name = ucfirst((new Request)->textFilter((string)$data['last_name']));
         $access_token = (new Request)->textFilter((string)$data['access_token']);
 
-        DB::getDB()->update('users', [
+        $this->db->query('UPDATE users SET', [
             'user_name' => $first_name,
-            'user_last_name' => $last_name
-        ], [
-            'user_hid' => $access_token
-        ]);
+            'user_last_name' => $last_name,
+        ], 'WHERE user_hid = ?', $access_token);
+
         $response = array(
             'status' => Status::OK,
         );
@@ -95,7 +92,7 @@ class Settings  extends Module
     function change_avatar()
     {
         $access_token = (new Request)->textFilter((string)$_POST['access_token']);
-        $check_user = $this->db->row('SELECT user_id, user_name, user_photo, user_email, user_last_name, user_group, user_albums_num FROM `users` WHERE user_hid = ?', $access_token);
+        $check_user = $this->db->fetch('SELECT user_id, user_name, user_photo, user_email, user_last_name, user_group, user_albums_num FROM `users` WHERE user_hid = ?', $access_token);
 
         if ($check_user['user_id']) {
             //Create user dirs
@@ -103,13 +100,13 @@ class Settings  extends Module
             Filesystem::createDir($upload_dir);
             Filesystem::createDir($upload_dir . $check_user['user_id']);
             Filesystem::createDir($upload_dir . $check_user['user_id'] . '/albums');
-            $check_system_albums = $this->db->row('SELECT aid, cover FROM `albums` WHERE user_id = ? AND system = 1', $check_user['user_id']);
+            $check_system_albums = $this->db->fetch('SELECT aid, cover FROM `albums` WHERE user_id = ? AND system = 1', $check_user['user_id']);
 
             if (!$check_system_albums) {
                 $hash = md5(md5(time()) . md5($check_user['user_id']) . md5($check_user['user_email']));
                 $date_create = date('Y-m-d H:i:s', time());
                 $sql_privacy = '';
-                $this->db->insert('albums', [
+                $this->db->query('INSERT INTO albums', [
                     'user_id' => $check_user['user_id'],
                     'name' => 'Фотографии со страницы',
                     'descr' => '',
@@ -119,12 +116,11 @@ class Settings  extends Module
                     'system' => '1',
                     'privacy' => $sql_privacy,
                 ]);
+                
                 $aid_fors = $this->db->getInsertId();
-                $this->db->update('users', [
+                $this->db->query('UPDATE users SET', [
                     'user_albums_num' => $check_user['user_albums_num'] + 1,
-                ], [
-                    'user_id' => $check_user['user_id']
-                ]);
+                ], 'WHERE user_id = ?', $check_user['user_id']);
             } else {
                 $aid_fors = $check_system_albums['aid'];
             }
@@ -145,10 +141,6 @@ class Settings  extends Module
             if (in_array($type, $allowed_files, true)) {
                 if ($image_size < 5000000) {
                     $res_type = '.' . $type;
-                    /**
-                     * Photo save to webp
-                     * toWebp()
-                     */
                     $new_photo_type = '.png';
                     $upload_dir = ROOT_DIR . '/public/uploads/users/' . $check_user['user_id'] . '/';
                     if (move_uploaded_file($image_tmp, $upload_dir . $image_rename . $res_type)) {
@@ -182,7 +174,7 @@ class Settings  extends Module
                             $position_all = 100000;
                         }
 
-                        $this->db->insert('photos', [
+                        $this->db->query('INSERT INTO photos', [
                             'album_id' => $aid_fors,
                             'photo_name' => $image_rename . $new_photo_type,
                             'user_id' => $check_user['user_id'],
@@ -194,25 +186,21 @@ class Settings  extends Module
                             'rating_num' => '0',
                             'rating_max' => '0',
                         ]);
-                        $ins_id = $this->db->lastInsertId();
+                        $ins_id = $this->db->getInsertId();
 
-                        $check_album = $this->db->row('SELECT photo_num FROM `albums` WHERE aid = ?', $aid_fors);
+                        $check_album = $this->db->fetch('SELECT photo_num FROM `albums` WHERE aid = ?', $aid_fors);
                         if (!$check_system_albums['cover']) {
-                            $this->db->update('albums', [
+                            $this->db->query('UPDATE albums SET', [
                                 'cover' => '',
-                                'photo_num' => $check_album['photo_num'] + 1, // note +=
+                                'photo_num+=' => 1, // note +=
                                 'adate' => $date
-                            ], [
-                                'aid' => $aid_fors
-                            ]);
+                            ], 'WHERE aid = ?', $aid_fors);
                         } else {
-                            $this->db->update('albums', [
+                            $this->db->query('UPDATE albums SET', [
                                 'cover' => $image_rename . $new_photo_type,
-                                'photo_num' => $check_album['photo_num'] + 1, // note +=
+                                'photo_num+=' => 1, // note +=
                                 'adate' => $date
-                            ], [
-                                'aid' => $aid_fors
-                            ]);
+                            ], 'WHERE aid = ?', $aid_fors);
                         }
 
                         //Добавляем на стену
@@ -245,12 +233,11 @@ class Settings  extends Module
                         Filesystem::delete($upload_dir . '100_' . $check_user['user_photo']);
 
                         //Обновляем имя фотки в бд
-                        $this->db->update('users', [
+                        $this->db->query('UPDATE users SET', [
                             'user_photo' => $image_rename . $new_photo_type, // note +=
                             // 'user_wall_id' => $dbid
-                        ], [
-                            'user_id' => $check_user['user_id']
-                        ]);
+                        ], 'WHERE user_id = ?', $check_user['user_id']);
+
                         $config = settings_get();
                         $photo = $config['api_url'] . 'uploads/users/' . $check_user['user_id'] . '/50_' . $image_rename . $new_photo_type;
 

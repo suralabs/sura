@@ -39,6 +39,7 @@ class I18n
     public static function getLang(): string
     {
         $data = json_decode(file_get_contents('php://input'), true);
+        $data['lang'] = $data['lang'] ?? self::EN;
         $curr_lang = (new \Sura\Http\Request)->textFilter((string)$data['lang']);
         if (!empty($curr_lang)) {
             if(isset(self::$lang_list[$curr_lang])){

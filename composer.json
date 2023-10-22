@@ -14,10 +14,9 @@
     "ext-iconv": "*",
     "ext-curl": "*",
     "ext-pdo": "*",
-    "sura/framework": "^0.2.0",
-    "sura/view": "^2.0",
-    "sura/database": "^0.2",
-    "sinergi/browser-detector": "^6.1",
+    "sura/framework": "^0.3.0",
+    "sura/view": "^2.1",
+    "sura/database": "^0.3",
     "james-heinrich/getid3": "^2.0-dev",
     "intervention/image": "3.0.*@beta"
   },

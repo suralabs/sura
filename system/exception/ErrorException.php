@@ -11,7 +11,7 @@ namespace Mozg\exception;
 
 use Sura\Corner\Error;
 
-class ErrorException extends Error
+class ErrorException extends \Error
 {
     public function __construct(string|false $message = false, $code = false)
     {

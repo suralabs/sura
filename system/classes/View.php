@@ -172,6 +172,9 @@ class View
             return $blade->run('main.json', ['json' => $json_data]);
         }
         header('Access-Control-Allow-Origin: *');
+
+        // echo $views. ' ' . $view;
+        // return '';
         return $blade->run($view, $variables);
     }
 }

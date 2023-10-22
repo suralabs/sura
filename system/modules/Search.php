@@ -11,7 +11,6 @@ namespace Mozg\modules;
 
 use Sura\Http\Request;
 use Mozg\classes\Module;
-use Mozg\classes\DB;
 use \Sura\Http\Response;
 use \Sura\Support\Status;
 
@@ -44,10 +43,10 @@ class Search extends Module
         //$where_sql_gen = "WHERE user_delete = '0' AND user_ban = '0'";
 
         if ($query == null) {
-            $sql_query = $this->db->run('SELECT user_id, user_name, user_last_name, user_photo, user_group 
+            $sql_query = $this->db->fetchAll('SELECT user_id, user_name, user_last_name, user_photo, user_group 
             FROM `users` LIMIT '.$limit_page.', '.$results_count);
         } else {
-            $sql_query = $this->db->run('SELECT user_id, user_name, user_last_name, user_photo, user_group 
+            $sql_query = $this->db->fetchAll('SELECT user_id, user_name, user_last_name, user_photo, user_group 
             FROM users WHERE MATCH (user_name,user_last_name) AGAINST (?) 
             LIMIT '.$limit_page.', '.$results_count, $query);
         }

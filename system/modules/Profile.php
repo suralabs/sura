@@ -10,15 +10,9 @@
 
 namespace Mozg\modules;
 
-use ErrorException;
 use Sura\Http\Request;
-use Mozg\classes\Cache;
-use Mozg\classes\DB;
 use Mozg\classes\Module;
 use Sura\Http\Response;
-use Sura\Support\Registry;
-use Mozg\classes\Wall;
-use Mozg\classes\WallProfile;
 use Sura\Support\Status;
 
 class Profile extends Module
@@ -44,7 +38,7 @@ class Profile extends Module
         $data = json_decode(file_get_contents('php://input'), true);
         $user_id = (new Request)->textFilter((string)$data['id']);
         $access_token = (new Request)->textFilter((string)$data['access_token']);
-        $check_user = $this->db->row('SELECT user_id, user_name, user_last_name, user_photo, user_group, user_hid, user_bio FROM `users` WHERE user_id = ?', $user_id);
+        $check_user = $this->db->fetch('SELECT user_id, user_name, user_last_name, user_photo, user_group, user_hid, user_bio FROM `users` WHERE user_id = ?', $user_id);
 
         if ($check_user) {
             // $check_user['access_token'] = $access_token;
@@ -101,7 +95,7 @@ class Profile extends Module
         $config = settings_get();
         $data = json_decode(file_get_contents('php://input'), true);
         $access_token = (new Request)->textFilter((string)$data['access_token']);
-        $check_user = $this->db->row('SELECT user_id, user_name, user_last_name, user_photo, user_group FROM `users` WHERE user_hid = ?', $access_token);
+        $check_user = $this->db->fetch('SELECT user_id, user_name, user_last_name, user_photo, user_group FROM `users` WHERE user_hid = ?', $access_token);
 
         if ($check_user) {
             $check_user['access_token'] = $access_token;
@@ -150,13 +144,12 @@ class Profile extends Module
         $data = json_decode(file_get_contents('php://input'), true);
         $access_token = (new Request)->textFilter((string)$data['access_token']);
         $bio = (new Request)->textFilter((string)$data['bio']);
-        $check_user = $this->db->row('SELECT user_id, user_bio FROM `users` WHERE user_hid = ?', $access_token);
+        $check_user = $this->db->fetch('SELECT user_id, user_bio FROM `users` WHERE user_hid = ?', $access_token);
         if ($check_user) {
-            $this->db->update('users', [
+            $this->db->query('UPDATE users SET', [
                 'user_bio' => $bio,
-            ], [
-                'user_hid' => $access_token
-            ]);
+            ], 'WHERE user_hid = ?', $access_token);
+
             $response = array(
                 'status' => Status::OK,
             );

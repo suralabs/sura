@@ -47,11 +47,13 @@ class DB
                 exit();
             }
             $db_config = require ENGINE_DIR . '/data/db_config.php';
-            self::$database = Factory::fromArray([
-                'mysql:host=' . $db_config['host'] . ';dbname=' . $db_config['name'],
-                $db_config['user'],
-                $db_config['pass']
-            ]);
+            // self::$database = Factory::fromArray([
+            //     'mysql:host=' . $db_config['host'] . ';dbname=' . $db_config['name'],
+            //     $db_config['user'],
+            //     $db_config['pass']
+            // ]);
+            $dsn = 'mysql:host=' . $db_config['host'] . ';dbname=' . $db_config['name'];
+            self::$database = new Database($dsn, $db_config['user'], $db_config['pass']);
         }
         return self::$database;
     }
