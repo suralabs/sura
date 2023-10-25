@@ -37,12 +37,11 @@ class Wall extends Module
         $add_time = time();
 
         if (!empty($content)) {
-            $owner = $this->db->row('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
-            $check_user = $this->db->row('SELECT user_id, user_wall_num FROM `users` WHERE user_id = ?', $user_id);
+            $owner = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
+            $check_user = $this->db->fetch('SELECT user_id, user_wall_num FROM `users` WHERE user_id = ?', $user_id);
             //todo privacy     
             if ($owner &&  $check_user) {
-
-                $this->db->insert('wall', [
+                $this->db->query('INSERT INTO wall', [
                     'author' => $owner['user_id'],//автор
                     'for_user_id' => $check_user['user_id'],//кому
                     'type' => '1',//profile/group
@@ -54,7 +53,7 @@ class Wall extends Module
                     'comments_num' => '0',            
                     'tell_uid' => '0',
                     'tell_date' => '0',
-                    'tell_id' => '0',            
+                    'tell_id' => '0',  
                 ]);
 
                 $response = array(
@@ -81,13 +80,11 @@ class Wall extends Module
         $access_token = (new Request)->textFilter((string)$data['access_token']);
         $wall_id = (new Request)->textFilter((string)$data['wall_id']);
 
-        $check_user = $this->db->row('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
+        $check_user = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
         if ($check_user) {
-            $check_wall = $this->db->row('SELECT id FROM `wall` WHERE author = ? AND id = ', $check_user['user_id'], $wall_id);
+            $check_wall = $this->db->fetch('SELECT id FROM `wall` WHERE author = ? AND id = ', $check_user['user_id'], $wall_id);
             if ($check_wall) {
-                $this->db->delete('wall', [
-                    'id' => $check_wall['id']
-                ]);
+                $this->db->query('DELETE FROM wall WHERE id = ?', $check_wall['id']);
                 $response = array(
                     'status' => Status::OK,
                 );
@@ -113,21 +110,21 @@ class Wall extends Module
         $wall_id = (new Request)->textFilter((string)$data['wall_id']);
         $content = (new Request)->textFilter((string)$data['content']);
 
-        $owner = $this->db->row('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
+        $owner = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
         if ($owner) {
-            $check_wall = $this->db->row('SELECT id, author, comments_num FROM `wall` WHERE id = ?', $wall_id);
+            $check_wall = $this->db->fetch('SELECT id, author, comments_num FROM `wall` WHERE id = ?', $wall_id);
             if ($check_wall) {
-                $check_user = $this->db->row('SELECT user_id FROM `users` WHERE user_id = ?', $check_wall['author']);
+                //$check_user = $this->db->fetch('SELECT user_id FROM `users` WHERE user_id = ?', $check_wall['author']);
                 //todo privacy
-
-                $this->db->insert('wall_comments', [
+                $this->db->query('INSERT INTO wall_comments', [
                     'wall_id' => $wall_id,
                     'author' => $owner['user_id'],
                     'content' => $content,
                     'add_date' => time(),
                     'attach' => '',
-                    'type' => '1',          
+                    'type' => '1',  
                 ]);
+
                 //todo upd num
                 $response = array(
                     'status' => Status::OK,
@@ -153,14 +150,11 @@ class Wall extends Module
         $access_token = (new Request)->textFilter((string)$data['access_token']);
         $comment_id = (new Request)->textFilter((string)$data['comment_id']);
 
-        $check_user = $this->db->row('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
+        $check_user = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
         if ($check_user) {
-            $check_wall_comments = $this->db->row('SELECT id FROM `wall_comments` WHERE author = ? AND id = ', $check_user['user_id'], $comment_id);
+            $check_wall_comments = $this->db->fetch('SELECT id FROM `wall_comments` WHERE author = ? AND id = ', $check_user['user_id'], $comment_id);
             if ($check_wall_comments) {
-                $this->db->delete('wall_comments', [
-                    'id' => $check_wall_comments['id'],
-                    'author' => $check_user['user_id']
-                ]);
+                $this->db->query('DELETE FROM wall_comments WHERE id = ? AND author = ?', $check_wall_comments['id'], $check_user['user_id']);
                 $response = array(
                     'status' => Status::OK,
                 );
@@ -185,15 +179,15 @@ class Wall extends Module
         $access_token = (new Request)->textFilter((string)$data['access_token']);
         $wall_id = (new Request)->textFilter((string)$data['wall_id']);
 
-        $check_user = $this->db->row('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
+        $check_user = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
         if ($check_user) {
-            $check_wall = $this->db->row('SELECT id, author, likes_num FROM `wall` WHERE id = ?', $wall_id);
-            $check_like = $this->db->row('SELECT id FROM `wall_like` WHERE wall = ? AND user_id', $wall_id, $check_user['user_id']);
+            $check_wall = $this->db->fetch('SELECT id, author, likes_num FROM `wall` WHERE id = ?', $wall_id);
+            $check_like = $this->db->fetch('SELECT id FROM `wall_like` WHERE wall = ? AND user_id', $wall_id, $check_user['user_id']);
             if (!$check_like) {
-                $this->db->insert('wall_like', [
+                $this->db->query('INSERT INTO wall_like', [
                     'wall' => $check_wall['id'],       
                     'user_id' => $check_user['user_id'],       
-                    'date' => time(),       
+                    'date' => time(),  
                 ]);
                 $response = array(
                     'status' => Status::OK,
@@ -219,15 +213,13 @@ class Wall extends Module
         $access_token = (new Request)->textFilter((string)$data['access_token']);
         $wall_id = (new Request)->textFilter((string)$data['wall_id']);
 
-        $check_user = $this->db->row('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
+        $check_user = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
         if ($check_user) {
-            $check_wall = $this->db->row('SELECT id, author, likes_num FROM `wall` WHERE id = ?', $wall_id);
-            $check_like = $this->db->row('SELECT id FROM `wall_like` WHERE wall = ? AND user_id', $wall_id, $check_user['user_id']);
+            $check_wall = $this->db->fetch('SELECT id, author, likes_num FROM `wall` WHERE id = ?', $wall_id);
+            $check_like = $this->db->fetch('SELECT id FROM `wall_like` WHERE wall = ? AND user_id', $wall_id, $check_user['user_id']);
             if ($check_like) {
-                $this->db->delete('wall_like', [
-                    'id' => $check_wall['id'],
-                    'user_id' => $check_user['user_id']
-                ]);
+                $this->db->query('DELETE FROM wall_like WHERE id = ? AND user_id = ?', $check_wall['id'], $check_user['user_id']);
+
                 $response = array(
                     'status' => Status::OK,
                 );
@@ -256,11 +248,11 @@ class Wall extends Module
         $results_count = 20;
         $limit_page = ($page - 1) * $results_count;
 
-        $owner = $this->db->row('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
-        $check_user = $this->db->row('SELECT user_id, user_wall_num FROM `users` WHERE user_id = ?', $user_id);
+        $owner = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
+        $check_user = $this->db->fetch('SELECT user_id, user_wall_num FROM `users` WHERE user_id = ?', $user_id);
         //todo privacy
         
-        $sql_query = $this->db->run('SELECT * FROM `wall` WHERE for_user_id = ? 
+        $sql_query = $this->db->fetchAll('SELECT * FROM `wall` WHERE for_user_id = ? 
         LIMIT '.$limit_page.', '.$results_count, $check_user['user_id']);
 
         if ($sql_query) {

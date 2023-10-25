@@ -144,7 +144,7 @@ class Settings  extends Module
                     $new_photo_type = '.png';
                     $upload_dir = ROOT_DIR . '/public/uploads/users/' . $check_user['user_id'] . '/';
                     if (move_uploaded_file($image_tmp, $upload_dir . $image_rename . $res_type)) {
-                        $manager = new ImageManager('gd');
+                        $manager = new ImageManager(['driver'=>'gd']);
                         //Оригинал
                         $image = $manager->read($upload_dir . $image_rename . $res_type);
                         $image->toPng(100)->save($upload_dir . 'o_' . $image_rename . $new_photo_type);

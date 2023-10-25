@@ -37,12 +37,12 @@ class Auth  extends Module
             if ($check_user) {
                 if (password_verify($data['password'], $check_user['user_password'])) {
                     $hid = $password;
-                    DB::getDB()->query('UPDATE users SET', [
+                    $this->db->query('UPDATE users SET', [
                         'user_hid' => $hid
                     ], 
                     'WHERE user_id = ?', $check_user['user_id']);
 
-                    DB::getDB()->query('DELETE FROM updates WHERE for_user_id = ?', $check_user['user_id']);
+                    $this->db->query('DELETE FROM updates WHERE for_user_id = ?', $check_user['user_id']);
 
                     $response = array(
                         'status' => Status::OK,
@@ -103,7 +103,7 @@ class Auth  extends Module
         $server_time = time();
         $check_email = $this->db->fetch('SELECT COUNT(*) AS cnt FROM `users` WHERE user_email = ?', $email);
         if (!$check_email['cnt']) {
-            DB::getDB()->query('INSERT INTO users', [
+            $this->db->query('INSERT INTO users', [
                 'user_last_visit' => $server_time,
                 'user_email' => $email,
                 'user_password' => $pass,
@@ -191,7 +191,7 @@ class Auth  extends Module
         $check = $this->db->fetch('SELECT user_id, user_photo, user_name FROM `users` WHERE user_email = ?', $email);
         if ($check) {
             //Удаляем все предыдущие запросы на восстановление
-            DB::getDB()->query('DELETE FROM restore WHERE email = ?', $email);
+            $this->db->query('DELETE FROM restore WHERE email = ?', $email);
             $salt = 'abchefghjkmnpqrstuvwxyz0123456789';
             $rand_lost = '';
             for ($i = 0; $i < 15; $i++) {
@@ -202,7 +202,7 @@ class Auth  extends Module
             // $hash = random_int(100000, 999999);
             //Вставляем в базу
             $_IP = '';//FIXME
-            DB::getDB()->query('INSERT INTO restore', [
+            $this->db->query('INSERT INTO restore', [
                 'email' => $email,
                 'hash' => $hash,
                 'ip' => $_IP,
