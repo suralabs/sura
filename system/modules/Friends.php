@@ -2,13 +2,19 @@
 
 namespace Mozg\modules;
 
-use Mozg\classes\Module;
+use Mozg\classes\{Friendship, Module, Notify};
 use Sura\Http\{Request, Response};
 use Sura\Support\Status;
 
 class Friends extends Module
 {
 
+    /**
+     * @return void
+     * @throws \JsonException
+     * @throws \Sura\Database\Exception\ConnectionException
+     * @throws \Sura\Database\Exception\DriverException
+     */
     public function add()
     {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -38,7 +44,7 @@ class Friends extends Module
                     ], 'WHERE user_id = ?', $for_user_id);
 
                     //Вставляем событие в моментальные оповещения
-                    (new \Mozg\classes\Notify)->add($for_user_id, $from_user_id, 11);
+                    (new Notify)->add($for_user_id, $from_user_id, 11);
                     $config = settings_get();
                     //Отправка уведомления на E-mail
                     if ($config['news_mail_1'] == 'yes') {
@@ -54,6 +60,8 @@ class Friends extends Module
                             // Email::send($email, $dictionary['lost_subj'], $message);
                         }
                     }
+
+
                     $response = array(
                         'status' => Status::OK,
                     );
@@ -105,7 +113,10 @@ class Friends extends Module
                 //     $db->query("INSERT INTO `news` SET ac_user_id = '{$for_user_id}', action_type = 4, action_text = '{$from_user_id}', action_time = '{time()}'");
 
                 //Вставляем событие в моментальные оповещения
-                (new \Mozg\classes\Notify)->add($for_user_id, $from_user_id, 12);
+                (new Notify)->add($for_user_id, $from_user_id, 12);
+
+                //add to cache
+                (new Friendship($from_user_id))->addFriend($for_user_id);
 
                 //Добавляем действия в ленту новостей себе
                 // $row = $db->super_query("SELECT ac_id, action_text FROM `news` WHERE action_time > '{$generateLastTime}' AND action_type = 4 AND ac_user_id = '{$from_user_id}'");
@@ -149,6 +160,8 @@ class Friends extends Module
             $this->db->query('UPDATE users SET', [
                 'user_friends_num-=' => 1, // note +=
             ], 'WHERE user_id = ?', $for_user_id);
+
+            (new Friendship($from_user_id))->removeFriend($for_user_id);
         }else{
             //Проверяем на существования юзера в таблице заявок в друзья
             $check = $this->db->fetch('SELECT for_user_id FROM `friends_demands` WHERE for_user_id = ? AND from_user_id = ?', $from_user_id, $for_user_id);
@@ -172,13 +185,12 @@ class Friends extends Module
         $page = (int)$data['page'];
         $g_count = 20;
         $limit_page = ($page - 1) * $g_count;
-
-        $access_token = (new Request)->textFilter((string)$data['access_token']);
+        $access_token = (new Request)->textFilter((string)$data['access_token']);        
         $check_user = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
+
         $for_user = (int)$data['user'];
         $row_for_user = $this->db->fetch('SELECT user_name, user_friends_num FROM `users` WHERE user_id = ?', $for_user);
         if ($row_for_user['user_friends_num']) {
-
             if ($for_user == $check_user['user_id']){
                 $sql_order = "ORDER by `views`";
             }else{
@@ -334,6 +346,10 @@ class Friends extends Module
         (new Response)->_e_json($response); 
     }
 
+    /**
+     * Summary of common
+     * @return void
+     */
     public function common()
     {
         $data = json_decode(file_get_contents('php://input'), true);

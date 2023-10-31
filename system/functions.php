@@ -139,27 +139,6 @@ function GenerateAlbumPhotosPosition($uid, $aid = false)
         Cache::mozgCreateCache('user_' . $uid . '/position_photos_album_' . $aid, $photo_info);
     }
 }
-function CheckFriends($friendId): bool
-{
-    $user_info = Registry::get('user_info');
-    /** @var string $user_info['user_id'] */
-    $open_my_list = Cache::mozgCache("user_{$user_info['user_id']}/friends");
-    return stripos($open_my_list, "u{$friendId}|") !== false;
-}
-function CheckBlackList($userId): bool
-{
-    $user_info = Registry::get('user_info');
-    $open_my_list = Cache::mozgCache("user_{$userId}/blacklist");
-    /** @var string $user_info['user_id'] */
-    return stripos($open_my_list, "|{$user_info['user_id']}|") !== false;
-}
-function MyCheckBlackList($userId): bool
-{
-    $user_info = Registry::get('user_info');
-    /** @var string $user_info['user_id'] */
-    $open_my_list = Cache::mozgCache("user_{$user_info['user_id']}/blacklist");
-    return stripos($open_my_list, "|{$userId}|") !== false;
-}
 
 /**
  * @param $source
@@ -279,45 +258,6 @@ function settings_get_db(): array
     } catch (Error) {
         echo 'Please install system';
         exit();
-    }
-}
-
-/**
- * @deprecated
- * @throws JsonException
- */
-function compileAdmin($tpl): void
-{
-    $tpl->load_template('main.tpl');
-    $config = settings_get();
-    $admin_index = $config['admin_index'];
-    $admin_link = $config['home_url'] . $config['admin_index'];
-    if (Registry::get('logged')) {
-        $stat_lnk = "<a href=\"{$admin_index}?mod=stats\" onclick=\"Page.Go(this.href); return false;\" style=\"margin-right:10px\">статистика</a>";
-        $exit_lnk = "<a href=\"#\" onclick=\"Logged.log_out()\">выйти</a>";
-    } else {
-        $stat_lnk = '';
-        $exit_lnk = '';
-    }
-
-    $box_width = 800;
-
-    $tpl->set('{admin_link}', $admin_link);
-    $tpl->set('{admin_index}', $admin_index);
-    $tpl->set('{box_width}', $box_width);
-    $tpl->set('{stat_lnk}', $stat_lnk);
-    $tpl->set('{exit_lnk}', $exit_lnk);
-    $tpl->set('{content}', $tpl->result['content']);
-    $tpl->compile('main');
-    if ((new Request)->filter('ajax') === 'yes') {
-        $metatags['title'] = 'Панель управления';
-        $result_ajax = array(
-            'title' => $metatags['title'],
-            'content' => $tpl->result['info'] . $tpl->result['content']
-        );
-        (new Response)->_e_json($result_ajax);
-    } else {
-        echo $tpl->result['main'];
     }
 }
 

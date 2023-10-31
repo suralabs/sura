@@ -45,21 +45,21 @@ class Captcha
         $height = 50;                //Высота изображения
         $font_size = 16;            //Размер шрифта
         $let_amount = 5;            //Количество символов, которые нужно набрать
-//        $fon_let_amount = 30;		//Количество символов на фоне
+        //$fon_let_amount = 30;		//Количество символов на фоне
 
 
         $font = ENGINE_DIR . "/fonts/cour.ttf";    //Путь к шрифту
         if (!file_exists($font)) {
-            throw new Error("Невозможно загрузить : " . $font, 0, 0, 'null', 0);
+            throw new Error("Невозможно загрузить : " . $font, 0);
         }
 
-//набор символов
+        //набор символов
         $letters = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 
-//Цвета для фона
+        //Цвета для фона
         $background_color = [random_int(200, 255), random_int(200, 255), random_int(200, 255)];
 
-//Цвета для обводки
+        //Цвета для обводки
         $foreground_color = [random_int(0, 100), random_int(0, 100), random_int(0, 100)];
 
         $src = imagecreatetruecolor($width, $height); //создаем изображение
@@ -68,7 +68,7 @@ class Captcha
 
         imagefill($src, 0, 0, $fon); //заливаем изображение фоном
 
-//то же самое для основных букв
+        //то же самое для основных букв
         for ($i = 0; $i < $let_amount; $i++) {
             $color = imagecolorallocatealpha($src, $foreground_color[0], $foreground_color[1], $foreground_color[2], random_int(20, 40)); //Цвет шрифта
             $letter = $letters[random_int(0, count($letters) - 1)];

@@ -3,12 +3,12 @@
 namespace Mozg\Security;
 
 use Sura\Contracts\Security\Factory;
-use Sura\Support\Registry;
+use Mozg\classes\Module;
 
 /**
  *
  */
-class AntiSpam implements Factory
+class AntiSpam  extends Module implements Factory
 {
     /** @var int Лимиты новых друзей на день */
     private static int $max_friends = 40;
@@ -57,6 +57,17 @@ class AntiSpam implements Factory
         'videos' => 13,
         'support' => 14,
     ];
+
+    /** @var int ID юзера */
+    public int $user_id;
+
+    /**
+     * @param int $user_id
+     */
+    public function __construct(int $user_id)
+    {
+        $this->user_id = $user_id;
+    }
 
     /**
      * @param string $act
@@ -117,25 +128,21 @@ class AntiSpam implements Factory
      * @param false|string $text
      * @return bool true - exceeded
      */
-    public static function check(string $act, false|string $text = false): bool
+    public function check(string $act, false|string $text = false): bool
     {
-        $user_info = Registry::get('user_info');
-        $db = Registry::get('db');
         if ($text) {
             $text = md5($text);
         }
-
-        //спам дата
         $antiDate = date('Y-m-d', time());
         $antiDate = strtotime($antiDate);
-        $action = self::$types[$act];
+        $action = self::getType($act);
         $limit = self::limit($act);
-//Проверяем в таблице
+        //Проверяем в таблице
         /** @var array $check */
-        $check = $db->superQuery("SELECT COUNT(*) AS cnt FROM `antispam` 
-            WHERE act = '{$action}' AND user_id = '{$user_info['user_id']}' 
-              AND date = '{$antiDate}' AND txt = '{$text}'");
-//Если кол-во, логов больше, то ставим блок
+        $check = $this->db->fetch('SELECT COUNT(*) AS cnt FROM `antispam` 
+        WHERE act = ? AND user_id = ? 
+              AND date = ? AND txt = ?', $action, $this->user_id, $antiDate, $text);
+        //Если кол-во, логов больше, то ставим блок
         return $check['cnt'] >= $limit;
     }
 
@@ -153,20 +160,18 @@ class AntiSpam implements Factory
      * @param bool $text
      * @return void
      */
-    public static function logInsert(string $act, bool|string $text = false): void
+    public function logInsert(string $act, bool|string $text = false): void
     {
-        /** @var array<string,int> $user_info */
-        $user_info = Registry::get('user_info');
-        $db = Registry::get('db');
         $text = (is_string($text) and !empty($text)) ? md5($text) : '';
         $server_time = date('Y-m-d', time());
         $antiDate = strtotime($server_time);
         $act_num = self::getType($act);
-        /** @var string|int|null $user_info ['user_id'] */
-        $db->query("INSERT INTO `antispam` 
-            SET act = '{$act_num}', 
-               user_id = '{$user_info['user_id']}', 
-               date = '{$antiDate}', txt = '{$text}'");
+        $this->db->query('INSERT INTO antispam', [
+            'act' => $act_num,
+            'user_id' => $this->user_id,
+            'date' => $antiDate,
+            'txt' => $text,
+        ]);               
 
     }
 }

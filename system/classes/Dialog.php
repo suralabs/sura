@@ -11,13 +11,14 @@
 namespace Mozg\classes;
 
 use Mozg\Security\AntiSpam;
-use Sura\Support\Registry;
+use Sura\Database\Exception\ConnectionException;
+use Sura\Database\Exception\DriverException;
 use Sura\Support\Status;
 
 /**
  *
  */
-class Dialog
+class Dialog extends Module
 {
     /** @var int ID юзера */
     public int $user_id;
@@ -28,7 +29,6 @@ class Dialog
     public function __construct(int $user_id)
     {
         $this->user_id = $user_id;
-
     }
 
     /**
@@ -39,22 +39,24 @@ class Dialog
      * @param string $msg Сообщение
      * @param string $attach_files Прикрепленный контент к сообщению
      * @return array Номер сообщения, статус, имя пользователя и фото пользователя
+     * @throws ConnectionException
+     * @throws DriverException
      */
-    final public function send(int $for_user_id, int $room_id, string $msg, string $attach_files): array
+    public function send(int $for_user_id, int $room_id, string $msg, string $attach_files): array
     {
         /** @var array $user_info */
-        $user_info = DB::getDB()->row(
-            "SELECT user_id, user_photo, user_name, user_last_name FROM `users` WHERE user_id = ?", $this->user_id);
-        if (Flood::check('messages')) {
-            return [
+        $user_info = $this->db->fetch('SELECT user_photo, user_name FROM `users` WHERE user_id = ?', $this->user_id);
+        $anti_spam = new AntiSpam( $this->user_id);
+        if ($anti_spam->check('messages', false)) {
+            return array(
                 'status' => Status::LIMIT
-            ];
+            );
         }
         if ($room_id) {
             $for_user_id = 0;
         }
         $attach_files = str_replace('vote|', 'hack|', $attach_files);
-        if (Flood::check('identical', $msg . $attach_files)) {
+        if ($anti_spam->check('identical', $msg . $attach_files)) {
             return array(
                 'status' => Status::LIMIT
             );
@@ -63,50 +65,46 @@ class Dialog
         if (!empty($msg) || !empty($attach_files)) {
             if ($room_id == 0) {
                 /** @var array $row */
-                $row = DB::getDB()->row("SELECT user_privacy FROM `users` WHERE user_id = ?", $for_user_id);
+                $row = $this->db->fetch('SELECT user_privacy FROM `users` WHERE user_id = ?', $for_user_id);
             } else {
                 /** @var array $row */
-                $row = DB::getDB()->row(
-                    "SELECT id FROM `room_users` WHERE room_id = ? and oid2 = ? and type = 0",
+                $row = $this->db->fetch('SELECT id FROM `room_users` WHERE room_id = ? and oid2 = ? and type = 0',
                     $room_id, $this->user_id
                 );
             }
             if ($row) {
                 if ($room_id == 0) {
                     $user_privacy = unserialize($row['user_privacy']);
-                    $CheckBlackList = CheckBlackList($for_user_id);
+                    $check_blacklist = (new Friendship($this->user_id))->checkBlackList($for_user_id);
                     if ($user_privacy['val_msg'] == 2) {
-                        $check_friend = CheckFriends($for_user_id);
+                        $check_friend = (new Friendship($this->user_id))->checkFriends($for_user_id);
                     } else {
                         $check_friend = null;
                     }
-                    if (!$CheckBlackList and $user_privacy['val_msg'] == 1 or
+                    if (!$check_blacklist and $user_privacy['val_msg'] == 1 or
                         $user_privacy['val_msg'] == 2 and $check_friend) {
-                        $xPrivasy = 1;
+                        $privacy = 1;
                     } else {
-                        $xPrivasy = 0;
+                        $privacy = 0;
                     }
                 } else {
-                    $xPrivasy = 1;
+                    $privacy = 1;
                 }
-                if ($xPrivasy && $this->user_id !== $for_user_id) {
-                    AntiSpam::LogInsert('identical', $msg . $attach_files);
-                    if (!$room_id && !CheckFriends($for_user_id))
-                        AntiSpam::LogInsert('messages');
+                if ($privacy && $this->user_id !== $for_user_id) {
+                    $anti_spam->LogInsert('identical', $msg . $attach_files);
+                    if (!$room_id && !(new Friendship($this->user_id))->checkBlackList($for_user_id))
+                    $anti_spam->LogInsert('messages', false);
                     $user_ids = array();
                     if (!$room_id) {
                         $user_ids[] = $for_user_id;
                         $user_ids[] = $this->user_id;
                     } else {
-                        $sqlUsers = DB::getDB()->run(
-                            "SELECT oid2 FROM `room_users` WHERE room_id = ? and type = 0",
-                            $room_id
-                        );
+                        $sqlUsers = $this->db->fetchAll('SELECT oid2 FROM `room_users` WHERE room_id = ? and type = 0',$room_id);
                         foreach ($sqlUsers as $rowUser)
                             $user_ids[] = $rowUser['oid2'];
                     }
 
-                    DB::getDB()->insert('messages', [
+                    $this->db->query('INSERT INTO messages', [
                         'user_ids' => implode(',', $user_ids),
                         'text' => $msg,
                         'room_id' => $room_id,
@@ -115,17 +113,17 @@ class Dialog
                         'attach' => $attach_files,
                     ]);
 
-                    $dbid = DB::getDB()->lastInsertId();
+                    $db_id = $this->db->getInsertId();
                     $user_ids = array_diff($user_ids, array($this->user_id));
                     foreach ($user_ids as $k => $v) {
-                        DB::getDB()->query(
-                            "UPDATE `users` SET user_pm_num = user_pm_num+1 WHERE user_id = '" . $v . "'");
-                        $check_im_2 = DB::getDB()->row(
-                            "SELECT id FROM im WHERE iuser_id = ? AND im_user_id = ? AND room_id = ?",
+                        $this->db->query('UPDATE users SET', [
+                            'user_pm_num+=' => 1,
+                        ], 'WHERE user_id = ?', $v);
+                        $check_im_2 = $this->db->fetch('SELECT id FROM im WHERE iuser_id = ? AND im_user_id = ? AND room_id = ?',
                             $v, ($room_id ? 0 : $this->user_id), $room_id
                         );
                         if (!$check_im_2) {
-                            DB::getDB()->insert('im', [
+                            $this->db->query('INSERT INTO im', [
                                 'iuser_id' => $v,
                                 'im_user_id' => ($room_id ? 0 : $this->user_id),
                                 'room_id' => $room_id,
@@ -133,23 +131,21 @@ class Dialog
                                 'idate' => time(),
                                 'all_msg_num' => 1,
                             ]);
-                        } else {
-                            DB::getDB()->update('im', [
+                        } else {                           
+                            $this->db->query('UPDATE im SET', [
                                 'idate' => time(),
-                                'msg_num+1',
-                                'all_msg_num+1',
-                            ], [
-                                'id' => $check_im_2['id']
-                            ]);
+                                'msg_num+=' => 1,
+                                'all_msg_num+=' => 1,
+                            ], 'WHERE id = ?', $check_im_2['id']);
                         }
                         /** @var array $check2 */
-                        $check2 = DB::getDB()->row(
+                        $check2 = $this->db->fetch(
                             "SELECT user_last_visit FROM `users` WHERE user_id = ?", $v);
                         $update_time = time() - 70;
                         if ($check2['user_last_visit'] >= $update_time) {
                             $msg_lnk = '/messages#' . ($room_id ? 'c' . $room_id : $this->user_id);
 
-                            DB::getDB()->insert('updates', [
+                            $this->db->query('INSERT INTO updates', [
                                 'for_user_id' => $v,
                                 'from_user_id' => $this->user_id,
                                 'type' => '8',
@@ -166,12 +162,12 @@ class Dialog
                         Cache::mozgCreateCache('user_' . $v . '/im_update', '1');
                         Cache::mozgCreateCache("user_{$v}/typograf{$this->user_id}", "");
                     }
-                    $check_im = DB::getDB()->row(
+                    $check_im = $this->db->fetch(
                         "SELECT id FROM `im` WHERE iuser_id = ? AND im_user_id = ? AND room_id = ?",
                         $this->user_id, $for_user_id, $room_id
                     );
                     if (!$check_im) {
-                        DB::getDB()->insert('im', [
+                        $this->db->query('INSERT INTO im', [
                             'iuser_id' => $this->user_id,
                             'im_user_id' => $for_user_id,
                             'room_id' => $room_id,
@@ -180,73 +176,65 @@ class Dialog
                             'all_msg_num' => 1,
                         ]);
                     } else {
-                        DB::getDB()->update('im', [
+                        $this->db->query('UPDATE im SET', [
                             'idate' => time(),
-                            //'msg_num+1',
-                            'all_msg_num+1',
-                        ], [
-                            'id' => $check_im['id']
-                        ]);
+                            'all_msg_num+=' => 1,
+                        ], 'WHERE id = ?', $check_im['id']);
                     }
                     return [
                         'status' => Status::OK,
-                        'id' => $dbid,
+                        'id' => $db_id,
                         'user_photo' => $user_info['user_photo'],
                         'user_name' => $user_info['user_name']
                     ];
                 }
-                return [
+                return array(
                     'status' => Status::PRIVACY
-                ];
+                );
             }
-            return [
+            return array(
                 'status' => Status::NOT_USER
-            ];
+            );
         }
 
-        return [
+        return array(
             'status' => Status::NOT_VALID
-        ];
+        );
 
     }
 
     /**
      * @param int $msg_id
      * @return bool "false" - если не найдено
+     * @throws ConnectionException
+     * @throws DriverException
      */
     final public function read(int $msg_id): bool
     {
-        $check = DB::getDB()->row(
-            "SELECT id, id2, date, room_id, history_user_id, room_id, read_ids, user_ids 
+        $check = $this->db->fetch('SELECT id, id2, date, room_id, history_user_id, room_id, read_ids, user_ids 
             FROM `messages` WHERE id = ? AND find_in_set( ? , user_ids) 
             AND not find_in_set( ? , del_ids) AND not find_in_set( ? , read_ids) 
-            AND history_user_id != ?", $msg_id, $this->user_id, $this->user_id, $this->user_id, $this->user_id);
+            AND history_user_id != ?', $msg_id, $this->user_id, $this->user_id, $this->user_id, $this->user_id);
         if ($check) {
             $read_ids = explode(',', $check['read_ids']);
             $read_ids[] = $this->user_id;
-            DB::getDB()->update('messages', [
+            $this->db->query('UPDATE messages SET', [
                 'read_ids' => implode(',', $read_ids),
-            ], [
-                'id' => $check['id']
-            ]);
-            DB::getDB()->update('users', [
-                'user_pm_num-1',
-            ], [
-                'user_id' => $this->user_id
-            ]);
+            ], 'WHERE id = ?', $check['id']);
+
+            $this->db->query('UPDATE users SET', [
+                'user_pm_num-=' => 1,
+            ], 'WHERE user_id = ?', $this->user_id);
+
             if (!$check['room_id']) {
                 $user_ids = explode(',', $check['user_ids']);
                 $im_user_id = $user_ids[0] == $this->user_id ? $user_ids[1] : $user_ids[0];
             } else {
                 $im_user_id = 0;
             }
-            DB::getDB()->update('im', [
-                'user_pm_num-1',
-            ], [
-                'iuser_id' => $this->user_id,
-                'im_user_id' => $im_user_id,
-                'room_id' => $check['room_id'],
-            ]);
+            $this->db->query('UPDATE im SET', [
+                'user_pm_num-=' => 1,
+            ], 'WHERE iuser_id = ? AND im_user_id = ? AND room_id', $this->user_id, $im_user_id, $check['room_id']);
             Cache::mozgClearCacheFile('user_' . $check['history_user_id'] . '/im');
             return true;
         }
@@ -275,75 +263,65 @@ class Dialog
     /**
      * @param int $room_id
      * @param int $im_user_id
-     * @param $user_id
      * @return bool
+     * @throws ConnectionException
+     * @throws DriverException
      */
-    final public function delete(int $room_id, int $im_user_id, $user_id): bool
+    final public function delete(int $room_id, int $im_user_id): bool
     {
         if ($room_id > 0) {
             $im_user_id = 0;
         }
-        $row = DB::getDB()->row(
-            "SELECT id, msg_num, all_msg_num FROM `im` WHERE iuser_id = ? AND im_user_id = ? AND room_id = ?",
+        $row = $this->db->fetch('SELECT id, msg_num, all_msg_num FROM `im` WHERE iuser_id = ? AND im_user_id = ? AND room_id = ?',
             $this->user_id, $im_user_id, $room_id);
         if ($row) {
-            $sql = DB::getDB()->row("SELECT id, read_ids, room_id, history_user_id, del_ids 
-                FROM `messages` 
-                WHERE " .
+            //todo update query
+            $sql = $this->db->fetchAll('SELECT id, read_ids, room_id, history_user_id, del_ids FROM `messages` 
+                WHERE ' .
                 ($room_id ? "room_id = '{$room_id}'" : "room_id = 0 and find_in_set('{$im_user_id}', tb1.user_ids)") .
-                " and find_in_set(?, user_ids) AND not find_in_set(?, del_ids)", $user_id, $user_id);
+                ' AND find_in_set(?, user_ids) AND not find_in_set(?, del_ids)', $this->user_id, $this->user_id);
             if ($sql) {
                 foreach ($sql as $row2) {
                     $del_ids = $row2['del_ids'] ? explode(',', $row2['del_ids']) : array();
-                    $del_ids[] = $user_id;
+                    $del_ids[] = $this->user_id;
                     $del_ids = implode(',', $del_ids);
 
-                    DB::getDB()->update('messages', [
+                    $this->db->query('UPDATE messages SET', [
                         'del_ids' => $del_ids,
-                    ], [
-                        'id' => $row2['id'],
-                    ]);
+                    ], 'WHERE id = ?', $row2['id']);
+
                     $read_ids = explode(',', $row2['read_ids']);
-                    if ($row['history_user_id'] !== $user_id && !in_array($user_id, $read_ids, true)) {
-                        $read_ids[] = $user_id;
-                        DB::getDB()->update('messages', [
+                    if ($row['history_user_id'] !== $this->user_id && !in_array($this->user_id, $read_ids, true)) {
+                        $read_ids[] = $this->user_id;
+                        $this->db->query('UPDATE messages SET', [
                             'read_ids' => implode(',', $read_ids),
-                        ], [
-                            'id' => $row2['id'],
-                        ]);
-                        DB::getDB()->update('users', [
-                            'user_pm_num-2',
-                        ], [
-                            'user_id' => $user_id,
-                        ]);
+                        ], 'WHERE id = ?', $row2['id']);
+
+                        $this->db->query('UPDATE users SET', [
+                            'user_pm_num-=' => 2,
+                        ], 'WHERE user_id = ?', $this->user_id);
+
                         if (!$row2['room_id']) {
                             $user_ids = explode(',', $row2['user_ids']);
-                            $im_user_id = $user_ids[0] === $user_id ? $user_ids[1] : $user_ids[0];
+                            $im_user_id = $user_ids[0] === $this->user_id ? $user_ids[1] : $user_ids[0];
                         } else {
                             $im_user_id = 0;
                         }
-                        DB::getDB()->update('im', [
-                            'msg_num-1',
-                        ], [
-                            'iuser_id' => $user_id,
-                            'im_user_id' => $im_user_id,
-                            'room_id' => $row2['room_id'],
-                        ]);
+                        $this->db->query('UPDATE im SET', [
+                            'msg_num-=' => 1,
+                        ], 'WHERE user_id = ? AND im_user_id = ? AND room_id = ?', $this->user_id, $im_user_id, $row2['room_id']);
+                        
                         Cache::mozgClearCacheFile('user_' . $row2['history_user_id'] . '/im');
                     }
                 }
             }
             if ($row['msg_num']) {
-                DB::getDB()->update('users', [
-                    'user_pm_num-' . $row['msg_num'],
-                ], [
-                    'user_id' => $user_id,
-                ]);
+                $this->db->query('UPDATE users SET', [
+                    'user_pm_num-=' => $row['msg_num'],
+                ], 'WHERE user_id = ?', $this->user_id);
 
             }
-            DB::getDB()->delete('im', [
-                'id' => $row['id']
-            ]);
+            $this->db->query('DELETE FROM im WHERE id = ?', $row['id']);
             return true;
         }
         return false;

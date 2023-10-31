@@ -18,16 +18,8 @@ use Sura\Support\Status;
 class Wall extends Module
 {
     /**
-     * @throws \JsonException
+     * 
      */
-    public function api()
-    {
-        $response = array(
-            'status' => Status::NOT_DATA,
-        );
-        (new Response)->_e_json($response);
-    }
-
     public function addProfile()
     {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -45,15 +37,15 @@ class Wall extends Module
                     'author' => $owner['user_id'],//автор
                     'for_user_id' => $check_user['user_id'],//кому
                     'type' => '1',//profile/group
-                    'content' => $content,//content
-                    'add_date' => $add_time,//date
+                    'content' => $content,
+                    'add_date' => $add_time,
                     'attach' => '',//photos //todo            
                     'privacy' => '',//privacy //todo
                     'likes_num' => '0',
-                    'comments_num' => '0',            
+                    'comments_num' => '0',
                     'tell_uid' => '0',
                     'tell_date' => '0',
-                    'tell_id' => '0',  
+                    'tell_id' => '0',
                 ]);
 
                 $response = array(
@@ -74,6 +66,9 @@ class Wall extends Module
         }
     }
     
+    /**
+     * 
+     */
     public function removeProfile()
     {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -103,6 +98,9 @@ class Wall extends Module
         }
     }
 
+    /**
+     * 
+     */
     public function addCommentProfile()
     {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -144,6 +142,9 @@ class Wall extends Module
         }
     }
 
+    /**
+     * 
+     */
     public function removeCommentProfile()
     {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -173,6 +174,9 @@ class Wall extends Module
         }
     }
 
+    /**
+     * 
+     */
     public function like()
     {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -207,6 +211,9 @@ class Wall extends Module
         }
     }
 
+    /**
+     * 
+     */
     public function unlike()
     {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -238,6 +245,9 @@ class Wall extends Module
         }
     }
 
+    /**
+     * 
+     */
     public function all()
     {
         $data = json_decode(file_get_contents('php://input'), true);
