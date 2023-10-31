@@ -223,11 +223,11 @@ class Profile extends Module
             if ($check_user['user_photo']) {
                 // $photo = $config['api_url'] . 'uploads/users/' . $check_user['user_id'] . '/' . $check_user['user_photo'];
                 $photo_50 = $config['api_url'] . 'uploads/users/' . $check_user['user_id'] . '/50_' . $check_user['user_photo'];
-                // $photo_100 = $config['api_url'] . 'uploads/users/' . $check_user['user_id'] . '/100_' . $check_user['user_photo'];
+                $photo_100 = $config['api_url'] . 'uploads/users/' . $check_user['user_id'] . '/100_' . $check_user['user_photo'];
             } else {
                 // $photo = $config['api_url'] . '/images/no_ava.gif';
                 $photo_50 = $config['api_url'] . '/images/no_ava.gif';
-                // $photo_100 = $config['api_url'] . '/images/no_ava.gif';
+                $photo_100 = $config['api_url'] . '/images/no_ava.gif';
             }
             $response = array(
                 'status' => Status::OK,
