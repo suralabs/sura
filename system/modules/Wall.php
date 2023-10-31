@@ -20,12 +20,13 @@ class Wall extends Module
     /**
      * 
      */
-    public function addProfile()
+    public function add()
     {
         $data = json_decode(file_get_contents('php://input'), true);
         $access_token = (new Request)->textFilter((string)$data['access_token']);
-        $user_id = (new Request)->textFilter((string)$data['user_id']);
+        $user_id = $data['user_id'];
         $content = (new Request)->textFilter((string)$data['content']);
+        $type = $data['type'];
         $add_time = time();
 
         if (!empty($content)) {
@@ -69,7 +70,7 @@ class Wall extends Module
     /**
      * 
      */
-    public function removeProfile()
+    public function remove()
     {
         $data = json_decode(file_get_contents('php://input'), true);
         $access_token = (new Request)->textFilter((string)$data['access_token']);
@@ -101,7 +102,7 @@ class Wall extends Module
     /**
      * 
      */
-    public function addCommentProfile()
+    public function addComment()
     {
         $data = json_decode(file_get_contents('php://input'), true);
         $access_token = (new Request)->textFilter((string)$data['access_token']);
@@ -145,7 +146,7 @@ class Wall extends Module
     /**
      * 
      */
-    public function removeCommentProfile()
+    public function removeComment()
     {
         $data = json_decode(file_get_contents('php://input'), true);
         $access_token = (new Request)->textFilter((string)$data['access_token']);

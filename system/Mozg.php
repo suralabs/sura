@@ -42,10 +42,37 @@ class Mozg
             '/api/account/change_bio' => 'Profile@bioEdit',
 
             '/api/users/profile' => 'Profile@profile',
-            '/api/albums/all' => 'Albums@all',            
+
+            '/api/albums/all' => 'Albums@all',   
+
             '/api/search' => 'Search@all',            
 
-            '/api/profile' => 'Profile@api',
+            '/api/friends/add' => 'Friends@add',
+            '/api/friends/delete' => 'Friends@delete',
+            '/api/friends/all' => 'Friends@all',
+            '/api/friends/search' => 'Friends@search',
+            '/api/friends/requests' => 'Friends@requests',
+            '/api/friends/online' => 'Friends@online',
+            '/api/friends/common' => 'Friends@common',
+
+            '/api/messages/send' => 'Messages@send',
+            '/api/messages/read' => 'Messages@read',
+            '/api/messages/typograf' => 'Messages@typograf',
+            '/api/messages/delete' => 'Messages@delete',
+
+            '/api/feed/all' => 'Newsfeed@all',
+
+            '/api/notifications/get' => 'Notifications@get',
+            '/api/notifications/all' => 'Notifications@all',
+
+            '/api/wall/add' => 'Wall@add',
+            '/api/wall/remove' => 'Wall@remove',
+            '/api/wall/comment/add' => 'Wall@addComment',
+            '/api/wall/comment/remove' => 'Wall@removeComment',
+            '/api/wall/like' => 'Wall@like',
+            '/api/wall/unlike' => 'Wall@unlike',
+            '/api/wall/all' => 'Wall@all',
+
         ];
         $router->add($routers);
 

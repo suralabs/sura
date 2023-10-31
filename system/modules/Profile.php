@@ -21,17 +21,6 @@ class Profile extends Module
     /**
      * @throws \JsonException
      */
-    public function api()
-    {
-        $response = array(
-            'status' => Status::NOT_DATA,
-        );
-        (new Response)->_e_json($response);
-    }
-
-    /**
-     * @throws \JsonException
-     */
     function profile()
     {
         $config = settings_get();
