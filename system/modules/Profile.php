@@ -45,9 +45,9 @@ class Profile extends Module
                 $photo_50 = $config['api_url'] . 'uploads/users/' . $check_user['user_id'] . '/50_' . $check_user['user_photo'];
                 $photo_100 = $config['api_url'] . 'uploads/users/' . $check_user['user_id'] . '/100_' . $check_user['user_photo'];
             }else{
-                $photo = $config['api_url'] . '/images/no_ava.gif';
-                $photo_50 = $config['api_url'] . '/images/no_ava.gif';
-                $photo_100 = $config['api_url'] . '/images/no_ava.gif';
+                $photo = $config['api_url'] . 'images/no_ava.gif';
+                $photo_50 = $config['api_url'] . 'images/no_ava.gif';
+                $photo_100 = $config['api_url'] . 'images/no_ava.gif';
             }
 
             $owner = ($check_user['user_id'] == $my_info['user_id']) ?? false;
@@ -85,9 +85,9 @@ class Profile extends Module
                         $all_friends[$key_friend]['name'] = $friend['user_name'];
                         $all_friends[$key_friend]['last_name'] = $friend['user_last_name'];                    
                         if ($friend['user_photo']) {
-                            $all_friends[$key_friend]['ava'] = $config['home_url'] . 'uploads/users/' . $friend['friend_id'] . '/50_' . $friend['user_photo'];
+                            $all_friends[$key_friend]['ava'] = $config['api_url'] . 'uploads/users/' . $friend['friend_id'] . '/50_' . $friend['user_photo'];
                         } else {
-                            $all_friends[$key_friend]['ava'] = '/images/no_ava_50.png';
+                            $all_friends[$key_friend]['ava'] = $config['api_url'] . 'images/no_ava_50.png';
                         }
                     }
                 }
@@ -116,9 +116,9 @@ class Profile extends Module
                         $all_albums[$key_album]['date'] = megaDate((int)$album['adate']);
                         $all_albums[$key_album]['albums_photos_num'] = declWord($album['photo_num'], 'photos');
                         if ($album['cover']) {
-                            $all_albums[$key_album]['album_cover'] = "/uploads/users/{$check_user['user_id']}/albums/{$album['aid']}/c_{$album['cover']}";
+                            $all_albums[$key_album]['album_cover'] = $config['api_url'] . "uploads/users/{$check_user['user_id']}/albums/{$album['aid']}/c_{$album['cover']}";
                         } else {
-                            $all_albums[$key_album]['album_cover'] = '/images/no_cover.png';
+                            $all_albums[$key_album]['album_cover'] = $config['api_url'] . 'images/no_cover.png';
                         }
                     }
                 }
@@ -131,34 +131,34 @@ class Profile extends Module
                 $results_count = 10;
                 $limit_page = ($page - 1) * $results_count;
                 
-                $sql_wall = $this->db->fetchAll('SELECT tb1.id, author_user_id, text, add_date, 
-                fasts_num, likes_num, likes_users, tell_uid, type, tell_date, public, attach, 
-                tell_comm, tb2.user_photo, user_name, user_last_name, user_last_visit 
+                $sql_wall = $this->db->fetchAll('SELECT tb1.id, author, content, add_date, 
+                comments_num, likes_num, tell_uid, type, tell_date, attach, 
+                tell_id, tb2.user_photo, user_name, user_last_name, user_last_visit 
                 FROM `wall` tb1, `users` tb2 
-                WHERE for_user_id = ? AND tb1.author_user_id = tb2.user_id 
-                  AND tb1.fast_comm_id = 0   
-                ORDER by `add_date` DESC LIMIT ' . $limit_page . ' , ' . $results_count, $check_user['user_id']);
+                WHERE for_user_id = ? AND tb1.author = tb2.user_id  
+                ORDER by `add_date` DESC LIMIT ? , ?', 
+                $check_user['user_id'], $limit_page, $results_count);
                 if($sql_wall){
                     foreach ($sql_wall as $key_wall => $wall) {
                         $all_walls[$key_wall]['id'] = $wall['id'];
-                        $all_walls[$key_wall]['author_user_id'] = $wall['author_user_id'];
-                        $all_walls[$key_wall]['text'] = $wall['text'];
+                        $all_walls[$key_wall]['author'] = $wall['author'];
+                        $all_walls[$key_wall]['content'] = $wall['content'];
                         $all_walls[$key_wall]['add_date'] = $wall['add_date'];
-                        $all_walls[$key_wall]['fasts_num'] = $wall['fasts_num'];
+                        $all_walls[$key_wall]['comments_num'] = $wall['comments_num'];
                         $all_walls[$key_wall]['likes_num'] = $wall['likes_num'];
-                        $all_walls[$key_wall]['likes_users'] = $wall['likes_users'];
+                        // $all_walls[$key_wall]['likes_users'] = $wall['likes_users'];
                         $all_walls[$key_wall]['tell_uid'] = $wall['tell_uid'];
                         $all_walls[$key_wall]['type'] = $wall['type'];
                         $all_walls[$key_wall]['tell_date'] = $wall['tell_date'];
-                        $all_walls[$key_wall]['public'] = $wall['public'];
+                        // $all_walls[$key_wall]['public'] = $wall['public'];
                         $all_walls[$key_wall]['attach'] = $wall['attach'];
-                        $all_walls[$key_wall]['tell_comm'] = $wall['tell_comm'];
+                        $all_walls[$key_wall]['tell_id'] = $wall['tell_id'];
                         if ($wall['user_photo']) {
-                            $all_walls[$key_wall]['user_photo'] = $config['home_url'] . 'uploads/users/' . $wall['author_user_id'] . '/50_' . $wall['user_photo'];
+                            $all_walls[$key_wall]['user_photo'] = $config['api_url'] . 'uploads/users/' . $wall['author'] . '/50_' . $wall['user_photo'];
                         } else {
-                            $all_walls[$key_wall]['user_photo'] = '/images/no_ava_50.png';
+                            $all_walls[$key_wall]['user_photo'] = $config['api_url'] . 'images/no_ava_50.png';
                         }
-                        $all_walls[$key_wall]['user_photo'] = '/images/no_cover.png';
+                        // $all_walls[$key_wall]['user_photo'] = '/images/no_cover.png';
                         $all_walls[$key_wall]['user_name'] = $wall['user_name'];
                         $all_walls[$key_wall]['user_last_name'] = $wall['user_last_name'];
                         $all_walls[$key_wall]['user_last_visit'] = $wall['user_last_visit'];
@@ -180,6 +180,7 @@ class Profile extends Module
                     'owner' => $owner,
                     'friends' => $all_friends,
                     'albums' => $all_albums,
+                    'wall_num' => $check_user['user_wall_num'],
                     'walls' => $all_walls,
                     'friend_status' => $friend_status,
                     'counters' => array(
@@ -225,18 +226,19 @@ class Profile extends Module
                 $photo_50 = $config['api_url'] . 'uploads/users/' . $check_user['user_id'] . '/50_' . $check_user['user_photo'];
                 $photo_100 = $config['api_url'] . 'uploads/users/' . $check_user['user_id'] . '/100_' . $check_user['user_photo'];
             } else {
-                // $photo = $config['api_url'] . '/images/no_ava.gif';
-                $photo_50 = $config['api_url'] . '/images/no_ava.gif';
-                $photo_100 = $config['api_url'] . '/images/no_ava.gif';
+                // $photo = $config['api_url'] . 'images/no_ava.gif';
+                $photo_50 = $config['api_url'] . 'images/no_ava.gif';
+                $photo_100 = $config['api_url'] . 'images/no_ava.gif';
             }
             $response = array(
                 'status' => Status::OK,
                 'data' => array(
-                    'user_id' => $check_user['user_id'],
+                    'id' => $check_user['user_id'],
                     'access_token' => $check_user['access_token'],
                     'first_name' => $check_user['user_name'],
                     'last_name' => $check_user['user_last_name'],
                     'photo_50' => $photo_50,
+                    'photo_100' => $photo_100,
                     'roles' => $check_user['roles'],
                 ),
             );

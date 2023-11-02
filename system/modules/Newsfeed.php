@@ -14,9 +14,9 @@ class Newsfeed extends Module
     final public function all(): void
     {
         $data = json_decode(file_get_contents('php://input'), true);
-        $page = (int)$data['page'];
+        $page = $data['page'] ?? 1;
         $page_count = 20;
-        $limit_page = ($page - 1) * $page_count;
+        $limit_page = ((int)$page - 1) * $page_count;
         $access_token = (new Request)->textFilter((string)$data['access_token']);
         $check_user = $this->db->fetch('SELECT user_id, user_photo FROM `users` WHERE user_hid = ?', $access_token);
         $config = settings_get();
@@ -145,7 +145,7 @@ class Newsfeed extends Module
         $response = array(
             'status' => '1',
             'data' => array(
-                'items'=> $items,
+                'walls'=> $items,
             )
         );
 

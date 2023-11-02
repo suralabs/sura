@@ -32,30 +32,40 @@ class Wall extends Module
         if (!empty($content)) {
             $owner = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
             $check_user = $this->db->fetch('SELECT user_id, user_wall_num FROM `users` WHERE user_id = ?', $user_id);
-            //todo privacy     
-            if ($owner &&  $check_user) {
-                $this->db->query('INSERT INTO wall', [
-                    'author' => $owner['user_id'],//автор
-                    'for_user_id' => $check_user['user_id'],//кому
-                    'type' => '1',//profile/group
-                    'content' => $content,
-                    'add_date' => $add_time,
-                    'attach' => '',//photos //todo            
-                    'privacy' => '',//privacy //todo
-                    'likes_num' => '0',
-                    'comments_num' => '0',
-                    'tell_uid' => '0',
-                    'tell_date' => '0',
-                    'tell_id' => '0',
-                ]);
+            //todo privacy
+            if($type == 1 || $type == 2){
+                if ($owner &&  $check_user) {
+                    $this->db->query('INSERT INTO wall', [
+                        'author' => $owner['user_id'],//автор
+                        'for_user_id' => $check_user['user_id'],//кому
+                        'type' => $type,//profile/group
+                        'content' => $content,
+                        'add_date' => $add_time,
+                        'attach' => '',//photos //todo            
+                        'privacy' => '',//privacy //todo
+                        'likes_num' => '0',
+                        'comments_num' => '0',
+                        'tell_uid' => '0',
+                        'tell_date' => '0',
+                        'tell_id' => '0',
+                    ]);
+                    $this->db->query('UPDATE users SET', [
+                        'user_wall_num+=' => 1, // note +=
+                    ], 'WHERE user_id = ?', $check_user['user_id']);
 
-                $response = array(
-                    'status' => Status::OK,
-                );
-                (new Response)->_e_json($response);
+                    $response = array(
+                        'status' => Status::OK,
+                    );
+                    (new Response)->_e_json($response);               
+                }else{
+                    $response = array(
+                        'status' => Status::NOT_USER,
+                    );
+                    (new Response)->_e_json($response);
+                }
             }else{
                 $response = array(
-                    'status' => Status::NOT_USER,
+                    'status' => Status::BAD,
                 );
                 (new Response)->_e_json($response);
             }

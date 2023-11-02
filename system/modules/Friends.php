@@ -71,62 +71,66 @@ class Friends extends Module
                     );       
                     // echo 'yes_friend';             
                 }
-            }                   
+            }else{
+                $response = array(
+                    'status' => Status::BAD,
+                );  
+            }
         } else{
-                //Добавляем юзера который кинул заявку в список друзей
-                $this->db->query('INSERT INTO friends', [
-                    'user_id' => $from_user_id,
-                    'friend_id' => $for_user_id,
-                    'friends_date' => time(),
-                ]);
+            //Добавляем юзера который кинул заявку в список друзей
+            $this->db->query('INSERT INTO friends', [
+                'user_id' => $from_user_id,
+                'friend_id' => $for_user_id,
+                'friends_date' => time(),
+            ]);
 
-                //Тому кто предлогал дружбу, добавляем ему в друзья себя
-                $this->db->query('INSERT INTO friends', [
-                    'user_id' => $for_user_id,
-                    'friend_id' => $from_user_id,
-                    'friends_date' => time(),
-                ]);
-                
-                //Обновляем кол-во заявок и кол-друзей у юзера
-                $this->db->query('UPDATE users SET', [
-                    'user_friends_demands-=' => 1, // note +=
-                    'user_friends_num+=' => 1, // note +=
-                ], 'WHERE user_id = ?', $from_user_id);
+            //Тому кто предлогал дружбу, добавляем ему в друзья себя
+            $this->db->query('INSERT INTO friends', [
+                'user_id' => $for_user_id,
+                'friend_id' => $from_user_id,
+                'friends_date' => time(),
+            ]);
+            
+            //Обновляем кол-во заявок и кол-друзей у юзера
+            $this->db->query('UPDATE users SET', [
+                'user_friends_demands-=' => 1, // note +=
+                'user_friends_num+=' => 1, // note +=
+            ], 'WHERE user_id = ?', $from_user_id);
 
-                //Тому кто предлогал дружбу, обновляем кол-друзей
-                $this->db->query('UPDATE users SET', [
-                    'user_friends_num+=' => 1, // note +=
-                ], 'WHERE user_id = ?', $for_user_id);
+            //Тому кто предлогал дружбу, обновляем кол-друзей
+            $this->db->query('UPDATE users SET', [
+                'user_friends_num+=' => 1, // note +=
+            ], 'WHERE user_id = ?', $for_user_id);
 
-                //Удаляем заявку из таблицы заявок
-                $this->db->query('DELETE FROM friends_demands WHERE for_user_id = ? AND from_user_id = ?', $from_user_id, $for_user_id);
-                $generateLastTime = time() - 10800;
+            //Удаляем заявку из таблицы заявок
+            $this->db->query('DELETE FROM friends_demands WHERE for_user_id = ? AND from_user_id = ?', $from_user_id, $for_user_id);
+            $generateLastTime = time() - 10800;
 
-                //Добавляем действия в ленту новостей кто подавал заявку
-                // $rowX = $db->super_query("SELECT ac_id, action_text FROM `news` WHERE action_time > '{$generateLastTime}' AND action_type = 4 AND ac_user_id = '{$for_user_id}'");
-                // if ($rowX['ac_id'])
-                //     if (!preg_match("/{$rowX['action_text']}/i", $from_user_id))
-                //         $db->query("UPDATE `news` SET action_text = '{$rowX['action_text']}||{$from_user_id}', action_time = '{time()}' WHERE ac_id = '{$rowX['ac_id']}'");
-                //     else
-                //         echo '';
-                // else
-                //     $db->query("INSERT INTO `news` SET ac_user_id = '{$for_user_id}', action_type = 4, action_text = '{$from_user_id}', action_time = '{time()}'");
+            //Добавляем действия в ленту новостей кто подавал заявку
+            // $rowX = $db->super_query("SELECT ac_id, action_text FROM `news` WHERE action_time > '{$generateLastTime}' AND action_type = 4 AND ac_user_id = '{$for_user_id}'");
+            // if ($rowX['ac_id'])
+            //     if (!preg_match("/{$rowX['action_text']}/i", $from_user_id))
+            //         $db->query("UPDATE `news` SET action_text = '{$rowX['action_text']}||{$from_user_id}', action_time = '{time()}' WHERE ac_id = '{$rowX['ac_id']}'");
+            //     else
+            //         echo '';
+            // else
+            //     $db->query("INSERT INTO `news` SET ac_user_id = '{$for_user_id}', action_type = 4, action_text = '{$from_user_id}', action_time = '{time()}'");
 
-                //Вставляем событие в моментальные оповещения
-                (new Notify)->add($for_user_id, $from_user_id, 12);
+            //Вставляем событие в моментальные оповещения
+            (new Notify)->add($for_user_id, $from_user_id, 12);
 
-                //add to cache
-                (new Friendship($from_user_id))->addFriend($for_user_id);
+            //add to cache
+            (new Friendship($from_user_id))->addFriend($for_user_id);
 
-                //Добавляем действия в ленту новостей себе
-                // $row = $db->super_query("SELECT ac_id, action_text FROM `news` WHERE action_time > '{$generateLastTime}' AND action_type = 4 AND ac_user_id = '{$from_user_id}'");
-                // if ($row)
-                //     if (!preg_match("/{$row['action_text']}/i", $for_user_id))
-                //         $db->query("UPDATE `news` SET action_text = '{$row['action_text']}||{$for_user_id}', action_time = '{time()}' WHERE ac_id = '{$row['ac_id']}'");
-                //     else
-                //         echo '';
-                // else
-                //     $db->query("INSERT INTO `news` SET ac_user_id = '{$from_user_id}', action_type = 4, action_text = '{$for_user_id}', action_time = '{time()}'");
+            //Добавляем действия в ленту новостей себе
+            // $row = $db->super_query("SELECT ac_id, action_text FROM `news` WHERE action_time > '{$generateLastTime}' AND action_type = 4 AND ac_user_id = '{$from_user_id}'");
+            // if ($row)
+            //     if (!preg_match("/{$row['action_text']}/i", $for_user_id))
+            //         $db->query("UPDATE `news` SET action_text = '{$row['action_text']}||{$for_user_id}', action_time = '{time()}' WHERE ac_id = '{$row['ac_id']}'");
+            //     else
+            //         echo '';
+            // else
+            //     $db->query("INSERT INTO `news` SET ac_user_id = '{$from_user_id}', action_type = 4, action_text = '{$for_user_id}', action_time = '{time()}'");
 
             $response = array(
                 'status' => Status::OK,
@@ -188,7 +192,8 @@ class Friends extends Module
         $access_token = (new Request)->textFilter((string)$data['access_token']);        
         $check_user = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
 
-        $for_user = (int)$data['user'];
+        $for_user = $data['user'];
+
         $row_for_user = $this->db->fetch('SELECT user_name, user_friends_num FROM `users` WHERE user_id = ?', $for_user);
         if ($row_for_user['user_friends_num']) {
             if ($for_user == $check_user['user_id']){
@@ -238,18 +243,20 @@ class Friends extends Module
     {
         $data = json_decode(file_get_contents('php://input'), true);
         $access_token = (new Request)->textFilter((string)$data['access_token']);
-        $check_user = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
+        // $check_user = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
     }
 
     public function requests()
     {
         $data = json_decode(file_get_contents('php://input'), true);
-        $page = (int)$data['page'];
+        $page = $data['page'];
         $g_count = 20;
         $limit_page = ($page - 1) * $g_count;
         $access_token = (new Request)->textFilter((string)$data['access_token']);
         $check_user = $this->db->fetch('SELECT user_id, user_friends_demands FROM `users` WHERE user_hid = ?', $access_token);
-        $for_user = (int)$data['user'];
+        // $for_user = $data['user'];
+        $for_user = $check_user['user_id'];
+
         // $row_for_user = $this->db->fetch('SELECT user_name, user_friends_num FROM `users` WHERE user_id = ?', $for_user);
 
         if ($check_user['user_friends_demands']) {
@@ -292,12 +299,12 @@ class Friends extends Module
     public function online()
     {
         $data = json_decode(file_get_contents('php://input'), true);
-        $page = (int)$data['page'];
+        $page = $data['page'] ?? 1;
         $g_count = 20;
         $limit_page = ($page - 1) * $g_count;
         $access_token = (new Request)->textFilter((string)$data['access_token']);
-        $for_user = (int)$data['user'];
-        $row_for_user = $this->db->fetch('SELECT user_name, user_friends_num FROM `users` WHERE user_id = ?', $for_user);
+        $for_user = $data['user'];
+        // $row_for_user = $this->db->fetch('SELECT user_name, user_friends_num FROM `users` WHERE user_id = ?', $for_user);
         $check_user = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
        
         $online_time = time() - 150;

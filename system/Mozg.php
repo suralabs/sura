@@ -40,7 +40,6 @@ class Mozg
             '/api/account/change_name' => 'Settings@change_name',
             '/api/account/change_avatar' => 'Settings@change_avatar',
             '/api/account/change_bio' => 'Profile@bioEdit',
-
             '/api/users/profile' => 'Profile@profile',
 
             '/api/albums/all' => 'Albums@all',   
