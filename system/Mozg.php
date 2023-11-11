@@ -63,6 +63,7 @@ class Mozg
 
             '/api/notifications/get' => 'Notifications@get',
             '/api/notifications/all' => 'Notifications@all',
+            '/api/notifications/test' => 'Notifications@addTest',
 
             '/api/wall/add' => 'Wall@add',
             '/api/wall/remove' => 'Wall@remove',

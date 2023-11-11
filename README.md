@@ -12,7 +12,7 @@
 It's recommended that you use [Composer](https://getcomposer.org/) to install Sura.
 
 ```bash
-$ composer create-project sura/sura:^0.0.1 MYPROJECT --prefer-dist
+$ composer create-project suralabs/sura:^0.0.1 MYPROJECT --prefer-dist
 ```
 
 Copy config files

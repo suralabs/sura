@@ -37,10 +37,11 @@ class Auth  extends Module
             if ($check_user) {
                 if (password_verify($data['password'], $check_user['user_password'])) {
                     $hid = $password;
-                    $this->db->query('UPDATE users SET', [
-                        'user_hid' => $hid
-                    ], 
-                    'WHERE user_id = ?', $check_user['user_id']);
+                    $hid = $check_user['user_hid'];
+                    // $this->db->query('UPDATE users SET', [
+                    //     'user_hid' => $hid
+                    // ], 
+                    // 'WHERE user_id = ?', $check_user['user_id']);
 
                     $this->db->query('DELETE FROM updates WHERE for_user_id = ?', $check_user['user_id']);
 

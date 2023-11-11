@@ -26,12 +26,16 @@ class Profile extends Module
         $config = settings_get();
         
         $data = json_decode(file_get_contents('php://input'), true);
-        $user_id = (new Request)->textFilter((string)$data['id']);
-        $access_token = (new Request)->textFilter((string)$data['access_token']);
+        $user_id = $data['id'];
+        $access_token = $data['access_token']; 
         $check_user = $this->db->fetch('SELECT user_id, user_name, user_last_name, user_photo, user_group, user_hid, user_bio, user_friends_num, user_albums_num, user_wall_num FROM `users` WHERE user_id = ?', $user_id);
         $my_info = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
-
-        if ($check_user) {
+        if(!$my_info){
+            $my_info = array(
+                'user_id' => 0,
+            );
+        }
+        if ($check_user && $my_info) {
             // $check_user['access_token'] = $access_token;
             if ($check_user['user_group'] == 1) {
                 $check_user['roles'] = 'ROLE_ADMIN';
@@ -77,8 +81,8 @@ class Profile extends Module
             //friends
             $all_friends = array();
             if ($check_user['user_friends_num']) {
-                $sql_friends = $this->db->fetchAll("SELECT tb1.friend_id, tb2.user_name, user_last_name, user_photo FROM `friends` tb1, `users` tb2 
-                WHERE tb1.user_id = '{$user_id}' AND tb1.friend_id = tb2.user_id  AND subscriptions = 0 ORDER by rand() DESC LIMIT 0, 6", true);
+                $sql_friends = $this->db->fetchAll('SELECT tb1.friend_id, tb2.user_name, user_last_name, user_photo FROM `friends` tb1, `users` tb2 
+                WHERE tb1.user_id = ? AND tb1.friend_id = tb2.user_id  AND subscriptions = 0 ORDER by rand() DESC LIMIT 0, 6', $check_user['user_id']);
                 if($sql_friends){                
                     foreach ($sql_friends as $key_friend => $friend) {
                         $all_friends[$key_friend]['user_id'] = $friend['friend_id'];
@@ -196,6 +200,7 @@ class Profile extends Module
         }else{
             $response = array(
                 'status' => Status::NOT_DATA,
+                'data' => $my_info
             );
     
             (new Response)->_e_json($response);   
@@ -209,7 +214,7 @@ class Profile extends Module
     {
         $config = settings_get();
         $data = json_decode(file_get_contents('php://input'), true);
-        $access_token = (new Request)->textFilter((string)$data['access_token']);
+        $access_token = $data['access_token'];
         $check_user = $this->db->fetch('SELECT user_id, user_name, user_last_name, user_photo, user_group FROM `users` WHERE user_hid = ?', $access_token);
 
         if ($check_user) {

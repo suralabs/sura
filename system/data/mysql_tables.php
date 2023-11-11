@@ -3990,6 +3990,7 @@ $db_table[] = "CREATE TABLE `updates` (
   `for_user_id` mediumint(8) unsigned NOT NULL,
   `from_user_id` mediumint(8) unsigned NOT NULL,
   `type` smallint(6) unsigned NOT NULL,
+  `vieved` INT( 11 ) unsigned NOT NULL,
   `date` varchar(10) NOT NULL,
   `text` text NOT NULL,
   `lnk` varchar(100) NOT NULL,

@@ -17,7 +17,7 @@ class Newsfeed extends Module
         $page = $data['page'] ?? 1;
         $page_count = 20;
         $limit_page = ((int)$page - 1) * $page_count;
-        $access_token = (new Request)->textFilter((string)$data['access_token']);
+        $access_token = (string)$data['access_token'];
         $check_user = $this->db->fetch('SELECT user_id, user_photo FROM `users` WHERE user_hid = ?', $access_token);
         $config = settings_get();
 
