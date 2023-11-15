@@ -19,29 +19,29 @@ use Sura\View\myView;
  */
 class ViewEmail
 {
-    /**
-     * @var string
-     */
-    public string $message = '';
+  /**
+   * @var string
+   */
+  public string $message = '';
 
-    /**
-     * @throws \Exception
-     */
-    public function __construct(string $template, $variables)
-    {
-        $config = settings_get();
-        $views = ROOT_DIR . '/templates/' . $config['temp'];
-        $cache = ENGINE_DIR . '/cache/views';
-        $blade = new myView($views, $cache, \Sura\View\View::MODE_AUTO); // MODE_DEBUG allows pinpointing troubles.
-        $blade::$dictionary = I18n::dictionary();
-        $this->message = $blade->run($template, $variables);
-    }
+  /**
+   * @throws \Exception
+   */
+  public function __construct(string $template, $variables)
+  {
+    $config = settings_get();
+    $views = ROOT_DIR . '/templates/' . $config['temp'];
+    $cache = ENGINE_DIR . '/cache/views';
+    $blade = new myView($views, $cache, \Sura\View\View::MODE_AUTO); // MODE_DEBUG allows pinpointing troubles.
+    $blade::$dictionary = I18n::dictionary();
+    $this->message = $blade->run($template, $variables);
+  }
 
-    /**
-     * @return string
-     */
-    final public function run(): string
-    {
-        return $this->message;
-    }
+  /**
+   * @return string
+   */
+  final public function run(): string
+  {
+    return $this->message;
+  }
 }

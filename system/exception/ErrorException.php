@@ -13,11 +13,11 @@ use Sura\Corner\Error;
 
 class ErrorException extends \Error
 {
-    public function __construct(string|false $message = false, $code = false)
-    {
-        if (!$message) {
-            $message = "We encountered an internal error. Please try again.";
-        }
-        parent::__construct($message, $code);
+  public function __construct(string|false $message = false, $code = false)
+  {
+    if (!$message) {
+      $message = "We encountered an internal error. Please try again.";
     }
+    parent::__construct($message, $code);
+  }
 }
