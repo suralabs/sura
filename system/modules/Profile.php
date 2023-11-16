@@ -28,13 +28,14 @@ class Profile extends Module
     $data = json_decode(file_get_contents('php://input'), true);
     $user_id = $data['id'];
     $access_token = $data['access_token']; 
-    $check_user = $this->db->fetch('SELECT user_id, user_name, user_last_name, user_photo, user_group, user_hid, user_bio, user_friends_num, user_albums_num, user_wall_num FROM `users` WHERE user_id = ?', $user_id);
+    $check_user = $this->db->fetch('SELECT user_id, user_name, user_last_name, user_photo, user_group, user_hid, user_bio, user_friends_num, user_albums_num, user_wall_num, user_last_update FROM `users` WHERE user_id = ?', $user_id);
     $my_info = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
     if(!$my_info){
       $my_info = array(
         'user_id' => 0,
       );
     }
+
     if ($check_user && $my_info) {
       // $check_user['access_token'] = $access_token;
       if ($check_user['user_group'] == 1) {
@@ -170,6 +171,8 @@ class Profile extends Module
         }
       }
 
+      $online = \Mozg\Models\Users::checkOnline($check_user['user_last_update']);
+
       $response = array(
         'status' => Status::OK,
         'data' => array(
@@ -182,6 +185,7 @@ class Profile extends Module
           'roles' => $check_user['roles'],
           'bio' => $check_user['user_bio'],
           'owner' => $owner,
+          'online' => $online,
           'friends' => $all_friends,
           'albums' => $all_albums,
           'wall_num' => $check_user['user_wall_num'],
@@ -216,6 +220,11 @@ class Profile extends Module
     $data = json_decode(file_get_contents('php://input'), true);
     $access_token = $data['access_token'];
     $check_user = $this->db->fetch('SELECT user_id, user_name, user_last_name, user_photo, user_group FROM `users` WHERE user_hid = ?', $access_token);
+
+    $this->db->query('UPDATE users SET', [
+      'user_last_update' => time(),
+    ], 'WHERE user_hid = ?', $access_token);
+
 
     if ($check_user) {
       $check_user['access_token'] = $access_token;

@@ -357,12 +357,13 @@ class Friends extends Module
       }else{
         $items[$key]['photo_50'] = $config['api_url'] . 'images/100_no_ava.png';
       }
-      $online_time = time() - 150;
-      if ($item['user_last_visit'] >= $online_time){
-        $items[$key]['online'] = true;
-      }else{
-        $items[$key]['online'] = false;
-      }
+      // $online_time = time() - 150;
+      // if ($item['user_last_visit'] >= $online_time){
+      //   $items[$key]['online'] = true;
+      // }else{
+      //   $items[$key]['online'] = false;
+      // }
+      $items[$key]['online'] = \Mozg\Models\Users::checkOnline($item['user_last_visit']);
       $items[$key]['first_name'] = $item['user_name'];
       $items[$key]['last_name'] = $item['user_last_name'];
     }

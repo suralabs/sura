@@ -135,4 +135,17 @@ class Users
       }
     }
   }
+
+  /**
+   * 
+   */
+  public static function checkOnline($user_last_update): bool
+  {
+    $online_time = time() - 150;
+    if ($user_last_update >= $online_time){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }

@@ -22,9 +22,6 @@ class Search extends Module
    *
    * Undocumented function long description
    *
-   * @param Type $var Description
-   * @return type
-   * @throws conditon
    **/
   public function all()
   {
@@ -43,10 +40,10 @@ class Search extends Module
     //$where_sql_gen = "WHERE user_delete = '0' AND user_ban = '0'";
 
     if ($query == null) {
-      $sql_query = $this->db->fetchAll('SELECT user_id, user_name, user_last_name, user_photo, user_group 
+      $sql_query = $this->db->fetchAll('SELECT user_id, user_name, user_last_name, user_photo, user_group, user_last_update 
       FROM `users` LIMIT '.$limit_page.', '.$results_count);
     } else {
-      $sql_query = $this->db->fetchAll('SELECT user_id, user_name, user_last_name, user_photo, user_group 
+      $sql_query = $this->db->fetchAll('SELECT user_id, user_name, user_last_name, user_photo, user_group, user_last_update 
       FROM users WHERE MATCH (user_name,user_last_name) AGAINST (?) 
       LIMIT '.$limit_page.', '.$results_count, $query);
     }
@@ -57,6 +54,7 @@ class Search extends Module
         $results[$key]['id'] = $item['user_id'];
         $results[$key]['first_name'] = $item['user_name'];
         $results[$key]['last_name'] = $item['user_last_name'];
+        $results[$key]['online'] = \Mozg\Models\Users::checkOnline($item['user_last_update']);
         if ($item['user_photo']) {
           $results[$key]['photo'] = $config['api_url'] . 'uploads/users/' . $item['user_id'] . '/' . $item['user_photo'];
           $results[$key]['photo_50'] = $config['api_url'] . 'uploads/users/' . $item['user_id'] . '/50_' . $item['user_photo'];

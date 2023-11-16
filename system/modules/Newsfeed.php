@@ -35,12 +35,13 @@ class Newsfeed extends Module
     foreach ($sql_ as $key => $item) {
       if ($item['type'] == 2) {
         //Если видео
-        $author_info = $this->db->fetch('SELECT user_search_pref, user_last_visit, user_logged_mobile, user_photo, user_sex, user_privacy FROM `users` WHERE user_id = ?', $item['author']);
+        $author_info = $this->db->fetch('SELECT user_search_pref, user_last_update, user_photo, user_sex, user_privacy FROM `users` WHERE user_id = ?', $item['author']);
         if ($author_info['user_photo']){
           $items[$key]['ava'] = '/uploads/users/' . $item['author'] . '/50_' . $author_info['user_photo'];
         }else{
           $items[$key]['ava'] = '/images/no_ava_50.png';
         }
+        $items[$key]['online'] = \Mozg\Models\Users::checkOnline($author_info['user_last_update']);
 
         $content = unserialize($item['content']);
         foreach ($content as $key_content => $item_content) {
@@ -51,12 +52,13 @@ class Newsfeed extends Module
         }                    
       }else if ($item['type'] == 3) {
         //Если фотография
-        $author_info = $this->db->fetch('SELECT user_search_pref, user_last_visit, user_logged_mobile, user_photo, user_sex, user_privacy FROM `users` WHERE user_id = ?', $item['author']);
+        $author_info = $this->db->fetch('SELECT user_search_pref, user_last_update, user_photo, user_sex, user_privacy FROM `users` WHERE user_id = ?', $item['author']);
         if ($author_info['user_photo']){
           $items[$key]['ava'] = '/uploads/users/' . $item['author'] . '/50_' . $author_info['user_photo'];
         }else{
           $items[$key]['ava'] = '/images/no_ava_50.png';
         }
+        $items[$key]['online'] = \Mozg\Models\Users::checkOnline($author_info['user_last_update']);
 
         $content = unserialize($item['content']);
         foreach ($content as $key_content => $item_content) {
@@ -68,12 +70,13 @@ class Newsfeed extends Module
       }else if ($item['type'] == 1) {
         //Если запись со стены
         //Приватность
-        $author_info = $this->db->fetch('SELECT user_search_pref, user_last_visit, user_logged_mobile, user_photo, user_sex, user_privacy FROM `users` WHERE user_id = ?', $item['author']);
+        $author_info = $this->db->fetch('SELECT user_search_pref, user_last_update, user_photo, user_sex, user_privacy FROM `users` WHERE user_id = ?', $item['author']);
         if ($author_info['user_photo']){
           $items[$key]['ava'] = '/uploads/users/' . $item['author'] . '/50_' . $author_info['user_photo'];
         }else{
           $items[$key]['ava'] = '/images/no_ava_50.png';
         }
+        $items[$key]['online'] = \Mozg\Models\Users::checkOnline($author_info['user_last_update']);
 
         //Выводим кол-во мне нравится
         $wall_likes = $this->db->fetchAll("SELECT user_id, date 
@@ -85,7 +88,7 @@ class Newsfeed extends Module
         else
           $comments_limit = 0;
 
-        $sql_comments = $this->db->fetchAll('SELECT tb1.id, author, content, add_date, attach, type, tb2.user_photo, user_name 
+        $sql_comments = $this->db->fetchAll('SELECT tb1.id, author, content, add_date, attach, type, tb2.user_photo, user_name, user_last_update
         FROM `wall_comments` tb1, `users` tb2 
         WHERE tb1.author = tb2.user_id AND tb1.wall_id = ? ORDER by `add_date` ASC LIMIT ?, 3', $item['id'], $comments_limit);
         $items_comments = array();
@@ -96,6 +99,7 @@ class Newsfeed extends Module
           }else{
             $items_comments[$key_commet]['ava'] = '/images/no_ava_50.png';
           }
+          $items_comments[$key_commet]['online'] = \Mozg\Models\Users::checkOnline($row_comments['user_last_update']);
         }
 
       }else if ($item['type'] == 11) {
@@ -120,7 +124,7 @@ class Newsfeed extends Module
         else
           $comments_limit = 0;
 
-        $sql_comments = $this->db->fetchAll('SELECT tb1.id, author, content, add_date, attach, type, tb2.user_photo, user_name 
+        $sql_comments = $this->db->fetchAll('SELECT tb1.id, author, content, add_date, attach, type, tb2.user_photo, user_name, user_last_update
         FROM `wall_comments` tb1, `users` tb2 
         WHERE tb1.author = tb2.user_id AND tb1.wall_id = ? ORDER by `add_date` ASC LIMIT ?, 3"', $item['id'], $comments_limit);
         $items_comments = array();
@@ -131,10 +135,10 @@ class Newsfeed extends Module
           }else{
             $items_comments[$key_commet]['ava'] = '/images/no_ava_50.png';
           }
+          $items_comments[$key_commet]['online'] = \Mozg\Models\Users::checkOnline($row_comments['user_last_update']);
         }
       }            
     }
-
     
     if ($check_user['user_photo']){
       $ava = '/uploads/users/' . $check_user['user_id'] . '/50_' . $check_user['user_photo'];
