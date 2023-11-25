@@ -84,12 +84,13 @@ class Wall extends Module
   {
     $data = json_decode(file_get_contents('php://input'), true);
     $access_token = (new Request)->textFilter((string)$data['access_token']);
-    $wall_id = (new Request)->textFilter((string)$data['wall_id']);
+    $wall_id = $data['wall_id'];
 
     $check_user = $this->db->fetch('SELECT user_id FROM `users` WHERE user_hid = ?', $access_token);
     if ($check_user) {
-      $check_wall = $this->db->fetch('SELECT id FROM `wall` WHERE author = ? AND id = ', $check_user['user_id'], $wall_id);
-      if ($check_wall) {
+      $check_wall = $this->db->fetch('SELECT id, author, for_user_id FROM `wall` WHERE id = ?', $wall_id);
+      //
+      if ($check_wall['author'] == $check_user['user_id'] || $check_wall['for_user_id'] == $check_user['user_id']) {
         $this->db->query('DELETE FROM wall WHERE id = ?', $check_wall['id']);
         $response = array(
           'status' => Status::OK,

@@ -18,7 +18,8 @@ class Notifications extends Module
     $count = 5;
     $limit_page = ($page - 1) * $count;
     $update_time = time() - 150;
-    $sql_notify = $this->db->fetchAll('SELECT id, type, date, from_user_id, text, lnk, user_name, user_photo FROM `updates` WHERE for_user_id = ? AND date > ? AND viewed = 0 ORDER by `date` ASC 
+    $sql_notify = $this->db->fetchAll('SELECT id, type, date, from_user_id, text, lnk, user_name, user_photo FROM `updates` 
+    WHERE for_user_id = ? AND date > ? AND viewed = 0 ORDER by `date` ASC 
     LIMIT '.$limit_page.', '.$count, $check_user['user_id'], $update_time);
 
     $count = count($sql_notify);

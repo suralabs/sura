@@ -131,7 +131,6 @@ class Profile extends Module
 
       $all_walls = array();
       if($check_user['user_wall_num']){
-
         $page = 1;
         $results_count = 10;
         $limit_page = ($page - 1) * $results_count;
