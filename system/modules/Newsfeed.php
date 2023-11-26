@@ -29,13 +29,13 @@ class Newsfeed extends Module
       tb1.author IN (SELECT tb2.friend_id FROM `friends` tb2 
       WHERE user_id = ? AND tb1.type = 11 AND subscriptions = 2) 
     AND tb1.type IN (1,2,3,11) 
-    ORDER BY tb1.add_date DESC LIMIT ?, ?', $check_user['user_id'], $check_user['user_id'], $page_count, $limit_page);
+    ORDER BY tb1.add_date DESC LIMIT ?, ?', $check_user['user_id'], $check_user['user_id'], $limit_page, $page_count);
 
     $items = array();
     foreach ($sql_ as $key => $item) {
       if ($item['type'] == 2) {
         //Если видео
-        $author_info = $this->db->fetch('SELECT user_search_pref, user_last_update, user_photo, user_sex, user_privacy FROM `users` WHERE user_id = ?', $item['author']);
+        $author_info = $this->db->fetch('SELECT user_name, user_last_update, user_photo, user_sex, user_privacy FROM `users` WHERE user_id = ?', $item['author']);
         if ($author_info['user_photo']){
           $items[$key]['ava'] = '/uploads/users/' . $item['author'] . '/50_' . $author_info['user_photo'];
         }else{
@@ -52,7 +52,7 @@ class Newsfeed extends Module
         }                    
       }else if ($item['type'] == 3) {
         //Если фотография
-        $author_info = $this->db->fetch('SELECT user_search_pref, user_last_update, user_photo, user_sex, user_privacy FROM `users` WHERE user_id = ?', $item['author']);
+        $author_info = $this->db->fetch('SELECT user_name, user_last_update, user_photo, user_sex, user_privacy FROM `users` WHERE user_id = ?', $item['author']);
         if ($author_info['user_photo']){
           $items[$key]['ava'] = '/uploads/users/' . $item['author'] . '/50_' . $author_info['user_photo'];
         }else{
@@ -70,22 +70,24 @@ class Newsfeed extends Module
       }else if ($item['type'] == 1) {
         //Если запись со стены
         //Приватность
-        $author_info = $this->db->fetch('SELECT user_search_pref, user_last_update, user_photo, user_sex, user_privacy FROM `users` WHERE user_id = ?', $item['author']);
+        $author_info = $this->db->fetch('SELECT user_name, user_last_update, user_photo, user_sex, user_privacy FROM `users` WHERE user_id = ?', $item['author']);
         if ($author_info['user_photo']){
-          $items[$key]['ava'] = '/uploads/users/' . $item['author'] . '/50_' . $author_info['user_photo'];
+          $items[$key]['user_photo'] = $config['api_url'] . '/uploads/users/' . $item['author'] . '/50_' . $author_info['user_photo'];
         }else{
-          $items[$key]['ava'] = '/images/no_ava_50.png';
+          $items[$key]['user_photo'] = $config['api_url'] . '/images/no_ava_50.png';
         }
         $items[$key]['online'] = \Mozg\Models\Users::checkOnline($author_info['user_last_update']);
-
+        $items[$key]['content'] = $item['content'];
         //Выводим кол-во мне нравится
         $wall_likes = $this->db->fetchAll("SELECT user_id, date 
         FROM `wall_like` WHERE wall = '{$item['id']}'");
         
         //Выводим кол-во комментов
-        if ($item['comments_num'] > 3)
-          $comments_limit = $item['comments_num'] - 3;
-        else
+        // if ($item['comments_num'] > 3)
+        //   $comments_limit = $item['comments_num'] - 3;
+        // else
+        //   $comments_limit = 0;
+
           $comments_limit = 0;
 
         $sql_comments = $this->db->fetchAll('SELECT tb1.id, author, content, add_date, attach, type, tb2.user_photo, user_name, user_last_update
@@ -119,9 +121,11 @@ class Newsfeed extends Module
         $wall_likes = $this->db->fetch('SELECT user_id, date FROM `wall_like` WHERE wall = ?', $item['id']);
         
         //Выводим кол-во комментов
-        if ($item['comments'] > 3)
-          $comments_limit = $item['comments'] - 3;
-        else
+        // if ($item['comments'] > 3)
+        //   $comments_limit = $item['comments'] - 3;
+        // else
+        //   $comments_limit = 0;
+
           $comments_limit = 0;
 
         $sql_comments = $this->db->fetchAll('SELECT tb1.id, author, content, add_date, attach, type, tb2.user_photo, user_name, user_last_update

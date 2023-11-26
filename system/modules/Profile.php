@@ -151,6 +151,9 @@ class Profile extends Module
             $all_walls[$key_wall]['comments_num'] = $wall['comments_num'];
             $all_walls[$key_wall]['likes_num'] = $wall['likes_num'];
             // $all_walls[$key_wall]['likes_users'] = $wall['likes_users'];
+            $check_like = $this->db->fetch('SELECT id FROM `wall_like` WHERE wall = ? AND user_id = ?', $wall['id'], $my_info['user_id']);
+            $all_walls[$key_wall]['liked'] = $check_like ?? false;
+
             $all_walls[$key_wall]['tell_uid'] = $wall['tell_uid'];
             $all_walls[$key_wall]['type'] = $wall['type'];
             $all_walls[$key_wall]['tell_date'] = $wall['tell_date'];
