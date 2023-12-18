@@ -18,7 +18,7 @@
     "sura/view": "^2.1",
     "sura/database": "^0.3",
     "james-heinrich/getid3": "^2.0-dev",
-    "intervention/image": "3.0.*@beta"
+    "intervention/image": "3.1.*@beta"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
